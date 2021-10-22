@@ -1,0 +1,67 @@
+* {
+  border: 0.3px solid black;
+  box-sizing: border-box;
+}
+
+
+/* 导航栏 */
+#nav_3 {
+  padding-top: 10px;
+  width: 13%;
+}
+.nav_info {
+  padding: 8px;
+}.nav_info:hover {
+  color: orange;
+  background-color: rgb(237,237,237);
+}.nav_info > div {
+  display: inline-block;
+}.nav_info_box {
+  padding-right: 10px;
+  width: 10px;
+  height: 100%;
+  background-color: skyblue;
+}.nav_info_img > img {
+  width: 10px;
+}.nav_info_text {
+  
+}
+
+
+#middle {
+  width: 85%;
+}
+
+/* cardBox */
+#article {
+} #article_continer {
+  
+  height: 2000px;
+  padding: 10px;
+  column-count: 2;
+  column-gap: 40px;
+  height: 100%;
+}
+.cardbox {
+  border-radius: 10px;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+  margin: 20px;
+}
+.boxhead {
+  height: 200px;
+  overflow: hidden;
+} .boxhead img {
+  width: 100%;
+}
+.boxcontent {
+  height: 50px;
+}
+.boxfooter {
+  height: 50px;
+} .boxfooter img {
+  height: 30px;
+} .boxfooter_id {
+  
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>search</title>
+		<link rel="stylesheet" href="./css/bootstrap.min.css" />
+		<script src="./js/lib/jquery-3.6.0.min.js"></script>
+		<script src="./js/lib/bootstrap.min.js"></script>
+		<script src="./js/search.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/element_loader.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			* {
+				/* border: 1px solid #000; */
+				box-sizing: border-box;
+			}
+			body{
+				padding-top: 50px;
+			}
+			#search {
+				height: 40px;
+				text-align: center;
+				width: 500px;
+				margin: 0 auto;
+			}
+
+			#search>form {
+				width: 100%;
+				display: flex;
+			}
+
+			#search_bar,
+			#search_btn {
+				height: 40px;
+			}
+
+			input {
+				outline: none;
+			}
+
+			#search_bar {
+				flex: 3;
+				border: 1px solid #bdbdbd;
+				transition: border 1s;
+				padding-left: 10px;
+			}
+
+			#search_bar:focus {
+				border: 1px solid #8f8f8f;
+			}
+
+			#search_btn {
+				flex: 1;
+				background-color: #e6e6e6;
+				line-height: 40px;
+				font-size: 16px;
+				font-weight: bolder;
+				color: #333;
+				padding: 0;
+				border: 1px solid #bdbdbd;
+			}
+
+			.card_container {
+				width: 100%;
+				margin: 0 auto;
+			}
+			#search_result{
+				column-count: 2;
+			}
+			#search_body{
+				padding-top: 50px;
+				width: 80vw;
+				margin: 0 auto;
+			}
+			#search_result>div{
+				padding-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="search">
+			<form>
+				<input type="text" name="search_bar" id="search_bar" />
+				<input type="button" name="search_btn" id="search_btn" value="SEARCH" />
+			</form>
+		</div>
+		<div id="search_body">
+		<div id="search_result"></div>
+			
+		</div>
+
+		<script>
+			var card_cnt = 10;
+			var card_loaded = 0;
+			var data;
+			var data_loaded = false;
+
+			function wait_for_load_card(mode) {
+				if (mode == 1)
+					card_loaded++;
+				else {
+					if (mode == 2) {
+						data_loaded = true;
+					}
+				}
+				if (card_loaded == card_cnt && data_loaded) {
+					function begin_to_load_card() {
+						if (load_card != undefined) {
+							for (var i = 0; i < card_cnt; i++) {
+								load_card($("#card_" + i).get(0), data[i]);
+							}
+							card_loaded = 0;
+							data = 0;
+							data_loaded = false;
+						} else {
+							// console.log(undefined);
+							setTimeout(function() {
+								begin_to_load_card();
+							}, 10)
+
+						}
+					}
+					begin_to_load_card();
+				}
+			}
+
+			function search_return(data_) {
+				data = data_;
+				wait_for_load_card(2);
+			}
+			$("#search_btn").click(function() {
+				var search_limit = card_cnt;
+				$("#search_result").get(0).innerHTML = "";
+				for (var i = 0; i < search_limit; i++)
+					$("#search_result").append($("<div class='replace card_container'  id='card_" + i +
+						"' load_name='card'></div>"));
+				load_all(function() {
+					wait_for_load_card(1)
+				});
+				search("./json/search", search_limit, $("#search_bar").val(), undefined, 1, search_return);
+			});
+		</script>
+
+		
+	</body>
+</html>

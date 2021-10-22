@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/publicgoods.css">
+    <script src="./js/jqery-3.5.1.min.js"></script>
+    <script >
+        var helpupload=new Array();//看看这个id下的信息是否需要上传（1为是，0为不是）
+        var next=0;//共有多少新加的类（helpupload下标从零开始next-1结束
+        function showImg(id){
+                // var img_file =  $("#img_file").val();
+                var file =  document.getElementById(id).files[0];
+                var re = new FileReader();
+                re.readAsDataURL(file);
+                re.onload = function(re){
+                    id=id.replace('img_','');
+                    // console.log(id);
+                    $('#loadhere'+id).attr("src", re.target.result);
+                }
+                if($("#a1").css("display")+""=="none")
+                {
+                    updateimage(id.split("_")[1])
+                    window.location.href=document.URL
+                }
+            }
+        function addmore(){
+            var id=next;
+            helpupload[next++]=1;
+            $("#body").append('\
+            <div class="goods" id="'+id+'">\
+                <div onclick="displaynone('+id+')">\
+                <svg t="1606475197985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2948" width="200" height="200"><path d="M803.84 863.744c-8.704 0-16.896-3.584-23.552-10.24L512 585.728l-267.264 267.264c-6.656 6.656-14.336 10.24-23.04 10.24-12.288 0-25.088-7.168-39.424-21.504-14.848-14.848-21.504-27.648-21.504-39.936 0-8.704 3.584-16.384 10.752-23.04L438.272 512 170.496 244.224c-25.6-26.112 0-52.736 9.728-62.464 11.776-11.776 25.088-23.04 39.424-23.04 8.192 0 16.384 3.584 24.576 11.264L512 438.272l267.776-267.264c7.168-7.168 15.36-10.752 23.552-10.752 12.288 0 24.064 7.168 40.96 23.552 11.264 11.264 35.328 35.328 9.216 60.928L585.728 512l267.264 267.264c23.04 23.04 9.216 44.032-9.216 62.976-13.824 14.336-27.648 21.504-39.936 21.504z" fill="#bfbfbf" p-id="2949"></path></svg>\
+                </div>\
+                <input type="text"placeholder="类型名">\
+                <input type="number"placeholder="修改此类型价格(元)"oninput="this.value=this.value.replace(/[+-]/g);">\
+                <div class="layui-form-item">\
+                    <label class="layui-form-label">添加图片</label>\
+                    <div class="layui-input-block">\
+                        <input type="hidden" id="img_url">\
+                        <input type="file" onchange="showImg(this.id)" id="img_'+id+'"><img src="./img/问号 .png" alt="" id="loadhere'+id+'" style="width: 190px;height: 190px">\
+                    </div>\
+                </div> \
+            </div>\
+            ');
+        }
+        function addmore2(){
+            //mymill-right.html?id={item["id"]}
+
+            var token = document.cookie.split(";")[0]; 
+            var thisURL = document.URL;
+            var itemid = thisURL.split('?')[1];
+            var itemid = itemid.split('=')[1];
+
+            var formData = new FormData();
+            formData.append("token",token)
+            formData.append("itemid",itemid)
+            $.ajax({
+                url: "http://192.168.137.175/user/addnewstyle",
+                type: "POST",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert(data.msg)
+                }
+            })
+            window.location.href= document.URL
+        }
+        function displaynone(id){
+            document.getElementById(id+"").remove();
+            helpupload[id]=0;
+        }
+        // img_n//照片id
+        // n//类的id（div）
+    </script>
+</head>
+<body >
+
+    
+    <div id="body">
+        <div style="clear: both;"></div>
+        <hr>
+        <div onclick=updatenewstyles() class="addmore" id="a1" style="float: left;">上传</div>
+        <div onclick="addmore()" class="addmore" id="b1"  style="float: right;">添加类型</div>
+        <div onclick="addmore2()" class="addmore" id="b2" style="float: right;">添加类型</div>
+        <div style="clear: both;"></div>
+    
+        <div class="goods" id="-1">
+            <div>此类型为默认显示类型</div>
+            <input type="text"placeholder="类型">
+            <input type="number" placeholder="修改此类型价格（元）"oninput="this.value=this.value.replace(/[+-]/g);">
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片地址</label>
+                <div class="layui-input-block" style="margin-top:0">
+                <input type="hidden" id="img_url">
+                <input type="file" onchange="showImg(this.id)" id="img_-1"><img src="./img/问号 .png" alt="" id="loadhere-1" style="margin:0;width: 190px;height: 190px;">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <hr>
+    <div class="up">
+        <div class="upleft">
+    <input type="text" placeholder="给商品起个名" id="introname">
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">添加图片介绍</label>
+                <div class="layui-input-block">
+                    <input type="hidden" id="img_url">
+                    <input type="file"  id="img_file"><br><img src="" alt="" id="loadherefile" style="width: 100px">
+                </div>
+            </div>    
+        </div>
+        <div class="upright">
+            <div>添加文字介绍</div>
+            <textarea name="introduce" id="introtext" cols="50" rows="6.5"></textarea>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+    
+
+    <script>
+
+        //mymill-right.html?id={item["id"]}
+        function showmystyle() {
+            var token = document.cookie.split(";")[0]; 
+            var thisURL = document.URL;
+            var itemid = thisURL.split('?')[1];
+            console.log(itemid)
+            if (itemid[6]=="-"){
+                $("#b2").css('display','none')
+                $("#a1").css('display','inline-block')
+                $("#b1").css('display','inline-block')
+
+            }
+            else{
+                $("#b1").css('display','none')
+                $("#a1").css('display','none')
+                $("#b2").css('display','inline-block')
+            }
+            var itemid = itemid.split("=")[1];
+            // 获取了itemid
+            $.ajax({
+                url: "http://192.168.137.175/user/showmystyle",
+                type: "POST",
+                ret: '0',
+                dataType: "json",
+                data: JSON.stringify({
+                    token: token,
+                    itemid: itemid,
+                }),
+                success: function(data) {
+                    if (data.ret != "1") {
+                        $("#body").append(data.data)
+                        $("body").append('<script src=\"\.\/js\/styleinfomodify\.js\"><\/script>')
+                        displaynone(-1);
+                        $(".items").click(function(){
+                            
+                        })
+                    } else {
+                        console.log(data)
+                        alert("没有此物")
+                    }
+                    $("svg").click(function(){
+
+                        styleid = $(this.parentNode.parentNode).attr('id')
+                        var formData = new FormData();
+                        formData.append("token",token)
+                        formData.append("styleid",styleid)
+                        $.ajax({
+                            url: "http://192.168.137.175/user/deletethisstyle",
+                            type: "POST",
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(data) {
+                                alert(data.msg)
+                            }
+                        })
+
+                    })
+                    
+
+                }
+            })
+        }
+        showmystyle()
+
+        function updatenewstyles(){
+            var thisURL = document.URL;
+            var millid = thisURL.split('?')[1];
+            var millid = millid.split("-")[1];
+            var token = document.cookie.split(";")[0];
+
+            var formData = new FormData();
+            var arr = new Array();
+            var list = document.getElementsByClassName("goods");
+            var index=0;
+            var cache = document.getElementsByTagName("input");
+            while(list[index]){
+
+
+                formData.append("name",cache[4*index].value)
+                formData.append("price",cache[4*index+1].value)
+                formData.append("image",$("#img_"+(index-1))[0].files[0])
+
+                //console.log($("#img_"+(index-1))[0].files[0]);
+                list[index]
+                index++;
+            }
+            formData.append("token", token);
+            formData.append("millid", millid);
+            formData.append("introname", $("#introname").val());
+            formData.append("introtext", $("#introtext").val());
+            //formData.append("array", styles);
+            // formData.append("file", $("#file")[0].files[0]);
+            console.log(formData.get("array"))
+                $.ajax({
+                url: "http://192.168.137.175/user/updatenewstyles",
+                type: "POST",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    alert(data.data)
+                    window.location.href="http://192.168.137.175/mymill-right.html?id=" + data.id
+                }
+            })
+           
+        }
+
+    </script>
+    
+</body>
+</html>

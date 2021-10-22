@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src='jquery-3.5.1.min.js'></script>
+    </head>
+    <body>
+        <p>sss</p>
+        <script>
+        $("body").click(function (event) {
+            var pos = getMousePos(event);
+            console.log(pos)
+        });
+        $("body").click(function() {
+            alert('111')
+        })
+        function getMousePos(event) {
+            var e = event || window.event;
+            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            var x = e.pageX || e.clientX + scrollX;
+            var y = e.pageY || e.clientY + scrollY;
+            return { x, y };
+        }
+        </script>
+    <body>
+</html>

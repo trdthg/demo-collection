@@ -1,0 +1,94 @@
+.goods{
+    width: 200px;
+    margin: 1%;
+    background-color: rgba(235, 235, 235, 0.26);
+    padding: 10px;
+    border-color: lavender;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 10px;
+    display: inline-block;
+    overflow: hidden;
+}
+.goods>input{
+    margin-top: 5px;   
+    outline: none;
+}
+.layui-input-block{
+    padding-top: 5px;
+}
+.layui-form-item{
+    margin-top: 10px;
+    border-top-color: lavender;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+.goods>div>svg{
+    width: 20px;
+    height: 20px;
+    float: right;
+}
+/* .important{
+    display: inline-block; */
+/* } */
+/* #tools{
+    height: 35px;
+    background-color: seagreen;
+}
+.dropdown{
+    display: inline-block;
+    height: 100%;
+    width: 30%;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 35px;
+}
+.inner{
+    position: absolute;
+    display: none;
+}
+.dropdown:hover>.inner{
+    /* transition: 1s; */
+    /* display: block;
+    background-color: rgb(38, 219, 117);
+    height: 40px;
+    width: 30%;
+}
+.text{
+    display: inline;
+} */
+.upleft{
+    display: block;
+    width: 200px;
+    float: left;
+}
+.upright{
+    display: block;
+    width: 400px;
+    float: right;
+}
+.addmore{
+    display: inline-block;
+    background-color: rgba(165, 165, 165, 0.096);
+    padding: 10px;
+    border-left-color: slategrey;
+    border-left-width: 2px;
+    border-left-style:solid ;
+    -webkit-touch-callout: none;
+    -moz-user-select: none; /*火狐*/
+    -webkit-user-select: none;  /*webkit浏览器*/
+    -ms-user-select: none;   /*IE10*/
+    -khtml-user-select: none; /*早期浏览器*/
+    user-select: none;
+}
+.layui-input-block>img{
+    margin-top: 10px;
+}
+#file-upload-button{
+    background-color: springgreen;
+}
+@media only screen and (max-width:730px) {
+    .upright{
+        float: left;
+    }
+}

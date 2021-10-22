@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="./js/jqery-3.5.1.min.js"></script>
+
+    <title>Document</title>
+    <style>
+        body>div{
+            height: 50px;
+            border-top-color:rgb(212, 212, 212) ;
+            border-top-width: 2px;
+            border-top-style:solid ;
+        }
+        body>div>a{
+            text-decoration: none;
+            color: #444;
+        }
+        .name,.delete{
+            display: inline-block;
+        }
+        .name{
+            width: 70vw;
+            height: 40px;
+        }
+        .delete{
+            float: right;
+        }
+        #new>*{
+            display: inline-block;
+        }
+        #new>input{outline: none;border-color: rgb(238, 238, 238);}
+        #new>input:focus{
+            border-color:rgb(4, 30, 66);
+            transition: 1s;
+        }
+        .new{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="new">
+        <input type="text" placeholder="添加新店">
+        <div class="new" id="" onclick=createnewmill()>√</div>
+    </div>
+    <div class="mills" id="">
+        <a href="./mymill-middle.html?id=233333" target="middle">
+            <div class="name" id="">老爹古董专卖店</div>
+        </a>
+        <div class="delete" id="">x</div>
+    </div>
+  
+    <script>
+
+    function showmymill(){
+        var token = document.cookie.split(";")[0]; 
+            $.ajax({
+                url: "http://192.168.137.175/user/showmymill",
+                ret: "0",
+                type:"POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    token: token,
+                }),
+                success: function(data){
+                    if (data.ret == "0"){
+                        $("body").append(data.data)
+                        $(".delete").click(function(){
+                            $.ajax({
+                                url:"http://192.168.137.175/user/deletethismill",
+                                ret: "0",
+                                type:"POST",
+                                dataType: "json",
+                                data: JSON.stringify({
+                                    token: token,
+                                    millid:$(this.parentNode).attr('id'),
+                                }),
+                                success: function(data){
+                                    
+                                    alert(data.msg)
+                                    window.location.href=document.URL
+
+                                }
+                            })
+                        })
+                    }  
+                    else{
+                        alert("显示我的店铺失败")
+                    }
+                }
+            })
+    }
+    showmymill()
+    function createnewmill(){
+
+        var newmillname = $("input").val();
+        var token = document.cookie.split(";")[0]; 
+        
+        
+        $.ajax({
+            url: "http://192.168.137.175/user/createnewmill",
+            type: "POST",
+            ret: '0',
+            dataType: "json",
+            data: JSON.stringify({
+                token: token,
+                newmillname: newmillname,
+            }),
+            success: function(data) {
+                if (data.ret != "1") {
+                    alert(data.msg)
+                    window.location.href=document.URL
+                } else {
+                    alert(data.msg)
+                }
+            }
+        })
+
+    }
+
+    
+
+    
+
+    </script>
+</body>
+</html>

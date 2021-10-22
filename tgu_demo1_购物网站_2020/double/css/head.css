@@ -1,0 +1,370 @@
+body {
+    margin: 0;
+}
+
+#top {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    padding-left: 24px;
+    padding-right: 24px;
+    background-color: rgb(4, 30, 66);
+    /* 不支持线性的时候显示 */
+    background-image: linear-gradient(to bottom right, rgb(4, 30, 66), rgb(4, 30, 66));
+    position: fixed;
+    z-index: 1000000000;
+    border-bottom-color: oldlace;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    padding-top: 13px;
+}
+
+#topmid>input {
+    width: 30vw;
+    height: 30px;
+    outline: none;
+    background-color: rgba(68, 68, 68, 0);
+    margin-top: 7px;
+    padding-left: 10px;
+    color: aliceblue;
+    border-left: aliceblue!important;
+    border-left-width: 2px!important;
+    border-left-style: solid!important;
+}
+
+input::-webkit-input-placeholder {
+    color: rgb(193, 194, 196);
+    text-align: left;
+}
+
+#topleft {
+    flex: 1;
+    padding: 7px;
+}
+
+#head_search {
+    width: 40px;
+    height: 40px;
+}
+
+#topleft>img {
+    display: inline-block;
+    height: 54px;
+    width: 120px;
+}
+
+#topmid {
+    flex: 1;
+    padding-left: -10vw;
+}
+
+#topright {
+    padding-right: 20px;
+    flex: 1;
+}
+
+#topright>a {
+    padding: 20px;
+    line-height: 0;
+    color: aliceblue;
+    text-decoration: none;
+    text-align: center;
+    height: 0px;
+    float: right;
+}
+
+#index {
+    display: none;
+}
+
+@media only screen and (max-width: 700px) {
+    #topmid:hover>#cue {
+        width: 65vw;
+        display: block;
+    }
+    #searchinput:focus+#cue {
+        display: block;
+        width: 65vw;
+    }
+    .goods {
+        display: inline-block;
+        width: 210px!important;
+        height: 338px!important;
+        background-color: white;
+        border-radius: 10px;
+        margin: 10px;
+    }
+    .goods>img {
+        width: 200px!important;
+        height: 200px!important;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 7px!important;
+    }
+    #shoppingcar,
+    #account {
+        display: none;
+    }
+    #bottom {
+        margin: 0px!important;
+    }
+    #top {
+        display: flex;
+    }
+    #topmid {
+        flex: 10;
+    }
+    #topmid>input {
+        background-color: rgba(255, 255, 255, 0.144);
+        width: 65vw;
+        height: 25px;
+    }
+    .goods {
+        margin: 5px!important;
+    }
+    #index {
+        display: block;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        height: 42px;
+        background-color: rgb(4, 30, 66);
+        width: 100vw;
+        display: flex;
+    }
+    #index>a {
+        flex: 1;
+        display: inline-block;
+        padding: 20px;
+        line-height: 0;
+        color: aliceblue;
+        text-decoration: none;
+        text-align: center;
+        height: 0px;
+        float: right;
+    }
+    #sale {
+        display: none;
+    }
+}
+
+.topicon>svg {
+    height: 30px;
+    width: 30px;
+    /*margin-top: -20px;*/
+}
+
+.topicon>svg {
+    /* margin-left: -6vw; */
+    margin-top: -15px;
+    color: aliceblue;
+}
+
+.content {
+    /* 给定容器宽高度 */
+    width: 80vw;
+    overflow: hidden;
+    height: 50vh;
+    position: relative;
+    margin: 24px auto;
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+.points {
+    position: absolute;
+    z-index: 5;
+    list-style: none;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: hsla(0, 0%, 0%, 0.2);
+    bottom: 5px;
+    left: 40%;
+    height: 20px;
+    border-radius: 25px;
+    right: 40%;
+}
+
+.points li {
+    cursor: pointer;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0px auto;
+    border-radius: 15px;
+    background-color: cadetblue;
+}
+
+.active {
+    background-color: hsla(0, 0%, 100%, 1.00) !important;
+}
+
+.prev {
+    border-radius: 30px;
+}
+
+.next,
+.prev {
+    appearance: menu;
+    margin: 0 auto;
+    width: 40px;
+    display: block;
+    float: left;
+    height: 40px;
+    position: absolute;
+    line-height: 40px;
+    text-align: center;
+    font-family: "宋体";
+    color: aliceblue;
+    z-index: 999;
+    background-color: hsla(0, 0%, 0%, 0.1);
+    top: 45%;
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+.next {
+    right: 0px;
+    border-radius: 30px;
+}
+
+.prev:hover {
+    background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.next:hover {
+    background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+#bottom {
+    background-color: #F4F4F4;
+    padding: 10px;
+    text-align: center;
+}
+
+.goodsname {
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4e4d4d;
+    line-height: 20px;
+    padding-top: 10px;
+}
+
+.goods {
+    display: inline-block;
+    width: 280px;
+    height: 420px;
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.goods>img {
+    width: 250px;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.price {
+    margin-left: 4px;
+    vertical-align: baseline;
+    text-align: left;
+    line-height: 25px;
+    font-family: PingFangSC-Medium;
+    font-size: 18px;
+    color: #000000;
+}
+
+.sellername {
+    text-align: left;
+    padding-left: 10px;
+    color: rgba(68, 68, 68, 0.418);
+    box-sizing: border-box;
+    background: #fff;
+    position: relative;
+    line-height: 0;
+    font-size: 14px;
+}
+
+.sellername>svg {
+    padding-top: 3px;
+}
+
+.salevol {
+    margin-top: 10px;
+    border-top: solid 1px #444;
+    text-align: right;
+    margin-right: 10px;
+    color: #9b9b9b;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.685);
+}
+
+.tooltip .tooltiptext {
+    width: 100px;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.699);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    padding: 10px;
+}
+
+#cue {
+    display: none;
+    color: white;
+    padding: 10px;
+    width: 40vw;
+    z-index: 10000000;
+    position: absolute;
+    border-width: 1px;
+    border-color: white;
+    border-style: solid;
+    top: 60px;
+    background-color: rgba(4, 30, 66, 0.911);
+}
+
+#cue>div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#cue>div:hover {
+    background-color: rgba(32, 71, 124, 0.911);
+}
+
+#searchinput:focus+#cue {
+    display: block;
+}
+
+#topmid:hover>#cue {
+    display: block;
+}

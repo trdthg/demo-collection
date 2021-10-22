@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<note>
+    <user>
+        <number>111</number>
+        <password>123</password>
+        <name>小绿</name>
+        <phone>666</phone>
+    </user>
+    <user>
+        <number>222</number>
+        <password>123</password>
+        <name>小红</name>
+        <phone>1112223</phone>
+    </user>
+    <user>
+        <number>333</number>
+        <password>123</password>
+        <name>小蓝</name>
+        <phone>43235657</phone>
+    </user>
+    <user>
+        <number>1</number>
+        <password>1</password>
+        <name>1</name>
+        <phone>1</phone>
+    </user>
+<user><number>000</number><password>000</password><name>000</name><phone>000</phone></user><user><number>47</number><password>123</password><name>杀手47</name><phone>看我头后的二维码</phone></user></note>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="./js/lib/jquery-3.6.0.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/user.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/element_loader.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			* {
+				/* border: 1px solid black; */
+			}
+
+			.blue,
+			#details>div>input {
+				transition: color 1s;
+				color: #7c90ad;
+			}
+
+			.gray {
+				transition: color 1s;
+				color: #cdcdce;
+			}
+
+			body {
+				height: 100vh;
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				background-color: #FBFCFE;
+			}
+
+			#container {
+				background-color: #FBFCFE;
+				box-sizing: border-box;
+				position: relative;
+				width: 300px;
+				margin: 0 auto;
+				box-shadow: 0px 5px 15px 15px #EAEFFE;
+			}
+
+			form {
+				height: 100%;
+			}
+
+			#method {
+				padding-top: 20%;
+				height: 13%;
+				padding-left: 10%;
+				transform: rotateX(30 deg) !important;
+				-webkit-transform: rotateX(30 deg) !important;
+			}
+
+			.actived_method {
+				color: #7c90ad;
+			}
+
+			.not_actived_method {
+				color: #cdcdce;
+			}
+
+
+			.underline_show {
+				transition: width 1s;
+				height: 5px;
+				border-bottom: 1px solid #7c90ad;
+				width: 40px;
+			}
+
+			.underline_hide {
+				transition: width 1s;
+				height: 5px;
+				border-bottom: 1px solid #7c90ad;
+				width: 0px;
+			}
+
+			#method>div {
+				display: inline-block;
+				font-size: 13px;
+				margin-right: 10px;
+			}
+
+			#details {
+				padding-left: 7px;
+				margin: 0 auto;
+				width: 90%;
+				padding: 15% 0px;
+				background-color: #FFFFFF;
+			}
+
+			#details>div>hr {
+				border: 1px solid #F8F8F8;
+				box-shadow: 0px 0px 1px 1px #F8F8F8;
+				margin: 0px auto;
+				width: 90%;
+			}
+
+			#details>div>label {
+				font-size: 12px;
+			}
+
+			#details>div>input {
+				display: block;
+				margin: 0 auto;
+				width: 90%;
+				height: 4vh;
+				outline: none;
+				border: 0px;
+				font-weight: bolder;
+			}
+
+			#username_container {
+				height: 25%;
+			}
+
+			.password_container {
+				padding-top: 5px;
+				height: 33%;
+			}
+
+			label {
+				display: inline-block;
+				padding-left: 15px;
+			}
+
+			#keep_sign_in {
+				height: 10px !important;
+				width: 10px !important;
+			}
+
+			#submit_btn {
+				width: 100%;
+				height: 7vh;
+				line-height: 7vh;
+				text-align: center;
+				font-size: 13px;
+				font-weight: bolder;
+				color: white;
+				background-color: #5D7EF2;
+				border: 0px;
+			}
+			#tips{
+				position: absolute;
+				right: 0px;
+				bottom: 0px;
+				width: 300px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<form id="form" action="#" method="get">
+				<div id="method">
+					<div class="actived_method" id="sign_in">Sign In <div id="underline_sign_in" class="underline_show">
+						</div>
+					</div>
+					<div class="not_actived_method" id="sign_up">Sign Up <div id="underline_sign_up"
+							class="underline_hide"></div>
+					</div>
+				</div>
+				<div style="height: 5vh;">
+				</div>
+				<div id="details">
+					<div id="username_container">
+						<label class="gray" for="username">USERNAME</label>
+						<br>
+						<input type="text" name="username" id="username" autocomplete="off" />
+						<hr>
+					</div>
+					<div class="password_container">
+						<label class="gray" for="password">PASSWORD</label>
+						<br>
+						<input type="password" name="password" id="password" autocomplete="off" />
+						<hr>
+					</div>
+					<div id="cfm_pswd" class="password_container" style="display: none;">
+						<!-- confirm password -->
+						<label class="gray" for="password">CONFIRM PASSWORD</label>
+						<br>
+						<input type="password" name="confirm_password" id="confirm_password" autocomplete="off" />
+						<hr>
+					</div>
+					<div>
+						<span class="blue" style="font-size: 10px;display: inline-block;padding: 10px;">
+							<input type="checkbox" name="keep_sign_in" id="keep_sign_in" />keep me sign in
+						</span>
+					</div>
+				</div>
+				<div style="height: 15vh;width: 5px;">
+				</div>
+				<div id="submit_btn">SIGN IN</div>
+			</form>
+		</div>
+		<div id="tips" class="replace" load_name="tips">
+			
+		</div>
+		<script type="text/javascript">
+			load_all(function(){});
+			
+			// setTimeout(function(){add_tip(tips,23333,"primary");},1000);
+		</script>
+		<script type="text/javascript">
+		var m={
+			mode:"sign in",
+			sign_in(){
+				this.mode="sign in";
+			},
+			sign_up(){
+				this.mode="sign up";
+			}
+		}
+			var t = 100;
+			$("#container").hide();
+			$("#container").show(1000);
+			$("#cfm_pswd").hide();
+			$("#sign_in").click(function() {
+				m.sign_in();
+				$("#underline_sign_up").attr("class", "underline_hide");
+				$("#underline_sign_in").attr("class", "underline_show");
+				$("#sign_in").attr("class", "actived_method");
+				$("#sign_up").attr("class", "not_actived_method");
+				$("#cfm_pswd").hide(t);
+				$("#submit_btn").text("SIGN IN");
+			})
+			$("#sign_up").click(function() {
+				m.sign_up()
+				$("#underline_sign_up").attr("class", "underline_show");
+				$("#underline_sign_in").attr("class", "underline_hide");
+				$("#sign_in").attr("class", "not_actived_method");
+				$("#sign_up").attr("class", "actived_method");
+				$("#cfm_pswd").show(t);
+				$("#submit_btn").text("SIGN UP");
+			})
+			// username
+			$("#username").focus(function() {
+				// console.log(this);
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(lable);
+				$(lable).attr("class", "blue");
+			})
+			$("#username").blur(function() {
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(this);
+				$(lable).attr("class", "gray");
+			})
+			// password
+			$("#password").focus(function() {
+				// console.log(this);
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(lable);
+				$(lable).attr("class", "blue");
+			})
+			$("#password").blur(function() {
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(this);
+				$(lable).attr("class", "gray");
+			})
+			// confirm_password
+			$("#confirm_password").focus(function() {
+				// console.log(this);
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(lable);
+				$(lable).attr("class", "blue");
+			})
+			$("#confirm_password").blur(function() {
+				var lable = this.parentNode.getElementsByTagName("label");
+				// console.log(this);
+				$(lable).attr("class", "gray");
+			})
+		</script>
+		<script type="text/javascript">
+			var state=["ok","用户名应为6到16字的数字、字母、下划线或减号","密码应为6到16字的数字、字母、下划线或减号","两次密码应相同"];
+			function verify(){
+				debugger;
+				var err=new Array();
+				var regex= /^[A-Za-z0-9_-]{6,16}$/;//username
+				if(!regex.test($("#username").val())){err.push(1);}
+				regex=/^[A-Za-z0-9_-]{6,16}$/;//password
+				if(!regex.test($("#password").val())){err.push(2);}
+				if(m.mode=="sign up"&& $("#password").val()!=$("#confirm_password").val()){err.push(3);}
+				var tips=document.getElementById("tips");
+				var wait=function(tip,mode){
+					try{
+						add_tip(tips,tip,mode);
+					}
+					catch(e){
+						setTimeout(function(){wait(tip,mode);} ,1000) ;
+					}
+				}
+				if(err.length){
+					for(var i in err)
+					wait(state[err[i]],"warning");
+				}
+				return err.length;
+			}
+			$("#submit_btn").click(function(){
+				if(!verify()){
+					document.getElementById("form").submit();
+					if(m.mode=="sign in"){
+						var data={
+							username:$("#username").text(),
+							password:$("#password").text(),
+						}
+						$.get("#",data,function(data){window.URL=})
+					}
+				}
+				
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        
+        <link rel="stylesheet" href="./css/login.css">
+        <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="./js/jquery.min.js" charset="utf-8"></script>
+        <script src="./js/LoopSlider.js" charset="utf-8"> </script>
+        <script>
+        function login(){
+
+            $.ajax({
+                url: "http://192.168.137.175/user/login",
+                type: "POST",
+                data: JSON.stringify({
+                    account:$("#username").val(),
+                    password:$("#password").val()
+                }),
+                success: function (data) {
+                    if (data.ret==0){
+                        document.cookie = data.token
+                        window.location.href="http://192.168.137.175/index.html"
+                    }
+                    else{
+                        alert(data.msg)
+                        console.log(data)
+
+                    }
+              }
+        })
+        }
+      </script>
+      </head>
+      <body>
+
+          <for  class="login-form">
+            <h1>Login</h1>
+
+            <div class="txtb">
+              <input type="text" id="username">
+              <span data-placeholder="Username"></span>
+            </div>
+
+            <div class="txtb">
+              <input type="password" id="password">
+              <span data-placeholder="Password"></span>
+            </div>
+
+            <input type="submit" class="logbtn" value="Login" onclick=login()>
+
+            <div class="bottom-text">
+              Don't have account? <a href="/register.html">Sign up</a>
+            </div>
+
+          </for>
+
+          <script type="text/javascript">
+          $(".txtb input").on("focus",function(){
+            $(this).addClass("focus");
+          });
+
+          $(".txtb input").on("blur",function(){
+            if($(this).val() == "")
+            $(this).removeClass("focus");
+          });
+
+          </script>
+          <script>
+          
+          </script>
+
+
+    </body>
+  
+</html>

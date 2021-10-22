@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/page1.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/page2.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/page3.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/page4.css"/>
+    <script src="../js/lib/jquery-3.6.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/lib/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(function() {
+        setTimeout(function() {
+          $("#container1 #a1").css("display", "inline");
+        }, 1000)
+      })
+    </script>
+    <title></title>
+    <!--
+        @time: 2018-08-04
+        @version: 0.0.1
+        @author: Mortal
+        -->
+    <style type="text/css">
+      /*
+         * 说明�?
+         * 标注为慎删的属性暂时认定可以删除，即在作者测试的环境下删除暂时没有影响，但不代表所有环境下删除都没有影�?
+         * 其他属性一概不可以删除
+         */
+      html,
+      body {
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      body,
+      ul,
+      li,
+      a,
+      p,
+      div {
+        /*慎删*/
+        padding: 0px;
+        margin: 0px;
+      }
+
+      #wrap {
+        overflow: hidden;
+        width: 100%;
+      }
+
+      #main {
+        top: 0;
+        position: relative;
+      }
+
+      .page {
+        /*谨删*/
+        width: 100%;
+        margin: 0;
+      }
+
+      #pageUl {
+        position: fixed;
+        right: 10px;
+      }
+      
+ 
+    </style>
+  </head>
+
+  <body>
+    <!--
+        每个全屏页面div的class为page，其中的图片的class为pageImg
+        ul为右侧的导航�?
+        pageUlLi和page的数目必须相等，修改数目时还应修改最下面js鼠标悬停的跳转代�?
+        -->
+    <div id="wrap">
+      <div id="main">
+        <ul style="z-index: 999; font-size: 64;" id="pageUl" class="list-unstyled" type="circle">
+          <li id="pageUlLi1" class="pageUlLi" style="color: red;"><span class="glyphicon glyphicon-pushpin">&nbsp;</span></li><br>
+          <li id="pageUlLi2" class="pageUlLi" style="color: red;"><span class="glyphicon glyphicon-pushpin">&nbsp;</span></li><br>
+          <li id="pageUlLi3" class="pageUlLi" style="color: red;"><span class="glyphicon glyphicon-pushpin">&nbsp;</span></li><br>
+          <li id="pageUlLi4" class="pageUlLi" style="color: red;"><span class="glyphicon glyphicon-pushpin">&nbsp;</span></li><br>
+          <li id="pageUlLi5" class="pageUlLi" style="color: red;"><span class="glyphicon glyphicon-pushpin">&nbsp;</span></li><br>
+        </ul>
+        <div style="position: relative; background-color: #1b6d85" id="page1" class="page">
+          <div id="container1" class="container-fluid" style="text-align: center;">
+            <h1 style="font-size: 54px; padding: 10px;">Welcome to our</h1>
+            <h1 style="font-size: 54px;"><span style="padding: 10px; background-color: white;color: rgb(0, 0, 0) ">Website</span> </h1>
+            <p style="font-size: 22px; margin: 40px;">Lorem ipsum dolor sit amt, consectet adop elit, sed do <br> eius mod ididu  There are many</p>
+            <div class="" style="margin: 40px;">
+              <a id="a1" href="demo1.html" class="btn btn-typ1">learn more</a>&nbsp;
+              <a id="a2" href="../sign_in_sign_up.html" class="btn btn-typ2">purchase now</a>
+            </div>
+          </div>
+        </div>
+        <div style="background-color: #ffffff" id="page2" class="page">
+          <div id="container2">
+            <div id="container2_header">
+              <div>
+                <div id="container2_header1">Faqs</div>
+                <div id="container2_header2">Lorem ipsum dolor sit amt, consectet adop adipisicing elit, sed do
+                  eiusmod more incididunt ugt
+                  labore.</div>
+      
+              </div>
+            </div>
+            <div id="container2_body">
+              <div id="container2_left">
+                <img  class="container2_img" src="../img/faqs-1.png">
+              </div>
+              <div id="container2_right">
+                <div class="container2_block">
+                  <div class="container2_outline">1</div>
+                  <div class="container2_detail">this is a very long text this is a very long text this is a very
+                    long text</div>
+                </div>
+                <div class="container2_block">
+                  <div class="container2_outline">2</div>
+                  <div class="container2_detail">this is a very long text this is a very long text this is a very
+                    long text</div>
+                </div>
+                <div class="container2_block">
+                  <div class="container2_outline">3</div>
+                  <div class="container2_detail">this is a very long text this is a very long text this is a very
+                    long text</div>
+                </div>
+                <div class="container2_block">
+                  <div class="container2_outline">4</div>
+                  <div class="container2_detail">this is a very long text this is a very long text this is a very
+                    long text</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="background-color: #8a6d3b" id="page3" class="page">
+            <div id="container3">
+              <div id="desc">
+                <h2>App Feature</h2>
+                <p>Lorem ipsum dolor sit amt, consectet adop adipisicing elit, sed do eiusmod <br>more incididunt ugt labore.</p>
+              </div>
+              <div id="card">
+                <div id="card1" class="card card-middle">
+                  <img class="header" src="../img/icon-1.png" >
+                  <h4>Easy Customize</h4>
+                  <p>Simply dummy text of the printing and typesetting industry. Ipsum has been</p>
+                  <img class="footer"  src="../img/shape-1.png" >
+                </div>
+                <div id="card2" class="card card-middle">
+                  <img class="header" src="../img/icon-2.png" >
+                  <h4>Responsive Ready</h4>
+                  <p>Simply dummy text of the printing and typesetting industry. Ipsum has been</p>
+                  <img class="footer"  src="../img/shape-2.png" >
+                </div>
+                <div id="card3" class="card card-aside">
+                  <img class="header" src="../img/icon-3.png" >
+                  <h4>Cloud Storage</h4>
+                  <p>Simply dummy text of the printing and typesetting industry. Ipsum has been</p>
+                  <img class="footer" src="../img/shape-3.png" >
+                </div>
+                
+              </div>
+            </div>
+        </div>
+        <div style="background-color: #000000;padding-top: 10vh;" id="page4" class="page">
+          <div id="container_4">
+            <footer class="s-footer footer">
+              <div class="row section-header align-center">
+                <div>
+                  <h1 class="display-1">
+                    Let's Stay In Touch.
+                  </h1>
+                  <p class="lead">
+                    Subscribe for updates, special offers, and other amazing stuff.
+                  </p>
+                </div>
+              </div> <!-- end section-header -->
+              <div class="row footer__top">
+      
+                <div class="col-full footer__subscribe end">
+                  <div class="subscribe-form">
+                    <form id="mc-form" class="group" novalidate="true">
+                      <input type="email" value="" name="EMAIL" class="email" id="mc-email"
+                        placeholder="Email Address" required="">
+                      <input type="submit" name="subscribe" value="Sign Up">
+                      <label for="mc-email" class="subscribe-message"></label>
+                    </form>
+                  </div>
+                </div>
+              </div> <!-- end footer__top -->
+              <div class="row footer__bottom">
+                <div class="footer__left">
+                  <h4>About Kairos.</h4>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                    laboris nisi ut aliquip ex consectetur adipisicing elit do eiusmod tempor.
+                  </p>
+                </div>
+                <div class="footer_right">
+                  <div>
+                    <div class="footer__site-links">
+                      <h4>Site links.</h4>
+                      <ul class="footer__site-links">
+                        <li><a href="#home" class="smoothscroll">Intro</a></li>
+                        <li><a href="#about" class="smoothscroll">About</a></li>
+                        <li><a href="#features" class="smoothscroll">Features</a></li>
+                        <li><a href="#pricing" class="smoothscroll">Pricing</a></li>
+                        <li><a href="#download" class="smoothscroll">Download</a></li>
+                        <li><a href="#0">Privacy Policy</a></li>
+                      </ul>
+                    </div>
+                    <div class="footer__contact">
+                      <h4>Contact Us.</h4>
+                      <p>
+                        Phone: (+63) 555 1212 <br>
+                        Fax: (+63) 555 0100
+                      </p>
+                      <p>
+                        Need help or have a question? Contact us at: <br>
+                        <a href="mailto:#0" class="footer__mail-link">support@kairos.com</a>
+                      </p>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div> <!-- end footer__bottom -->
+              <div class="go-top link-is-visible">
+                <a class="smoothscroll" title="Back to Top" href="#top"></a>
+              </div>
+            </footer>
+          </div>
+        </div>
+        <div style="background-color: #66512c" id="page5" class="page">
+
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    $("#pageUlLi1").click(function() {
+      // location.href = "demo1.html"
+      toPage(1)
+    })
+    function container1_move() {
+      $("#container1 #a1").animate(
+        {
+          right: "-20%"
+        }, "slow", function() {
+          $("aside").toggleClass("hidden-md")
+          $("aside").toggleClass("col-md-2")
+        }
+      )
+    }
+    container1_move()
+  
+  
+    //改变窗口大小时调整图片大�?
+    window.onload = resizeImages;
+    window.onresize = resizeImages;
+
+    function resizeImages() {
+      $(function(e) {
+        var screenWeight = document.documentElement.clientWidth;
+        var screenHeight = document.documentElement.clientHeight;
+        $("[name=pageImg]").css("width", screenWeight).css("height", screenHeight);
+        $("#pageUl").css("bottom", screenHeight >> 1);
+      });
+    }
+
+    var index = 1;
+    var curIndex = 1;
+    var wrap = document.getElementById("wrap");
+    var main = document.getElementById("main");
+    var hei = document.body.clientHeight;
+    wrap.style.height = hei + "px";
+    var obj = document.getElementsByTagName("div");
+    for (var i = 0; i < obj.length; i++) {
+      if (obj[i].className == 'page') {
+        obj[i].style.height = hei + "px";
+      }
+    }
+    var pageNum = document.querySelectorAll(".page").length;
+    //如果不加时间控制，滚动会过度灵敏，一次翻好几�?
+    var startTime = 0, //翻屏起始时间  
+      endTime = 0,
+      now = 0;
+    //浏览器兼�?      
+    if ((navigator.userAgent.toLowerCase().indexOf("firefox") != -1)) {
+      document.addEventListener("DOMMouseScroll", scrollFun, false);
+    } else if (document.addEventListener) {
+      document.addEventListener("mousewheel", scrollFun, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("onmousewheel", scrollFun);
+    } else {
+      document.onmousewheel = scrollFun;
+    }
+
+    //滚动事件处理函数
+    function scrollFun(event) {
+      startTime = new Date().getTime();
+      var delta = event.detail || (-event.wheelDelta);
+      //mousewheel事件中的 “event.wheelDelta�? 属性值：返回的如果是正值说明滚轮是向上滚动
+      //DOMMouseScroll事件中的 “event.detail�? 属性值：返回的如果是负值说明滚轮是向上滚动
+      if ((endTime - startTime) < -300) {
+        if (delta > 0 && parseInt(main.offsetTop) > -(hei * (pageNum - 1))) {
+          //向下滚动
+          index++;
+          toPage(index);
+        }
+        if (delta < 0 && parseInt(main.offsetTop) < 0) {
+          //向上滚动
+          index--;
+          toPage(index);
+        }
+        endTime = new Date().getTime();
+      } else {
+        event.preventDefault();
+      }
+    }
+
+
+    function toPage(idx) {
+      //jquery实现动画效果
+      if (idx != curIndex) {
+        index = idx
+        var delta = idx - curIndex;
+        now = now - delta * hei;
+        $("#main").animate({
+          top: (now + 'px')
+        }, 500);
+        curIndex = idx;
+        //更改列表的选中�?
+        $(".pageUlLi").css("color", "black");
+        $("#pageUlLi" + idx).css("color", "red");
+
+      }
+    }
+  </script>
+
+</html>

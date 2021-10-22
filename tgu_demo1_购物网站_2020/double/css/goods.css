@@ -1,0 +1,330 @@
+body{
+    margin: 0;
+}
+#top{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    padding-left: 24px;
+    padding-right: 24px;
+    background-color:rgb(4, 30, 66); /* 不支持线性的时候显示 */
+    background-image: linear-gradient(to bottom right,rgb(4, 30, 66) , rgb(4, 30, 66));
+    position: fixed;
+    z-index: 1000000000;
+    border-bottom-color: oldlace ;
+    border-bottom-width:2px ;
+    border-bottom-style: solid;
+    padding-top: 13px;
+}
+#topmid>input{
+    width: 30vw;
+    height: 30px;
+    outline: none;
+    background-color:rgba(68, 68, 68, 0);
+    margin-top:7px;
+    padding-left: 10px;
+    color: aliceblue;
+    border-left: aliceblue!important;
+    border-left-width: 2px!important;
+    border-left-style: solid!important;
+}
+input::-webkit-input-placeholder {
+    color: rgb(193, 194, 196);
+    text-align: left;
+}
+#topleft{
+    flex: 1;
+    padding: 7px;
+}
+#head_search{
+    width: 40px;
+    height: 40px;
+}
+#topleft>img{
+    display: inline-block;
+    height: 54px;
+    width: 120px;
+}
+#topmid{
+    flex: 1;
+    padding-left: -10vw;
+}
+#topright{
+    padding-right: 20px;
+    flex: 1;
+}
+#topright>a{
+    padding: 20px;
+    line-height: 0;
+    color: aliceblue;
+    text-decoration: none;
+    text-align: center;
+    height: 0px;
+    float: right;
+}
+#index{
+    display: none;
+}
+@media only screen and (max-width: 700px) {
+    #topright{
+        visibility: hidden;
+    }
+    .left{
+        width: 100vw!important;
+        display: block!important;
+        text-align: center!important;
+    }
+    .left>img{width: 70vw!important;height: 70vw!important;}
+    .right{
+        display: block!important;
+        width: 90vw!important;
+        /* text-align: center!important; */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .goods{
+        display: inline-block;
+        width: 210px!important;
+        height: 338px!important;
+        background-color: white;
+        border-radius: 10px;
+        margin: 10px;
+    }
+    .goods>img{
+        width: 200px!important;
+        height: 200px!important;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 7px!important;
+    }
+    #shoppingcar,#account{
+        display: none;
+    }
+    #bottom{
+        margin: 0px!important;
+    }
+    #top{
+        display: flex;
+    }
+    #topmid{
+        flex: 10;
+    }
+    #topmid>input{
+        background-color: rgba(255, 255, 255, 0.144);
+        width: 65vw;
+        height: 25px;
+    }
+    .goods{
+        margin: 5px!important;
+    }
+    #index{
+        display: block;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        height: 42px;
+        background-color:rgb(4, 30, 66);
+        width: 100vw;
+        display: flex;
+    }
+    #index>a{
+        flex: 1;
+        display: inline-block;
+        padding: 20px;
+        line-height: 0;
+        color: aliceblue;
+        text-decoration: none;
+        text-align: center;
+        height: 0px;
+        float: right;
+    }
+    #sale{
+        display: none;
+    }
+}
+.topicon>svg{
+    height:30px ;
+    width: 30px;
+    /*margin-top: -20px;*/
+}
+
+.topicon>svg{
+    /* margin-left: -6vw; */
+    margin-top: -15px;
+    color: aliceblue;
+}
+
+
+
+.up>.left{
+    display: inline-block;
+    width: 50vw;
+    text-align: right;
+    /*background-color: rgb(224, 144, 144);*/
+}
+.up>.left>img{
+    border-width: 1px;
+    border-color:rgb(214, 214, 214) ;
+    border-style:solid ;
+    border-radius: 5px;
+    display: inline-block;
+    height: 44vw;
+    width: 44vw;
+}
+.up>.right{
+    display: inline-block;
+    /* height: 30vw; */
+    /*background-color: #3eb1b1;*/
+    width: 44vw;
+    vertical-align: top;
+}
+.up>.right>div>p
+{
+    padding-left: 40px;
+    color: #666;
+    font-size: 16px;
+    font-weight: bold;
+}
+#price{
+    padding-left: 24px;
+    background-color: rgb(209, 209, 209);
+}
+#price>div{
+    color: rgb(4, 30, 66);
+    font-size: 24px;
+    font-weight: bold;
+}
+.right>div>a{
+    padding: 0;
+    border: 1px solid #ccc;
+    display: block;
+    text-decoration: none;
+    margin: 0;
+    white-space: nowrap;
+    float: left;
+    background-color: #fff;
+    margin-right: 7px;
+    margin-bottom: 4px;
+    line-height: 40px;
+    font: 12px/150% tahoma,arial,Microsoft YaHei,Hiragino Sans GB,"\u5b8b\u4f53",sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+.right>div>a>img{
+    border: 0;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    display: inline-block;
+    border-left-style:none ;
+    border-top-style:none ;
+    border-bottom-style:none ;
+}
+.right>div>a>i{
+    margin: 0 8px;
+    font-style: normal;
+    padding: 0 13px;
+    display: block;
+    display: inline-block;
+    white-space: nowrap;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.685);
+}
+
+.tooltip .tooltiptext {
+    width: 100px;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.699);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    padding: 10px;
+    transition: 0.5s;
+}
+#count{
+    padding-top: 10px;
+}
+#count>input{
+    height: 30px;
+    width: 80px;
+    outline: none;
+    /* border: none; */
+    font-size: 20px;
+    border-color: rgba(204, 204, 204, 0.678);
+
+}
+#count>input:focus{
+    border-color:rgb(4, 30, 66);
+    border-width: 2px;
+    border-style: solid;
+    transition: 1s;
+}
+#count>input::placeholder{
+    color: rgba(0, 0, 0, 0.637);
+}
+#add{
+    margin-top: 10px;
+    background-color: rgb(4, 30, 66);
+    width: 150px;
+    height:50px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    font-size: large;
+
+}
+#pri{
+    display: inline;
+}
+#count{
+    line-height: 0;
+    padding-bottom: 5px;
+    padding-top: 5px!important;
+    color: rgb(119, 119, 119)!important;
+    padding-left: 5px;
+}
+#count>input{
+    background-color: rgba(255, 255, 255, 0.753);
+}
+#down{
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top-color:rgba(153, 153, 153, 0.473) ;
+    border-top-width: 3px;
+    border-top-style: solid;
+    text-align: center;
+}
+#detail{
+    margin-left:15vw;
+    margin-right: 15vw;
+    text-align: left!important;
+}
+#readme{
+    width: 70%;
+    height: 0;
+    padding-bottom: 100%;
+    /* overflow: hidden; */
+}
+#readme>img{
+    width: 100%;
+    margin-left: 15vw;
+    margin-right: 15vw;
+}
+@media only screen and (max-width: 330px) {
+    #count>input {width:40px ;}
+}

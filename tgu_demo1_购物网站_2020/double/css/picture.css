@@ -1,0 +1,21 @@
+.content {
+    /* 给定容器宽高度 */
+    width: 80vw;
+    overflow: scroll;
+    height: 80vw;
+    position: relative;
+    margin: 24px auto;
+    background-color: rgba(204, 204, 204, 0.349);
+    /* background-image: url('../img/giveme.png'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    border-radius: 10px;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+

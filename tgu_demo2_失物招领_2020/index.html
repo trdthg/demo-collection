@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="swzl.css" />
+    <script src="jqery-3.5.1.min.js"></script>
+    <script src="loginornot.js"></script>
+    <script src="swzl.js"></script>
+    <script src="fun.js"></script>
+    <title>swzl</title>
+</head>
+<body>
+<div id=home>
+    <!--登录时弹窗-->
+    <div id="outsideWindow">
+        <!--登陆界面-->
+        <div class="register" id="register1">
+            <div id=registerTop>
+                <span style="float:left;padding-left:30px;">Welcome!</span>
+                <span font-size=20px id=false1>×</span>
+            </div>
+            <hr><br>
+            <div id="registerMiddle">
+                <input type="text" id="number" placeholder="账号/邮箱"><br><br>
+                <input type="password" id="password" placeholder="密码"><br><br>
+                <button  type="submit" id=registerButton1>登录</button><br><br>
+                
+                <button id=registerButton2>现在注册</button><br>
+            </div>
+            <div >
+            </div>
+        </div>
+        <!--注册界面-->
+        <div class="register" id="register2">
+            <div id=registerTop>
+                <span style="float:left;padding-left:30px;">欢迎您丢失物品</span>
+                <span font-size=20px id=false2>×</span>
+            </div>
+            <hr><br>
+            <div id="registerMiddle">
+                <input id="number2" type="text" placeholder="账号/邮箱"><br><br>
+                <input id="password2" type="text" placeholder="密码"><br><br>
+                <input id="name2"  type="text" placeholder="姓名"><br><br>
+                <input id="phone2" type="text" placeholder="联系电话"><br><br>
+                <button  type="submit" id="registerButton3">注册</button><br><br>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!--左侧固定导航栏-->
+    <div id="windowLeft">
+        <ul>
+            <span><a class="L" id="L0" href="#"><div><img src="image/1.jpg"><br>CSDN</div></a></span>
+            <span><a class="L" id="L1" href="#"><div><img src="image/7.png"><br>首页</div></a></span>               
+            <span><a class="L" id="L2" href="#"><div><img src="image/c1.png"><br>我的失物</div></a></span>
+            <span><a class="L" id="L3" href="#"><div><img src="image/8.png"><br>发布失物</div></a></span>
+            <span><a class="L" id="L4" href="#"><div><img src="image/9.png"><br>我的主页</div></a></span>
+            <span><a href="#"><div><img src="./image/a3.png"><br>♪♩♬♪</div></a></span>
+            <span><a href="#"><div><img src="./image/a3.jpg"><br>♪♬♩♪</div></a></span>
+
+        </ul>
+    </div>
+
+    <!--右侧滚轮浏览区-->
+    <div class="windowRight">
+        <!--顶部logo和登录按钮-->
+        <div id="rightTop">
+            <!--标题-->
+            <div id=rightTop1><div >天津工业大学CSDN社团</div></div>
+            <!--登录按钮-->
+            <div id=rightTop2><button id=rightTop2Btn style="float:right" value="登录CSDN">登录CSDN</button></div>
+            <div id=rightTop3><button id=rightTop2Btn2 style="float:right" value="登录">登陆成功</button></div>
+        </div>
+
+
+    <div class="rightMiddle0">
+        <!--主页-->
+        <div class="rightMiddle" id=rightMiddle1>
+
+            <div id="middleLeft"></div>
+            <div id="middleRight"><b>CSDN失物招领网</b></div>
+
+            <!--追加区域-->
+        </div>
+
+        <!--失物发布页-->
+        <div class="rightMiddle" id="rightMiddle3">
+            <div id="rM2_1">
+                <div id="continer">
+                    <h2>发布我的失物</h2>
+                    
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="lostname">物品名称</label>
+                            </div>
+                            <div class="col-75"> 
+                                <input type="text" class="input2" id="lostname" placeholder="丢失物品名称"><br><br>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="lostplace">丢失地点</label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" class="input2" id="lostplace" placeholder="大致地点"><br><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="losttime">丢失时间</label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" class="input2" id="losttime" placeholder="丢失的时间"><br><br>
+                            </div>
+                        </div>   
+                        
+                        <div class="row">
+                            <div class="col-25">
+                            <label for="subject">物品详细信息</label>
+                            </div>
+                            <div class="col-75">
+                            <textarea id="subject" class="input2" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row col-75">
+                            <input type="submit" id="pbulicmylost111"  class="submit2" value="Submit">
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+            
+
+        <!--我的主页-->
+        <div class="rightMiddle" id="rightMiddle4">
+            <div id="rM4Inner">
+                <div id="rM4InnerLeft"></div>
+                <div id="rM4InnerRight"><br><br><b>我的个人名片</b><br><br><br>
+                    <span>我的账号: </span>
+                    <span id="myaccount"></span><br><br>
+                    
+                    <span>我的姓名: </span>
+                    <span id="myname"></span><br><br>
+                    
+                    <span>我的电话: </span>
+                    <span id="myphone"></span><br><br><br>
+
+                    <input tpye="text" id="changename_text" placeholder="新姓名">
+                    <button id="changename" >更改姓名</button><br><br>
+
+                    <input type="text" id="changephone_text" placeholder="新手机号">
+                    <button id="changephone">更改电话</button>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!--版权所有-->
+        <div id="rightBottom">
+
+        </div>
+    </div>
+    </div>
+    <script src="bg.js"></script>
+
+</body>
+</html>

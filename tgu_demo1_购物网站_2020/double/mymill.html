@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<script src="./js/jqery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="./css/mymill.css">
+    <style>
+        body{
+            min-width: 1000px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="top">
+        
+        <div id="money">总收入：￥233333</div>
+        
+    </div>
+    <div class="else">
+        <div id="select">
+        <iframe src="http://192.168.137.175/mymill-left.html" frameborder="1" class="left" name="left"></iframe>
+        <iframe src="" frameborder="1" class="middle" name="middle"></iframe>
+        </div>
+        <iframe src="" frameborder="1" class="right" name="right"></iframe>
+    </div>
+</body>
+<script>
+    var token = document.cookie.split(";")[0]; 
+    $.ajax({
+        url: "http://192.168.137.175/user/showmymoney",
+        ret: "0",
+        type:"POST",
+        dataType: "json",
+        data: JSON.stringify({
+            token: token,
+        }),
+        success: function(data){
+            if (data.ret == "0"){
+                $("#money").text("总收入：￥"+data.money)
+            }  
+            else{
+                window.location.href="http://192.168.137.175/login.html"
+            }
+        }
+    })
+    
+    
+</script>
+</html>

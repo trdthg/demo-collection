@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jqery-3.5.1.min.js"></script>
+    <title>swzl</title>
+</head>
+<body>
+    <div>
+        <img src = './3.jpg'>
+        <script>
+            var xy=new Array();
+            var i =0;
+            $("body").click(function (event) {
+                var pos = getMousePos(event);
+                console.log(xy)
+                i += 1
+                xy[i] = pos
+            });
+            $("body").click(function(){
+                $("#s").text(function(xy){
+                    return xy[0];
+                });
+            });
+     
+            function getMousePos(event) {
+                var e = event || window.event;
+                var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+                var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+                var x = e.pageX || e.clientX + scrollX;
+                var y = e.pageY || e.clientY + scrollY;
+                return [x, y];
+            }
+        </script>
+    </div>
+    <div id='s'>
+
+    </div>
+</body>
+</html>

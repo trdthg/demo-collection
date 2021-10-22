@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+			body {
+				height: 100vw;
+				width: 100vw;
+				display: flex;
+				flex-direction: column;
+				padding: 0px;
+				margin: 0px;
+				overflow-x: hidden;
+			}
+
+			.line {
+				flex: 1;
+				width: 100%;
+				display: flex;
+			}
+
+			.grid {
+				flex: 1;
+				height: 100%;
+				transition:  background-color 2s;
+				-webkit-transition:  background-color 2s;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			class _node {
+				constructor(x, y) {
+					this.x = x;
+					this.y = y;
+				}
+			}
+			class edge {
+				constructor(x1, y1, x2, y2) {
+					this.u = new _node(x1, y1);
+					this.v = new _node(x2, y2);
+				}
+			}
+			const BASE = 128;
+			const PI = Math.acos(-1);
+			const dTHETA = 0.0001 * PI;
+			class Color {
+				constructor() {
+					this.red = 0;
+					this.green = (PI / 3) * 2;
+					this.blue = (PI / 3) * 4;
+				}
+				next_phase(phase) {
+					var new_phase = phase + dTHETA;
+					if (new_phase > PI) new_phase -= PI;
+					return new_phase;
+				}
+				next_color() {
+					this.red = this.next_phase(this.red);
+					this.green = this.next_phase(this.green);
+					this.blue = this.next_phase(this.blue);
+				}
+				phase_to_color(phase) {
+					return Math.floor((1 + Math.sin(phase) * 0.95) * BASE).toString(16);
+				}
+				to_str() {
+					var str = "#";
+					str += this.phase_to_color(this.red);
+					str += this.phase_to_color(this.blue);
+					str += this.phase_to_color(this.green);
+					return str;
+				}
+			}
+			var x = 200,
+				y = 200;
+			// 添加元素
+			for (var i = 0; i < x; i++) {
+				var d = document.createElement("div");
+				d.className = "line";
+				for (var j = 0; j < y; j++) {
+					var s = document.createElement("span");
+					s.id = "grid" + i + "-" + j;
+					s.className = "grid";
+					d.appendChild(s);
+				}
+				document.body.appendChild(d);
+			}
+
+			// 随机生成边
+			var arr = new Array();
+
+			for (var i = 1; i < x; i++) {
+				for (var j = 0; j < y; j++) {
+					arr.push(new edge(i - 1, j, i, j));
+				}
+			}
+			for (var i = 0; i < x; i++) {
+				for (var j = 1; j < y; j++) {
+					arr.push(new edge(i, j - 1, i, j));
+				}
+			}
+
+			function randArr(arr) {
+				for (var i = 0; i < arr.length; i++) {
+					var iRand = parseInt(arr.length * Math.random());
+					var temp = arr[i];
+					arr[i] = arr[iRand];
+					arr[iRand] = temp;
+				}
+				return arr;
+			}
+			randArr(arr);
+			var father = new Array();
+			for (var i = 0; i < x; i++) {
+				father[i] = new Array();
+				for (var j = 0; j < y; j++) {
+					father[i][j] = new _node(i, j);
+				}
+			}
+			var _nodes = x * y;
+			var e = new Array();
+			for (var i = 0; i < x; i++) {
+				e[i] = new Array();
+				for (var j = 0; j < y; j++) {
+					e[i][j] = new Array();
+				}
+			}
+
+			function equal(a, b) {
+				return a.x == b.x && a.y == b.y;
+			}
+
+			function findFather(dt) {
+				if (equal(father[dt.x][dt.y], dt)) {
+					return dt;
+				} else {
+					return (father[dt.x][dt.y] = findFather(father[dt.x][dt.y]));
+				}
+			}
+
+			function print(str, dt) {
+				console.log(str + dt.x + dt.y);
+			}
+
+			function _union(d1, d2) {
+				if (!equal(findFather(d1), findFather(d2))) {
+					_nodes -= 1;
+					var f1 = findFather(d1);
+					father[f1.x][f1.y] = findFather(d2);
+					e[d1.x][d1.y].push(d2);
+					e[d2.x][d2.y].push(d1);
+				}
+			}
+			for (var i = 0; i < arr.length; i++) {
+				if (_nodes == 1) break;
+				_union(arr[i].u, arr[i].v);
+			}
+			var visited = new Array();
+			for (var i = 0; i < x; i++) {
+				visited[i] = new Array();
+				for (var j = 0; j < y; j++) {
+					visited[i][j] = false;
+				}
+			}
+			var begin = new _node(
+				Math.floor(Math.random() * x),
+				Math.floor(Math.random() * x)
+			);
+			var _color = new Color();
+			_color.next_color();
+			var old = 0;
+
+			function replace_color(i, j, depth) {
+				var obj = document.getElementById("grid" + i + "-" + j);
+				obj.style.backgroundColor = _color.to_str();
+				if (depth != old) {
+					_color.next_color();
+					depth = old;
+				}
+			}
+
+			function traverse(dot, depth, i) {
+				if (i == e[dot.x][dot.y].length) return;
+				var nxt = e[dot.x][dot.y][i];
+				if (!visited[nxt.x][nxt.y]) {
+					visited[nxt.x][nxt.y] = true;
+					var next_step = {
+						fun: function () {
+							dfs(nxt, depth + 1);
+						},
+						Animation: function () {
+							window.requestAnimationFrame(this.fun);
+						},
+					};
+					next_step.Animation();
+				}
+				var next_direction = {
+					traverse_: function () {
+						traverse(dot, depth, i + 1);
+					},
+					Animation: function () {
+						window.requestAnimationFrame(this.traverse_);
+					},
+				};
+				next_direction.Animation();
+			}
+
+			function dfs(dot, depth) {
+				replace_color(dot.x, dot.y, depth);
+				traverse(dot, depth, 0);
+			}
+			visited[begin.x][begin.y] = true;
+			dfs(begin, 0);
+		</script>
+	</body>
+</html>

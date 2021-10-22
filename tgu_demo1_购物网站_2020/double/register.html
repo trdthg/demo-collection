@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        
+        <link rel="stylesheet" href="./css/login.css">
+        <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="./js/jquery.min.js" charset="utf-8"></script>
+        <script src="./js/LoopSlider.js" charset="utf-8"> </script>
+       
+      </head>
+      <body>
+
+          <for  class="login-form">
+            <h1>Register</h1>
+
+            <div class="txtb">
+              <input type="text" id="username">
+              <span data-placeholder="Username"></span>
+            </div>
+
+            <div class="txtb">
+              <input type="password" id="password">
+              <span data-placeholder="Password" class="changeme"></span>
+            </div>
+
+            <div class="txtb">
+                <input type="password" id="confirm">
+                <span data-placeholder="Confirm" class="changeme"></span>
+            </div>
+
+            <input type="submit" class="logbtn" value="Register" onclick=register() id="register">
+
+            <div id="err" style="margin-top:20px ;color: rgba(255, 0, 0, 0.712);">Passwords do not match</div>
+            <script>$("#err").fadeOut(0);</script>
+          </for>
+
+          <script type="text/javascript">
+          $(".txtb input").on("focus",function(){
+            $(this).addClass("focus");
+          });
+
+          $(".txtb input").on("blur",function(){
+            if($(this).val() == "")
+            $(this).removeClass("focus");
+          });
+      </script>
+      <script>
+            
+        function register(){
+
+            if($("#confirm").val()!=$("#password").val()){
+                $("#err").fadeIn(1000);
+                return 0;
+            }
+
+            $.ajax({
+                url: "http://192.168.137.175/user/register",
+                type: "POST",
+                data: JSON.stringify({
+                    name:$("#username").val(),
+                    password:$("#password").val(),
+                    confirm:$("#confirm").val(),
+                }),
+                success: function (data) {
+                    if (data.ret==0){
+                        alert(data.msg)
+                        window.location.href="http://192.168.137.175/login.html"
+                    }
+                    else{
+                        alert(data.msg)
+                        console.log(data)
+                    }
+              }
+        })
+        }
+      </script>
+
+
+
+    </body>
+  
+</html>

@@ -1,0 +1,103 @@
+body{
+    margin: 0;
+}
+#top{
+    width: 100%;
+    height: 54px;
+    display: flex;
+    padding-left: 24px;
+    padding-right: 24px;
+    background-color:#3895DA; /* 不支持线性的时候显示 */
+    background-image: linear-gradient(to bottom right,#E60F14 , #EB1F40);
+    position: fixed;
+    z-index: 1000000000;
+    border-bottom-color: oldlace ;
+    border-bottom-width:2px ;
+    border-bottom-style: solid;
+}
+#topmid>input{
+    width: 20vw;
+    height: 40px;
+    outline: none;
+    background-color:rgba(68, 68, 68, 0);
+    margin-top:7px;
+    padding-left: 10px;
+    color: aliceblue;
+    font-size: large;
+    border-left: aliceblue!important;
+    border-left-width: 2px!important;
+    border-left-style: solid!important;
+}
+input::-webkit-input-placeholder {
+    color: rgb(193, 194, 196);
+    text-align: left;
+}
+#topleft{
+    flex: 1;
+    padding: 7px;
+}
+#head_search{
+    width: 40px;
+    height: 40px;
+}
+#topleft>img{
+    display: inline-block;
+    height: 54px;
+    width: 120px;
+}
+#topmid{
+    flex: 1;
+}
+#topright{
+    flex: 1;
+    display: flex;
+}
+#topright>a{
+    flex: 1;
+    padding: 27px;
+    line-height: 0;
+    color: aliceblue;
+    text-decoration: none;
+    text-align: center;
+}
+#topright>a:hover{
+    background-color: rgb(224, 18, 32);
+}
+.topicon>svg{
+    height:40px ;
+    width: 40px;
+    /*margin-top: -20px;*/
+}
+
+.topicon>svg{
+    /* margin-left: -6vw; */
+    margin-top: -20px;
+    color: aliceblue;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.685);
+}
+
+.tooltip .tooltiptext {
+    width: 100px;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.699);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    padding: 10px;
+}

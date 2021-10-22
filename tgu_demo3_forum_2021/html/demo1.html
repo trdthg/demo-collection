@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/demo1.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/demo2.css"/>
+    <script src="../js/lib/jquery-3.6.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/lib/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/search.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/element_loader.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+      
+    </script>
+    <style type="text/css">
+      * {
+        /* border: 0.5px solid black; */
+        box-sizing: border-box;
+      }
+      body {
+        position: relative;
+        background-color: rgb(251 251 251 / 36%);
+        height: 100%;
+        margin: 0;
+      }
+      
+      nav {
+        padding: 0px;
+        height: 100%;
+      } .list-group-item {
+        border: none;
+      }
+      main {
+        position: absolute;
+        height: 100%;
+        background-color: white;
+      }
+      aside {
+        position: absolute;
+        background-color: white;
+        height: 100%;
+      }
+      article {
+      }
+      #container {
+        height: 100%;
+      }
+      .container-fluid {
+        padding: 0;
+      }
+      #nav_1 {
+        margin: 0;
+      }
+      
+      .dropdown {
+        margin: 0;
+      }
+      .main_section {
+        background-color: white;
+        margin: 0px;
+      }
+      button.list-group-item {
+        text-align: center;
+        right: 0;
+      }
+      #list-group1 > button{
+        background-color: rgb(230,230,230);
+      }
+      #list-group2_btn {
+        right: 0;
+        margin: 0 auto;
+      }
+	  #nav_2{
+		  border-right:1px solid #e7e7e7;
+		  height: 100%;
+	  }
+	  .container-fluid>aside{
+		  border-left:1px solid #e7e7e7;
+	  }
+	  #nav_2>#list-group2 button:hover{
+		background-color: #fdfdfd;
+	  }
+	  #nav_2>#list-group2 button{
+	  		background-color: #ffffff;
+	  }
+	  #bs-example-navbar-collapse-1 {
+        width: 50%;
+        max-height: 400px;
+        position: absolute;
+        right: 0;
+        z-index: 999;
+      } #bs-example-navbar-collapse-1::-webkit-scrollbar {
+        display: none;
+      }
+      
+      #moveLeft {
+        color: skyblue;
+        display: inline;
+      } .nav-link {
+        color: skyblue;
+        display: inline;
+      }
+      #nav_2 button:hover {
+        border-left: 3px solid black;
+      }
+      .carousel-inner img{
+        height: 100px
+      }
+      .navbar {
+          border-radius: 0px;
+      }.navbar-form {
+        border: none;
+      }.form-control {
+        width: 10%;
+        display: inline-block;
+      }
+	  .list-group-item{
+		   background-color: #fdfdfd;
+	  }
+	  #asidebox1,#asidebox2{
+		  background-color: #fdfdfd;
+	  }
+	  
+	  /*  */
+	  /*  */
+	  /*  */
+	  * {
+	  	/* border: 1px solid #000; */
+	  	box-sizing: border-box;
+	  }
+	  .card_container {
+	  	width: 100%;
+	  	margin: 0 auto;
+	  }
+	  #search_result{
+	  	column-count: 2;
+	  }
+	  #search_body{
+	  	padding-top: 50px;
+	  	width: 8;
+	  	margin: 0 auto;
+	  }
+	  #search_result>div{
+	  	padding-bottom: 20px;
+	  }
+    </style>
+  </head>
+  <body>
+      <nav id="nav_1" class="navbar navbar-default " style="background-color: #fdfdfd;">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+              <a class="navbar-brand" href="#">Brand&nbsp;</a>
+            
+            <button onclick="changePage()"  id="link1" type="button" class="nav-link nav-link-a navbar-toggle collapsed hidden-lg hidden-md hidden-sm" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </button>
+            <!-- 三个链接按钮 a型 -->
+            <button  onclick="changePage()" id="link2" type="button" class="nav-link nav-link-a navbar-toggle collapsed hidden-lg hidden-md hidden-sm" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <a href=""><span class="glyphicon glyphicon-console"></span></a>
+            </button>
+            <button onclick="changePage()" id="link3" type="button" class="nav-link nav-link-a navbar-toggle collapsed hidden-lg hidden-md hidden-sm" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <a href=""><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;page2</a>
+            </button>
+          </div>
+         <form onclick="saaA" class="nav-link navbar-form navbar-left hidden-xs">
+           <div class="form-group">
+             <input type="text" class="form-control" placeholder="Search">
+           </div>
+         </form>
+         <!-- 平移控件 -->
+          <button onclick="moveLeft()" id="moveLeft" type="button" class="navbar-toggle collapsed hidden-lg hidden-xs hidden-sm" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="glyphicon glyphicon-th-list"></span>
+          </button>
+          
+          <!-- 三个链接按钮 b型 --> 
+          <button onclick="changePage()"  id="link2" type="button" class="nav-link nav-link-b navbar-toggle collapsed hidden-xs" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+           <span class="glyphicon glyphicon-console">&nbsp;change</span>
+          </button>
+
+          <button  id="link1" type="button" class="nav-link nav-link-b navbar-toggle collapsed hidden-xs" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <a href="../search.html"><span class="glyphicon glyphicon-search">&nbsp;search</span></a>
+          </button>
+          
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+          </div><!-- /.navbar-collapse -->
+      </nav>
+      <div class="container-fluid">
+      <!-- 侧边栏 -->
+      <nav id="nav_2" class="main_section col-lg-2 col-md-2 col-sm-1 hidden-xs">
+        <button id="list-group2_btn" type="button" class="list-group-item hidden-lg hidden-md hidden-sm">
+          <span class="glyphicon glyphicon-folder-close"></span><span class="hidden-sm">下拉菜单</span><span class="caret"></span>
+        </button>
+        <div id="list-group2" class="list-group">
+          <div type="button" class="list-group-item hidden-sm hidden-xs"><img src="../img/logo.png" style="width: 100%;"><span class="hidden-sm"></span></div>
+          <div type="button" class="list-group-item">&nbsp;&nbsp;&nbsp;&nbsp; <span class="hidden-sm">&nbsp;&nbsp;分类1</span></div>
+          <button type="button" class="list-group-item"> <span class="glyphicon glyphicon-apple"></span><span class="hidden-sm">&nbsp;&nbsp;购买主体</span></button>
+          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-hdd"></span><span class="hidden-sm">&nbsp;&nbsp;主体内容</span></button>
+          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-folder-close"></span><span class="hidden-sm">&nbsp;&nbsp;内容购买</span></button>
+          <div class="dropdown list-group ">
+            <button  id="dropdown_btn1" type="button" class="list-group-item">
+              <span class="glyphicon glyphicon-folder-close"></span><span class="hidden-sm">下拉菜单</span><span class="caret"></span>
+            </button>
+            <div id="list-group1" class="dropdown_menu">
+              <button type="button" class="list-group-item"><span class="hidden-sm">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="glyphicon glyphicon-asterisk"><span  class="hidden-sm">A</span></span></button>
+              <button type="button" class="list-group-item"><span class="hidden-sm">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="glyphicon glyphicon-asterisk"><span  class="hidden-sm">A</span></span></span></button>
+              <button type="button" class="list-group-item"><span class="hidden-sm">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="glyphicon glyphicon-asterisk"><span  class="hidden-sm">A</span></span></span></button>
+              <button type="button" class="list-group-item"><span class="hidden-sm">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="glyphicon glyphicon-asterisk"><span  class="hidden-sm">A</span></span></span></button>
+            </div>
+          </div>
+          <div type="button" class="list-group-item">&nbsp;&nbsp;&nbsp;&nbsp; <span class="hidden-sm">&nbsp;&nbsp;分类2</span></div>
+          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-leaf"></span><span class="hidden-sm">&nbsp;&nbsp;绿叶电话</span></button>
+          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-earphone"></span><span class="hidden-sm">&nbsp;&nbsp;电话购买</span></button>
+        </div>
+      </nav>
+      
+      <!-- 页面主体部分 -->
+      <main count=1 class="main_section col-lg-8 col-md-10 col-sm-11"> 
+        <section  id="main1">
+          <!-- 主体 -->
+          <section style="display:  none;">
+            <div id="myCarousel" class="carousel slide">
+                <!-- 轮播（Carousel）指标 -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" 
+                        class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>   
+                <!-- 轮播（Carousel）项目 -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+                    </div>
+                    <div class="item">
+                      <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+                    </div>
+                    <div class="item">
+                      <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+                    </div>
+                </div>
+                <!-- 轮播（Carousel）导航 -->
+                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                <!-- 控制按钮 -->
+               
+            </div> 
+            <script>
+            $(function(){
+                    // 初始化轮播
+                    $(".start-slide").click(function(){
+                        $("#myCarousel").carousel('cycle');
+                    });
+                    // 停止轮播
+                    $(".pause-slide").click(function(){
+                        $("#myCarousel").carousel('pause');
+                    });
+                    // 循环轮播到上一个项目
+                    $(".prev-slide").click(function(){
+                        $("#myCarousel").carousel('prev');
+                    });
+                    // 循环轮播到下一个项目
+                    $(".next-slide").click(function(){
+                        $("#myCarousel").carousel('next');
+                    });
+                    // 循环轮播到某个特定的帧 
+                    $(".slide-one").click(function(){
+                        $("#myCarousel").carousel(0);
+                    });
+                    $(".slide-two").click(function(){
+                        $("#myCarousel").carousel(1);
+                    });
+                    $(".slide-three").click(function(){
+                        $("#myCarousel").carousel(2);
+                    });
+                });
+            </script>
+          </section>
+		  <!-- 展示 -->
+		  <!-- 展示 -->
+		  <!-- 展示 -->
+		  <!-- 展示 -->
+		  <!-- 展示 -->
+		  <!-- 展示 -->
+		  <div id="">
+		  	<div id="search_body">
+		  	<div id="search_result"></div>
+		  		
+		  	</div>
+		  	
+		  	<script>
+		  		var card_cnt = 10;
+		  		var card_loaded = 0;
+		  		var data;
+		  		var data_loaded = false;
+		  	
+		  		function wait_for_load_card(mode) {
+		  			if (mode == 1)
+		  				card_loaded++;
+		  			else {
+		  				if (mode == 2) {
+		  					data_loaded = true;
+		  				}
+		  			}
+		  			if (card_loaded == card_cnt && data_loaded) {
+		  				function begin_to_load_card() {
+							try{
+								load_card($("#card_" + "0").get(0), data[0]);
+								for (var i = 1; i < card_cnt; i++) {
+									load_card($("#card_" + i).get(0), data[i]);
+								}
+								card_loaded = 0;
+								data = 0;
+								data_loaded = false;
+							}catch(e){
+								setTimeout(function() {
+									begin_to_load_card();
+								}, 1000)
+							}
+		  				}
+		  				begin_to_load_card();
+		  			}
+		  		}
+		  	
+		  		function search_return(data_) {
+		  			data = data_;
+		  			wait_for_load_card(2);
+		  		}
+		  		(function() {
+		  			var search_limit = card_cnt;
+		  			$("#search_result").get(0).innerHTML = "";
+		  			for (var i = 0; i < search_limit; i++)
+		  				$("#search_result").append($("<div class='replace card_container'  id='card_" + i +
+		  					"' load_name='card'></div>"));
+		  			load_all(function() {
+		  				wait_for_load_card(1)
+		  			});
+		  			search("../json/search", search_limit, $("#search_bar").val(), undefined, 1, search_return);
+		  		})();
+		  	</script>
+		  </div>
+          <!-- 翻页组件 -->
+          <nav aria-label="...">
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav>
+        </section>
+        <section id="main2">
+          <!-- 第二部分 -->
+          <div id="pagedemo2">
+                  <form action="" method="post">
+                    <!-- 标题 -->
+                    <input autocomplete="off" id="h1" placeholder="请输入标题(建议30字以内)" type="text" name="" id="" value="" />
+                    
+                    <!-- 工具栏 -->
+                    <div id="tools">
+                      <div class="list-group">
+                        <div class="btn-group">
+                          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-step-backward"></span></button></div><div class="btn-group">
+                          <button type="button" class="list-group-item"><span class="glyphicon glyphicon-step-backward"></span></button>
+                        </div>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle list-group-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a >Action</a></li>
+                            <li><a >Another action</a></li>
+                            <li><a >Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a >Separated link</a></li>
+                          </ul>
+                        </div>
+                        <div class="btn-group"><button type="button" class="list-group-item"><span class="glyphicon glyphicon-step-backward"></span></button></div>
+                        <div class="btn-group"><button type="button" class="list-group-item"><span class="glyphicon glyphicon-step-backward"></span></button></div>
+                        <div class="btn-group"><button type="button" class="list-group-item"><span class="glyphicon glyphicon-step-backward"></span></button></div>
+                      </div>
+                    </div>
+                    <!-- 正文 -->
+                    <textarea id="p" placeholder="请输入正文"></textarea>
+                    
+                    <!-- 活动复选框 -->
+                    <!-- Single button -->
+                    <hr >
+                    <div class="tip" id="">
+                      <span><h4>请选择分类标签</h4></span>
+                    </div>
+                    <div id="single-list1" class="single-list btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle list-group-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        A <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li group=1 count=1><a >A1</a></li>
+                        <li group=1 count=2><a >A2</a></li>
+                        <li group=1 count=3><a >A3</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li group=1 count=4><a >A4</a></li>
+                      </ul>
+                    </div>
+                    <div id="single-list2" class="single-list btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle list-group-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        B <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li group=2 count=1><a >B1</a></li>
+                        <li group=2 count=2><a >B2</a></li>
+                        <li group=2 count=3><a >B3</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li group=2 count=4><a >B4</a></li>
+                      </ul>
+                    </div> <div id="single-list3" class="single-list btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle list-group-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        C <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li group=3 count=1><a >C1</a></li>
+                        <li group=3 count=2><a >C2</a></li>
+                        <li group=3 count=3><a >C3</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li group=3 count=4><a >C4</a></li>
+                      </ul>
+                    </div>
+                    <div id="select-tip">
+                      <span id="">
+                        您当前选择的是:  
+                      </span>
+                    </div>
+                    <hr >
+                    <div class="custom-control custom-radio">
+                      <span><h4>请选择分类标签</h4></span>
+                      <div id="">
+                        <input type="radio" class="custom-control-input" id="customRadio" name="example1">
+                        <label class="custom-control-label" for="customRadio">aaaaaaaaaa</label>
+                      </div>
+                      <div id="">
+                        <input type="radio" id="defaultRadio" name="example1">
+                        <label for="defaultRadio">bbbbbbbbbb</label><br>
+                      </div>    
+                    </div>
+                    <hr >
+                    <div id="select-tip">
+                      <span id="">
+                        <h4>上传图片</h4>
+                      </span>
+                    </div>
+                    <div class="head-picture">
+                       <h4>请添加图片</h4>
+                       <p>支持图片种类xxx / xxx / xxx / xxx 等高清图片</p>
+                    </div>
+                    <hr >
+                    <div id="select-tip">
+                      <span id="">
+                        <h5>可选: 添加标签</h5>  <h6></h6>
+                      </span>
+                    </div>
+                    <div id="inputlabel">
+                      <span><input style="border: 1px solid gray;width: 100px; padding-left: 20px; border-radius: 10px;" type="" name="" id="" value="" />
+                      </span><span style="color: rgb(185,185,185);"> 按回车确定</span>
+                    </div>
+                    <hr >
+                    <!-- 请同意以下内容 -->
+                    <div id="tip">
+                      <span id="">
+                        <h4>请认真阅读以下内容 </h4>
+                      </span>
+                    </div>
+                    <div class="mui-input-row mui-checkbox ">
+                      <input name="Checkbox" type="checkbox" checked>&nbsp;
+                      <label>Checkbox</label>
+                    </div> <div class="mui-input-row mui-checkbox ">
+                      <input name="Checkbox" type="checkbox" checked>&nbsp;
+                      <label>Checkbox</label>
+                    </div> <div class="mui-input-row mui-checkbox ">
+                      <input name="Checkbox" type="checkbox" checked>&nbsp;
+                      <label>Checkbox</label>
+                    </div>
+                    <hr >
+                    <div class="date-select">
+                      
+                      
+                    </div>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                      同意并提交
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                          </div>
+                          <div class="modal-body">
+                            ...
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                      
+                  </form>
+                  
+                </div>
+                
+          <script type="text/javascript">
+          let old = null;
+          $("#pagedemo2 .single-list > ul > li").click(function() {
+            $(this).attr("count")
+            if (old) {
+              old.css("background-color", "white")
+            }
+            $("#pagedemo2 #single-list" + $(this).attr("group") + "> button" ).css("background-color", "skyblue")
+            $("#pagedemo2 #select-tip > span").text("您当前选择的是:  " + $(this).text()) 
+            $("#pagedemo2 #select-tip").css("color", "skyblue")
+            old = $("#pagedemo2 #single-list" + $(this).attr("group") + "> button" )
+          })
+          
+          </script>
+        </section>
+      </main>
+      
+      <!-- 广告区 -->
+      <aside class="main_section col-lg-2 hidden-md hidden-sm">
+        <div id="asidemenu" width=100%>
+            <div class="asidemenu_dropdown">
+                <button type="button" class="list-group-item"><span class="glyphicon glyphicon-folder-close"></span><span class="hidden-sm">自定义显示菜单</span><span class="caret"></span></button>
+                <div class="asidemenu_dropdown_content">
+                   <span id="asideicon1"><a href="#"><div asidecount=1 class="asideicon"><img src="../img/baidu1.png"><br>蜗牛盘</div></a></span>
+                   <span id="asideicon2"><a href="#"><div asidecount=2 class="asideicon"><img src="../img/baidu3.png"><br>滚,不知道</div></a></span>               
+                   <span id="asideicon3"><a href="#"><div asidecount=3 class="asideicon"><img src="../img/baidu4.png"><br>百科</div></a></span>
+                   <span id="asideicon4"><a href="#"><div asidecount=4 class="asideicon"><img src="../img/baidu1.png"><br>冬瓜</div></a></span>
+                   <span id="asideicon5"><a href="#"><div asidecount=5 class="asideicon"><img src="../img/baidu3.png"><br>弟弟</div></a></span>
+                   <span id="asideicon6"><a href="#"><div asidecount=6 class="asideicon"><img src="../img/baidu4.png"><br>快打钱</div></a></span>
+                   <span id="asideicon7"><a href="#"><div asidecount=7 class="asideicon"><img src="../img/baidu1.png"><br>exp</div></a></span>
+                   <span id="asideicon8"><a href="#"><div asidecount=8 class="asideicon"><img src="../img/baidu3.png"><br>♪♩♬♪</div></a></span>
+                   <div style="padding:20px 20px;text-align: center;"><a href="#" onclick="alert1()">查看全部百度产品 ></a></div>              
+                </div>
+           </div>
+        </div>
+        <div id="asidebox1">
+          <h3>天气预报<small>Subtext</small></h3>
+          <div class="list-group">
+            <a href="#" class="list-group-item ">
+              <h4 class="list-group-item-heading">华北东北雷阵雨勤“打卡"</h4>
+              <p class="list-group-item-text">江南、华南等地仍将有较强降水，其中，广东南部、云南东部等地局地有大暴雨，并伴有强对流天气</p>
+            </a>
+          </div>
+          <div class="list-group">
+            <a href="#" class="list-group-item">
+              <h4 class="list-group-item-heading">华南强降雨持续“发力”</h4>
+              <p class="list-group-item-text">华北、东北等地多阵雨或雷阵雨。气温方面，未来几天，华北、华南的高温天气均有缩减，但黄淮等地高温依然会频繁“打卡”</p>
+            </a>
+          </div>
+        </div>
+        <div id="asidebox2">
+          <h3>消息列表<small>Subtext</small></h3>
+          <div class="list-group">
+            <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+            <a href="#" class="list-group-item">Cras sit amet nibh libero</a>
+            <a href="#" class="list-group-item ">Porta ac consectetur ac</a>
+            <a href="#" class="list-group-item ">Vestibulum at eros</a>
+            <a href="#" class="list-group-item ">Vestibulum at eros</a>
+            <a href="#" class="list-group-item ">Vestibulum at eros</a>
+            <a href="#" class="list-group-item ">Vestibulum at eros</a>
+          </div>
+        </div>
+        
+      </aside>
+      
+    </div>
+    
+    <script type="text/javascript">
+      $("#main2").toggle()
+      $(".nav-link").click(function () {
+        $("#main1").toggle()
+        $("#main2").toggle()
+      })
+    
+      $("#dropdown_btn1").click(function() {
+        $(".dropdown_menu > button").slideToggle("slow");
+      })
+      
+      $(window).resize(function(){
+          var browserWidth = document.body.clientWidth;//获取浏览器可视区域的宽度。
+          if(browserWidth > 1200){
+            $("aside").removeClass("hidden-md")
+            $("aside").addClass("col-md-2")
+            $("aside").css({
+              right: "0%"
+            })
+            let a = $("main").attr("count")
+            if (a < 0) {
+              $("main").animate(
+                {
+                  left: 0
+                }, "slow"
+              )
+              $("main").attr("count",  a*(-1) )
+            } 
+          } else {
+            $("aside").addClass("hidden-md")
+            $("aside").removeClass("col-md-2")
+          }
+          if (browserWidth < 768) {
+            $("#nav_2").addClass("asidemenu_dropdown"); 
+            $("#list-group2").addClass("asidemenu_dropdown_content")
+            // $("#list-group2 > button").appendTo("#bs-example-navbar-collapse-1")
+            $("#bs-example-navbar-collapse-1").append($("#list-group2 > *"))
+          } else {
+            $("#nav_2").removeClass("asidemenu_dropdown");
+            $("#list-group2").removeClass("asidemenu_dropdown_content")
+            $("#list-group2").append($("#bs-example-navbar-collapse-1 > *"))
+          }
+          
+          
+          
+      });
+      $(".asideicon").click(function() {
+        $("#asidebox" + $(this).attr("asidecount")).slideToggle()
+      })
+      function moveLeft() {
+        let a = $("main").attr("count")
+        $("main").attr("count",  a*(-1) )
+        if (a > 0) {
+          $("aside").toggleClass("hidden-md")
+          $("aside").toggleClass("col-md-2")
+          var b = "-18%"
+          var c = "-20%"
+        } else {
+          var b = "0%"
+          var c = "-40%"
+        }
+        $("main").animate(
+          {
+            left: b
+          }, "slow"
+        )
+        
+        if (a > 0) {
+          $("aside").css({
+            position: "absolute",
+            right: "-20%"
+          })
+          $("aside").animate(
+            {
+              right: 0
+            }, "slow", () => {
+              if (a < 0) {
+                $("aside").toggleClass("hidden-md")
+                $("aside").toggleClass("col-md-2")
+              }
+            }
+          )
+        } else {
+          $("aside").animate(
+            {
+              right: "-20%"
+            }, "slow", function() {
+              $("aside").toggleClass("hidden-md")
+              $("aside").toggleClass("col-md-2")
+            }
+          )
+          
+        }
+        
+        
+      }
+    </script>
+    
+  </body>
+</html>

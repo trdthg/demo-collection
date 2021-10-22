@@ -1,0 +1,41 @@
+body{
+    margin: 0;
+    text-align: center;
+}
+.top{
+    height: 7vh;
+    background-color:  rgb(4, 30, 66);
+    text-align: right;
+    line-height: 7vh;
+    color: rgb(219, 190, 116);
+    font-weight: bold;
+    font-size: 15px;
+    padding-right: 20px;
+}
+.else{
+    width: 100%;
+    height: 92%;
+    display: flex;
+    flex-direction: row;
+}
+#select{
+    margin-left: auto;
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    /* width: 100vw; */
+}
+.left{
+    height: 45vh;
+    width: 100%;
+    flex: 1;
+}
+.middle{
+    height: 45vh;
+    width: 100%;
+    flex: 1;    
+}
+.right{
+    margin-right: auto;
+    flex:6;
+}

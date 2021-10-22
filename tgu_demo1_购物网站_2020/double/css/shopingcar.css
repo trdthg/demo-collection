@@ -1,0 +1,255 @@
+*{
+    overflow: visible!important;
+}
+body{
+    margin: 0;
+}
+table{
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+tbody{
+    display: block;
+}
+
+#up{
+    background-color: rgb(235, 235, 235);
+    display: flex;
+    margin-left: 5px;
+    margin-top: 8px;
+    margin-right: 5px;
+    height: 40px;
+    line-height: 40px;
+}
+th{
+    flex: 2;
+}
+.goods{
+    background-color: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(177, 177, 177, 0.452);
+    border-top-width:3px ;
+    display: flex;
+    margin-left: 5px;
+    margin-top: 8px;
+    margin-right: 5px;
+    height: 80px;
+    text-align: center;
+}
+.goods>.what{
+    margin-left: 20px;
+    vertical-align: middle;
+    text-align: left;
+}
+.goods>td{
+    flex: 2;
+}
+
+.goods>.what{
+    flex: 15!important;
+    padding-top: 5px;
+}
+.goods:not(.what){
+    line-height: 80px;
+}
+.what>a{
+    color: #444;
+    text-decoration: none;
+}
+
+i{
+    padding-left: 10px;
+    font-style: normal;
+}
+.number>input{
+    outline: none;
+    width: 70px;
+    border-color:rgba(68, 68, 68, 0.377) ;
+}
+.number>input:focus{
+    border-color: rgb(4, 30, 66);
+    transition: 1s;
+}
+#top{
+    width: 100%;
+    height: 54px;
+    display: flex;
+    padding-left: 24px;
+    padding-right: 24px;
+    background-color:rgb(4, 30, 66); /* 不支持线性的时候显示 */
+    position: fixed;
+    z-index: 1000000000;
+    border-bottom-color: oldlace ;
+    border-bottom-width:2px ;
+    border-bottom-style: solid;
+}
+#topmid>input{
+    width: 20vw;
+    height: 40px;
+    outline: none;
+    background-color:rgba(68, 68, 68, 0);
+    margin-top:7px;
+    padding-left: 10px;
+    color: aliceblue;
+    font-size: large;
+    border-left: aliceblue!important;
+    border-left-width: 2px!important;
+    border-left-style: solid!important;
+}
+input::-webkit-input-placeholder {
+    color: rgb(193, 194, 196);
+    text-align: left;
+}
+#topleft{
+    flex: 1;
+    padding: 7px;
+}
+#head_search{
+    width: 40px;
+    height: 40px;
+}
+#topleft>img{
+    display: inline-block;
+    height: 54px;
+    width: 120px;
+}
+#topmid{
+    flex: 1;
+}
+#topright{
+    flex: 1;
+    display: flex;
+}
+#topright>a{
+    flex: 1;
+    padding: 27px;
+    line-height: 0;
+    color: aliceblue;
+    text-decoration: none;
+    text-align: center;
+}
+#topright>a:hover{
+    background-color: rgb(4, 30, 66);
+}
+.topicon>svg{
+    height:40px ;
+    width: 40px;
+    /*margin-top: -20px;*/
+}
+
+.topicon>svg{
+    /* margin-left: -6vw; */
+    margin-top: -20px;
+    color: aliceblue;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.685);
+}
+
+.tooltip .tooltiptext {
+    width: 100px;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.699);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    padding: 10px;
+}
+#down{
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background-color:rgb(4, 30, 66); ;
+    height: 50px;
+    padding-left: 10vw;
+    line-height: 50px;
+    color: ivory;
+}
+#down>div{
+    flex: 1;
+    display: inline-block;
+}
+#down>div>div{
+    display: inline-block;
+}
+#where{
+    float: left;
+}
+#pay{
+    margin-left: auto;
+}
+
+#bottom-right{
+    position: absolute;
+    right:20vw;
+    display: block;
+    margin-left: auto;
+    margin: right;
+}
+#bottom-right>div{
+    flex: 1;
+}
+#sum1,#sum2{
+    display: inline-block;
+}
+#towhere{
+    outline: none;
+    border: none;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.137);
+    border-left-width:2px ;
+    border-left-style:solid;
+    border-left-color:white;
+}
+#where>input{
+    color: white;
+    font-size: 20px;
+}
+#submit:hover{
+    background-color: rgb(4, 30, 66);
+    transition: 1s;
+}
+
+#submit{
+    text-align: center!important;
+}
+@media only screen and (max-width: 760px) {
+    table{
+        width: 90vw;
+    }
+    #up>th{
+        flex: 3;
+    }
+    .number>input{
+        width: 7vw;
+    }
+    .operate{
+        flex: 3!important;
+    }
+    #where>input{
+        width: 30vw;
+    }
+    #topleft{
+        display: none;
+    }
+    #bottom-right{
+        right: 10vw;
+    }
+    #down{
+        padding-left: 5vw;
+    }
+}

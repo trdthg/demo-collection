@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<script src="./js/jqery-3.5.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body>div{
+            height: 50px;
+            border-top-color:rgb(212, 212, 212) ;
+            border-top-width: 2px;
+            border-top-style:solid ;
+        }
+        body>div>a{
+            text-decoration: none;
+            color: #444;
+        }
+        .name,.delete{
+            display: inline-block;
+        }
+        .name{
+            width: 50vw;
+            height: 40px;
+        }
+        .delete{
+            float: right;
+        }
+        #new>*{
+            display: inline-block;
+        }
+        .new{
+            padding: 10px;
+            border-left-style: solid;
+            border-left-width: 1px;
+            border-left-color: slategray;
+            background-color: rgba(165, 165, 165, 0.096);
+        }
+        #new{
+            vertical-align: middle;
+            text-align: right;
+            line-height: 25px;
+            padding-top: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="new">
+        <a href=createnewitem() target="right"><div class="new" id="">发布新商品</div></a>
+    </div>
+    
+    <div id="">
+        <a>
+            <div class="name">曲奇饼</div>
+        </a>
+        <div style="text-align: center; display: inline-block;">销量：2333</div>
+        <div class="delete" id="">x</div>
+    </div>
+   
+    <script>
+        //mymill-right.html?id={item["id"]}
+
+        function showmyitem() {
+            var token = document.cookie.split(";")[0]; 
+            var thisURL = document.URL;
+            var millid = thisURL.split('?')[1];
+            var millid = millid.split("=")[1];
+            // 获取了itemid
+            $.ajax({
+                url: "http://192.168.137.175/user/showmyitem",
+                type: "POST",
+                ret: '0',
+                dataType: "json",
+                data: JSON.stringify({
+                    token: token,
+                    millid: millid,
+                }),
+                success: function(data) {
+                    if (data.ret != "1") {
+                        $("body").append(data.data)
+                        $(".delete").click(function(){
+                            $.ajax({
+                                url:"http://192.168.137.175/user/deletethisitem",
+                                ret: "0",
+                                type:"POST",
+                                dataType: "json",
+                                data: JSON.stringify({
+                                    token: token,
+                                    itemid:$(this.parentNode).attr('id'),
+                                    millid:millid,
+                                }),
+                                success: function(data){
+                                    
+                                    alert(data.msg)
+                                    window.location.href=document.URL
+
+                                }
+                            })
+                        })
+                    } else {
+                        console.log(data)
+                        alert("没有此物")
+                    }
+                }
+            })
+        }
+        showmyitem()
+
+    </script>
+    <script>
+    
+        function createnewitem(){
+            var newitemname = $("input").val();
+            var token = document.cookie.split(";")[0]; 
+            var thisURL = document.URL;
+            var millid = thisURL.split('?')[1];
+            var millid = millid.split("=")[1];
+            return  "mymill-right.html"+"?millid-"+millid;
+        }
+
+        $("#new>a").attr("href",createnewitem()); 
+    </script>
+</body>
+</html>
