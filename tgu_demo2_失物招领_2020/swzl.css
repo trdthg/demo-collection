@@ -1,0 +1,460 @@
+/*通用内容*/
+body{
+    margin:0;
+}
+hr{
+    border:rgba(128, 128, 128, 0.253) 1px solid;
+    width:100%;
+}
+#false1{
+    padding-top: -5px;
+    padding-right:20px;
+    float:right;
+}
+#false2{
+    padding-top: -5px;
+    padding-right:20px;
+    float:right;
+}
+.account{
+    display:none;
+}
+/*登陆系统*/
+#outsideWindow{
+    background-color:rgba(0, 0, 0, 0.37);
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height:100vh;
+    z-index: 10000;
+
+}
+#outsideWindow1{
+    background-color: #000;
+    display: block;
+    position: fixed;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+    overflow: hidden;
+}
+.register{
+    position: fixed;
+    border-radius: 5%;
+    width: 400px;
+    height:300px;
+    background-color: white;
+    top: 50%;left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+#register1{
+    display: none;
+}
+
+#register2{
+    display: none;
+    height:400px;
+}
+#registerTop{
+    height:40px;
+    padding-top: 20px;
+    font-size: 24px;
+}
+.register input{
+    padding-left: 10px;
+    width:230px;
+    height:25px;
+    border-radius: 5px;
+    border:gray 1px solid;
+}
+.register input:focus{
+    outline:none;
+}
+
+#registerButton1{
+    border:0;
+    background-color: rgb(114, 62, 62);
+    color: lavender;
+    width:250px;
+    height:30px;
+    font-size: 16px;
+}#registerButton3{
+    border:0;
+    background-color: rgb(114, 62, 62);
+    color: lavender;
+    width:250px;
+    height:30px;
+    font-size: 16px;
+}
+
+#registerButton2{
+    background-color: white;
+    border:0px;
+    color:black;
+    font-size: 14px;
+}
+.register #registerButton1:hover{
+    background-color: rgb(160, 41, 41);
+}.register #registerButton3:hover{
+    background-color: rgb(160, 41, 41);
+}
+.register>div>button:focus{
+    outline:none;
+}
+
+
+/*left内容*/
+#windowLeft{
+    position: fixed;
+    background-color:rgb(255, 255, 255);
+    width:70px;
+    height:100%;
+    text-align: center;
+
+}
+ul{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
+ul li{
+    display:inline;
+}
+ul a{
+    color: black;
+    text-decoration: none;
+    padding:16px 13px;
+    font-size: 13px;
+}
+ul li a:hover{
+    color: rgb(98, 143, 240);
+}
+ul img{
+    width:40px;
+    height:40px;
+}
+#leftTop{
+    position: fixed;
+    top: 0;
+    height:70px;
+    width:70px;
+}
+
+#leftBottom{
+    position: fixed;
+
+    bottom:0;
+}
+
+
+
+
+
+
+
+/*right内容*/
+.windowRight{
+    margin-left: 70px;
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width:94%;
+    height:100%;
+    background-size: cover;
+    background-color: rgba(255, 248, 220, 0);
+    /*background-image: url("./image/7.jpg");*/
+    
+   
+}
+
+
+#rightTop{
+    display: block;
+    background-color: rgba(248, 246, 246, 0.767);
+    height:70px;
+    line-height: 70px;
+    text-align: center;
+    background-size: cover;
+    background-image:url("./image/bg1.jpg");
+    z-index: -1;
+}
+#rightTop1{    
+    float:left;
+    font-size: 20px;
+    width:70%;
+}
+#rightTop2{
+    padding-top: 20px;
+    display: inline-block;
+}
+#rightTop3{
+    padding-top: 20px;
+    display: none;
+}
+#rightTop2Btn{
+    border:black 0 solid;
+    color:white;
+    background-color: rgb(211, 61, 61);
+    border-radius: 5px;
+    width:100px;
+    height:30px;
+}
+#rightTop2Btn2{
+    border:black 0 solid;
+    color:white;
+    background-color: rgb(211, 61, 61);
+    border-radius: 5px;
+    width:100px;
+    height:30px;
+}
+#rightTop2Btn:focus{
+    outline:none;
+}
+#rightTop2Btn:hover{
+    background-color: rgba(220, 20, 60, 0.445);
+}
+
+
+
+
+.rightMiddle{
+    display: inline-block;
+    width: 97%;
+    
+    margin:10px;
+
+}
+
+#rightMiddle1{
+    background-color: rgba(255, 248, 220, 0);
+    display: block;
+}
+#middleLeft{
+    margin: 20px;
+    background-color: rgba(255, 248, 220, 0);
+    float: left;
+    background-color: lightblue;
+    background-image:url("./image/2.jpg");
+    background-size: cover;
+    width:720px;
+    border-radius: 10px;
+    height:420px;
+    text-align: center;
+
+}
+#middleRight{
+    background-position: center;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-image: url("./image/3.png");
+    text-align: center;
+    padding-top: 20px;
+    font-size: 30px;
+    margin: 20px;
+    border-radius: 10px;
+    float: left;
+    background-color: rgba(200, 245, 223, 0.349);
+    width:340px;
+    height:400px
+}
+
+.middleSquare{
+    float:left;
+    overflow:hidden;
+    word-break:break-all;
+    background-color: rgba(255, 255, 255, 0.856);
+    width:340px;
+    height:250px;
+    margin: 20px;
+    border-radius: 10px;
+    
+
+        box-shadow:0px 0px  5px 2.5px rgba(170, 170, 170, 0.534);
+        
+}
+.expand1{
+    background-size: cover;
+    height:300px;
+}
+
+.expandContentTop{
+    display: block;
+    text-align: center;
+    font-weight: 800;
+    font-size: 20px;
+    height:40px;
+    padding-top:15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.expandContentTop1{
+    color:rgb(250, 248, 248);
+    background-color: rgb(253, 63, 63);
+}
+.expandContentTop2{
+    color:#444;
+    background-color: rgb(91, 253, 70);
+}
+
+.expandContentMiddle{
+    font-weight: 400;
+    font-size: 14px;
+}
+.expandContentBottom{
+    font-size: 15px;
+    font-weight:500;
+    bottom:0;
+}
+#expandContentHide{
+    display:none;
+}
+.expandContentMiddle1{
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+
+
+#rightMiddle3{
+    background-color: rgba(255, 248, 220, 0);
+    display: none;
+}
+#continer{
+    background-color: rgba(255, 248, 220, 0);
+
+    border-radius: 5px;
+    text-align: center;
+}
+.row{
+    width:100%;
+    display: block;
+}
+.col-25{
+    float:left;
+    width:25%;
+    margin-top: 0px;
+}
+label{
+    padding:6px 12px 12px 0;
+    display:inline-block;
+}
+.col-75{
+    float: left;
+    width:60%;
+    margin-top: 6px;
+
+}
+
+.input2[type=text],textarea{
+    margin-top: 12px;
+    width:100%;
+    padding:12px;
+    border:#ccc 1px solid;
+    border-radius: 5px;
+    resize: vertical;
+}
+.submit2{
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+
+#rightMiddle4{
+    z-index:5000;
+    position:absolute;
+    width:100%;
+    height:60%;
+    display: none;
+    text-align: center;
+}
+#rM4Inner{
+    position: absolute;
+    float:left;
+    width:50%;
+    height:90%;
+    background-color: white;
+    top:60%;left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    border-radius: 5px;
+}
+#rM4InnerLeft{
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+
+    float: left;
+    width:40%;
+    height:100%;
+    background-image: url("./image/b1.png");
+
+}
+#rM4InnerRight{
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: rgba(248, 207, 153, 0.219);
+    float: left;
+    width:60%;
+    height:100%;
+}
+@media screen and (max-width : 500px) {
+    #windowLeft{
+        width:20px;
+        z-index: 6000;
+    }
+    #middleLeft{
+        width:300px;
+        height:200px;
+    }
+    #middleRight{
+        width:300px;
+        height:290px
+    }
+    #rightTop{
+        width: 100%;
+        position: absolute;
+        z-index: 6001;
+
+    }
+    .middleSquare{
+        width:300px;
+    }
+    .windowRight{
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
+    }
+    .rightMiddle{
+        margin-top: 70px;
+
+        padding-left: 20px;
+        background-color: rgba(0, 0, 0, 0);
+    }
+    ul a{
+        font-size: 0;
+    }
+    #rM4Inner{
+        z-index: 0;
+        width:80%;
+    }
+    #rM4InnerLeft{
+        width:0%;
+    
+    }
+    #rM4InnerRight{
+        width:100%;
+        height:100%;
+    }
+    
+
+}
