@@ -14,13 +14,13 @@ comrak = "0.11.0"
 clap = {version="2.29.0", features=["yaml"]}
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8"
-serde_json = ""
+serde_json = "1.0.68"
 serde_derive = "1.0.104"
 toml = "0.5"
 chrono = "0.4.10"
 
 json = "0.12.4"
-nanoid = ""
+nanoid = "0.4.0"
 
 [profile.release]
 lto = true
