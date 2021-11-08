@@ -1,0 +1,8 @@
+ 
+Flask==1.0.2
+werkzeug==0.16.0
+PyMySQL
+DBUtils==2.0.1
+Flask_Uploads==0.2.1
+PyJWT
+nanoid
