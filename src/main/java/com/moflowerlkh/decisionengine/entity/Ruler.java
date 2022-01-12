@@ -1,6 +1,8 @@
-package com.moflowerlkh.decisionengine.model;
+package com.moflowerlkh.decisionengine.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Check;
+import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 
