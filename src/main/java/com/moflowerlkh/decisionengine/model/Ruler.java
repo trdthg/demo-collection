@@ -19,7 +19,7 @@ public class Ruler {
     private boolean rulerOne;
 
     // 对应的活动
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @OneToOne
     private ShoppingActivity shoppingActivity;
 }

@@ -27,7 +27,7 @@ public class ShoppingActivity {
      * 一个秒杀活动只能对应一个商品
      * 一个商品可能有多个秒杀活动
      */
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private ShoppingGoods shoppingGoods;
 
@@ -36,7 +36,7 @@ public class ShoppingActivity {
     private long shoppingTotal;
 
     // 对应的规则
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @OneToOne
     private Ruler ruler;
 }
