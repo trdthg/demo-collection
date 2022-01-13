@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.model;
+package com.moflowerlkh.decisionengine.entity;
 
 import lombok.Data;
 
