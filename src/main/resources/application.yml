@@ -12,3 +12,14 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         new_generator_mappings: false
         format_sql: true
+  redis:
+#    database: 0
+    host: tguio.club
+    port: 5470
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 4
+      min-idle: 1
+#    timeout: 5
+

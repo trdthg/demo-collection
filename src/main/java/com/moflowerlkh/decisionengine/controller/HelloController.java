@@ -11,8 +11,8 @@ public class HelloController {
     HelloService helloSevice;
 
     @GetMapping("/hello")
-    public void hello(String arg) {
+    public String hello(String arg) {
         System.out.println(arg);
-//        helloSevice.hello();
+        return "hello" + "ssss";
     }
 }

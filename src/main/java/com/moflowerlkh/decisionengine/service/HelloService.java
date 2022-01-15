@@ -18,9 +18,9 @@ public class HelloService {
     ShoppingActivityDao shoppingActivityDao;
 
     public void hello(String arg) {
-        List<Ruler> rulers = rulerDao.findAll();
-        List<ShoppingActivity> i = shoppingActivityDao.findAll();
-        i.get(0).getRuler();
-        System.out.println("hello");
+//        List<Ruler> rulers = rulerDao.findAll();
+//        List<ShoppingActivity> i = shoppingActivityDao.findAll();
+//        i.get(0).getRuler();
+//        System.out.println("hello");
     }
 }
