@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 秒杀商品
+ */
 @Entity
 @Data
 @Table(name = "shopping_goods_tb")

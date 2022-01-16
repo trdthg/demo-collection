@@ -1,9 +1,9 @@
 package com.moflowerlkh.decisionengine.dao;
 
-import com.moflowerlkh.decisionengine.entity.Ruler;
+import com.moflowerlkh.decisionengine.entity.LoanRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RulerDao extends JpaRepository<Ruler, Long> {
+public interface RuleDao extends JpaRepository<LoanRule, Long> {
 }

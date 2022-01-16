@@ -5,10 +5,15 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+/**
+ *                        秒杀规则 1 - 1 秒杀活动 n - +
+ *                                                  |
+ * @Description 秒杀活动   秒杀规则 1 - 1 秒杀活动 n - 1 商品
+ */
 @Entity
 @Data
 @Table(name = "shopping_activity_tb")
-public class ShoppingActivity {
+public class LoanActivity {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
@@ -22,6 +27,18 @@ public class ShoppingActivity {
 
     @Column(nullable = false)
     private Timestamp endTime;
+
+    // 贷款额度上限
+    @Column(nullable = false)
+    private long depositLimit;
+
+    // 贷款期限
+    @Column(nullable = false)
+    private Timestamp depositTerm;
+
+    // 年利率
+    @Column(nullable = false)
+    private double apr;
 
     /**
      * 一个秒杀活动只能对应一个商品
@@ -38,5 +55,5 @@ public class ShoppingActivity {
     // 对应的规则
     @JoinColumn(nullable = false)
     @OneToOne
-    private Ruler ruler;
+    private LoanRule ruler;
 }

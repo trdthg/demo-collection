@@ -1,13 +1,12 @@
 package com.moflowerlkh.decisionengine.service;
 
-import com.moflowerlkh.decisionengine.dao.RulerDao;
+import com.moflowerlkh.decisionengine.dao.RuleDao;
 import com.moflowerlkh.decisionengine.dao.ShoppingActivityDao;
 import com.moflowerlkh.decisionengine.dao.UserDao;
-import com.moflowerlkh.decisionengine.entity.Ruler;
-import com.moflowerlkh.decisionengine.entity.ShoppingActivity;
 import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.enums.Gender;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 @Service
 public class HelloService {
     @Autowired
-    RulerDao rulerDao;
+    RuleDao rulerDao;
 
     @Autowired
     ShoppingActivityDao shoppingActivityDao;
@@ -32,7 +31,7 @@ public class HelloService {
             newUser.setUsername("asd");
             newUser.setPassword("asd");
             newUser.setYearIncome(10L);
-            newUser.setGender("男");
+            newUser.setGender(Gender.Male);
             newUser.setAge(18);
             userDao.save(newUser);
         } else {
