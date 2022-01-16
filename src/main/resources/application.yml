@@ -23,4 +23,3 @@ spring:
       max-idle: 4
       min-idle: 1
 #    timeout: 5
-

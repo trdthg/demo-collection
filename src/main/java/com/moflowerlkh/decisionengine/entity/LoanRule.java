@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "ruler_tb")
+@Table(name = "loan_rule_tb")
 public class LoanRule {
     @Id
     @Column(name = "id", nullable = false)
@@ -42,16 +42,19 @@ public class LoanRule {
 
     // 检查年龄
     @Column(nullable = false)
-    private boolean checkAge;
+    private boolean checkMaxAge;
     @Column()
     private int MaxAge;
+
+    @Column(nullable = false)
+    private boolean checkMinAge;
     @Column()
     private int MinAge;
 
     // 检查就业状况
     @Column(nullable = false)
     private boolean checkEmployment;
-    @Column()
+    @Transient
     private List<Employment> allowedEmployments;
 
     // 检查是否是失信人员
@@ -65,7 +68,7 @@ public class LoanRule {
     // 是否限制地区
     @Column(nullable = false)
     private boolean checkCountry;
-    @Column()
+    @Transient
     private List<String> allowedCountries;
 
     // 对应的活动

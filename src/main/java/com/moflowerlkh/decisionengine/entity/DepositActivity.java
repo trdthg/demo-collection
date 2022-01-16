@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- *                        秒杀规则 1 - 1 秒杀活动 n - +
- *                                                  |
- * @Description 秒杀活动   秒杀规则 1 - 1 秒杀活动 n - 1 商品
+ *                        秒杀规则 1 - 1 秒杀活动 - +
+ *                                                |-- 商品
+ * @Description 秒杀活动   秒杀规则 1 - 1 秒杀活动 - +
  */
 @Entity
 @Data
-@Table(name = "shopping_activity_tb")
+@Table(name = "deposit_activity_tb")
 public class DepositActivity {
     @Id
     @Column(name = "id", nullable = false)
@@ -64,5 +64,5 @@ public class DepositActivity {
     // 对应的规则
     @JoinColumn(nullable = false)
     @OneToOne
-    private LoanRule ruler;
+    private DepositRule rule;
 }

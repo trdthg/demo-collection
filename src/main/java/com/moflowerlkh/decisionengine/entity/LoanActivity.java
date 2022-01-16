@@ -5,14 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-/**
- *                        秒杀规则 1 - 1 秒杀活动 n - +
- *                                                  |
- * @Description 秒杀活动   秒杀规则 1 - 1 秒杀活动 n - 1 商品
- */
 @Entity
 @Data
-@Table(name = "shopping_activity_tb")
+@Table(name = "loan_activity_tb")
 public class LoanActivity {
     @Id
     @Column(name = "id", nullable = false)
@@ -55,5 +50,5 @@ public class LoanActivity {
     // 对应的规则
     @JoinColumn(nullable = false)
     @OneToOne
-    private LoanRule ruler;
+    private LoanRule rule;
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "ruler_tb")
+@Table(name = "deposit_rule_tb")
 public class DepositRule {
     @Id
     @Column(name = "id", nullable = false)
@@ -41,16 +41,19 @@ public class DepositRule {
 
     // 检查年龄
     @Column(nullable = false)
-    private boolean checkAge;
+    private boolean checkMaxAge;
     @Column()
     private int MaxAge;
+
+    @Column(nullable = false)
+    private boolean checkMinAge;
     @Column()
     private int MinAge;
 
     // 是否限制地区
     @Column(nullable = false)
     private boolean checkCountry;
-    @Column()
+    @Transient
     private List<String> allowedCountries;
 
     // 对应的活动
