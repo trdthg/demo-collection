@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RuleDao extends JpaRepository<LoanRule, Long> {
+public interface LoanRuleDao extends JpaRepository<LoanRule, Long> {
 }

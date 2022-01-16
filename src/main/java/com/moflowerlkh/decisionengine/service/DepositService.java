@@ -11,6 +11,9 @@ public class UserService {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+
+
     public List<User> getAllUser() {
         return userDao.findAll();
     }
