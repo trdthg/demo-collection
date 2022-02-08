@@ -1,8 +1,0 @@
-{
-    "card_link":"#",
-    "card_title":"使用Vscode 开发调试 C/C++ 项目",
-    "card_outline":"下载vscode。直接进入vscode官网下载即可，要注意选择与自己系统符合的版本。进入官网，会出 …下载编译环境。在这里博主用的是TDM-GCC。大家可以百度官网下载或者下面的使用百度网盘链接 …",
-    "card_tags":["vscode","c","c++"],
-    "card_release_time":"2021/6/23",
-    "card_auther":"浅花迷人"
-}
