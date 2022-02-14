@@ -1,5 +1,6 @@
 package com.moflowerlkh.decisionengine.config;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,9 +23,9 @@ public class RedisConfig {
         // 配置key的序列化方式
         template.setKeySerializer(new StringRedisSerializer());
         // 使用Jackson2JsonRedisSerializer配置value的序列化方式
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+        //template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         // 使用FastJson配置value的序列化方式
-        // template.setValueSerializer(new GenericFastJsonRedisSerializer());
+        template.setValueSerializer(new GenericFastJsonRedisSerializer());
         return template;
     }
 }

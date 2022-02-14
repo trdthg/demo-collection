@@ -3,10 +3,12 @@ package com.moflowerlkh.decisionengine.service;
 import com.moflowerlkh.decisionengine.dao.*;
 import com.moflowerlkh.decisionengine.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class LoanService {
     @Autowired
     UserDao userDao;

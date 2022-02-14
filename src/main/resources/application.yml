@@ -8,9 +8,13 @@ spring:
     password: 2022A22db
   jpa:
     properties:
+      # javax:
+      #   persistence:
+      #     query:
+      #       timeout: 1000
       hibernate:
         format_sql: true
-#        show_sql: true
+#         show_sql: true
         hbm2ddl:
           auto: update
   redis:

@@ -65,4 +65,7 @@ public class DepositActivity {
     @JoinColumn(nullable = false)
     @OneToOne
     private DepositRule rule;
+
+    //
 }
+
