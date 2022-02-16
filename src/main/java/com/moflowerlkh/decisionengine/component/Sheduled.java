@@ -2,6 +2,7 @@ package com.moflowerlkh.decisionengine.component;
 
 import com.moflowerlkh.decisionengine.dao.UserDao;
 import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.Gender;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class Sheduled {
 
             newUser.setYearIncome(10L);
             newUser.setGender(Gender.Male);
+            newUser.setEmployment(Employment.Employed);
             newUser.setAge(18);
             newUser.setName("小明");
             userDao.save(newUser);

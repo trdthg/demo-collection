@@ -5,34 +5,38 @@ import com.moflowerlkh.decisionengine.enums.Gender;
 import lombok.Data;
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.GenericGenerator;
-//import org.hibernate.annotations.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Data
 @Entity
 @Table(name = "user_tb")
 public class User {
     @Id
-    @GenericGenerator(name = "这是什么", strategy = "increment")
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = true)
+    @Length(min = 1, max = 64)
     private String name;
 
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = true)
-    @Check(constraints = "age < 200 and age >= 0")
+    @Min(value = 0)
+    @Max(value = 9999)
     private Integer age;
 
     @Column(nullable = true)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     // 年收入信息
@@ -59,7 +63,7 @@ public class User {
 
     // 就业状态
     @Column(nullable = true)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Employment employment;
 
     // 被列入失信人名单

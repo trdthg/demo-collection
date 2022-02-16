@@ -8,5 +8,15 @@ public enum Employment {
     LoseJob, // 失业
     Retired, // 退休
     SickLeave, // 病休
-    Other, // 其他
+    Other; // 其他
+
+    public static boolean isValid(String s) {
+        for (Employment employment : Employment.values()) {
+            if (employment.name().equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -27,7 +27,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- Redis -->
+        <!-- Redis fastjson-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -37,7 +37,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.79</version>
         </dependency>
-        <!-- 安全 -->
+        <!-- security jwt -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
