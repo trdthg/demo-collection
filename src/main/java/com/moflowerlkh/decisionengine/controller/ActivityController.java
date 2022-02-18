@@ -1,32 +1,26 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.dao.LoanActivityDao;
+import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.entity.LoanActivity;
 import com.moflowerlkh.decisionengine.entity.LoanRule;
-import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
 import com.moflowerlkh.decisionengine.enums.DateValue;
-import com.moflowerlkh.decisionengine.enums.Employment;
-import com.moflowerlkh.decisionengine.enums.EnumValue;
-import com.moflowerlkh.decisionengine.enums.Gender;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.*;
 
 @RestController
 @Api(tags = {"活动设置相关"})
@@ -35,11 +29,13 @@ public class ActivityController {
 
     @Autowired
     LoanActivityDao loanActivityDao;
+    @Autowired
+    ShoppingGoodsDao shoppingGoodsDao;
 
     @PostMapping("/set-loan-activity")
     @ApiOperation("新增活动")
     public BaseResponse<Long> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
-        LoanActivity loanActivity = request.toEntity();
+        LoanActivity loanActivity = request.toEntity(shoppingGoodsDao);
         loanActivityDao.save(loanActivity);
         return new BaseResponse<>(HttpStatus.CREATED, "成功", loanActivity.getId());
     }
@@ -122,8 +118,13 @@ class SetLoanActivityRequest {
     @NotNull(message = "活动规则不能为空")
     private SetLoanActivityRuleRequest ruler;
 
-    public LoanActivity toEntity() {
+    // 活动对应的商品
+    @NotNull(message = "活动对应的商品id不能为空")
+    private Long shoppinggoods_id;
+
+    public LoanActivity toEntity(ShoppingGoodsDao shoppingGoodsDao) {
         LoanActivity loanActivity = new LoanActivity();
+        // 设置基本信息
         loanActivity.setName(activity_name);
         loanActivity.setMaxMoneyLimit(activity_moneyLimit);
         loanActivity.setTimeLimit(activity_timeLimit);
@@ -132,9 +133,18 @@ class SetLoanActivityRequest {
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
 
+        // 添加规则
         LoanRule loanRule = ruler.toLoanRule();
         loanRule.setLoanActivity(loanActivity);
         loanActivity.setRule(loanRule);
+
+        // 添加商品
+        Optional<ShoppingGoods> _shoppingGoods = shoppingGoodsDao.findById(shoppinggoods_id);
+        ShoppingGoods shoppingGoods = null;
+        if (_shoppingGoods.isPresent()) {
+            shoppingGoods = _shoppingGoods.get();
+        }
+        loanActivity.setShoppingGoods(shoppingGoods);
         return loanActivity;
     }
 }

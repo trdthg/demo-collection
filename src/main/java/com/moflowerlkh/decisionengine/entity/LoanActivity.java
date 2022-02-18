@@ -1,6 +1,7 @@
 package com.moflowerlkh.decisionengine.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -47,7 +48,7 @@ public class LoanActivity {
      * 一个商品可能有多个秒杀活动
      */
     @JoinColumn(nullable = false)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private ShoppingGoods shoppingGoods;
 
     // 活动销售总数，不能超卖
@@ -56,7 +57,6 @@ public class LoanActivity {
 
     // 对应的规则
     // 一个活动对应一个规则
-    @JoinColumn(nullable = false)
     @OneToOne(cascade = CascadeType.ALL)
     private LoanRule rule;
 }
