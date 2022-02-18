@@ -34,16 +34,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public BaseResponse<String> register(@RequestBody @Valid UserRequest userRequest) {
-        try {
-            User user = userRequest.toUser();
-            userService.register(user);
-            return new BaseResponse<>(HttpStatus.CREATED, "成功");
-        } catch (IllegalArgumentException e) {
-            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "参数不合法: " + e.getMessage());
-        } catch (Exception e) {
-            return new BaseResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "未知异常: " + e.getMessage());
-        }
+    @ApiOperation("注册")
+    public BaseResponse<Long> register(@RequestBody @Valid UserRequest userRequest) throws Exception {
+        User user = userRequest.toUser();
+        userService.register(user);
+        return new BaseResponse<>(HttpStatus.CREATED, "成功", user.getId());
     }
 
     @GetMapping("/hello")
@@ -82,7 +77,7 @@ class UserRequest {
     @NonNull
     private Boolean user_dishonest;
 
-    public User toUser() throws Exception {
+    public User toUser() {
         User user = new User();
         // 枚举
         Employment employment = Employment.valueOf(user_employment);
@@ -104,5 +99,14 @@ class UserRequest {
         user.setDishonest(user_dishonest);
         return user;
     }
+}
 
+class UserResponse {
+    private Long user_id;
+
+    public static UserResponse fromUser(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.user_id = user.getId();
+        return userResponse;
+    }
 }

@@ -33,11 +33,11 @@ public class LoanService {
         LoanRule loanRule = loanActivity.getRule();
         List<User> users = userDao.findAll();
         return users.stream().filter(x -> {
-            if (loanRule.isCheckMaxAge() && x.getAge() > loanRule.getMaxAge()) return false;
-            if (loanRule.isCheckMinAge() && x.getAge() < loanRule.getMinAge()) return false;
-            if (loanRule.isCheckCountry() && loanRule.getAllowedCountries().contains(x.getCountry())) return false;
-            if (loanRule.isCheckDishonest() && x.isDishonest()) return false;
-            if (loanRule.isCheckEmployment() && !loanRule.getAllowedEmployments().contains(x.getEmployment())) return false;
+            //if ( x.getAge() > loanRule.getMaxAge()) return false;
+            //if (loanRule.isCheckMinAge() && x.getAge() < loanRule.getMinAge()) return false;
+            //if (loanRule.isCheckCountry() && loanRule.getAllowedCountries().contains(x.getCountry())) return false;
+            //if (loanRule.isCheckDishonest() && x.isDishonest()) return false;
+            //if (loanRule.isCheckEmployment() && !loanRule.getAllowedEmployments().contains(x.getEmployment())) return false;
             return true;
         }).collect(Collectors.toList());
     }

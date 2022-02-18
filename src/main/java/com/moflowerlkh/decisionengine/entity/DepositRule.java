@@ -15,6 +15,7 @@ import java.util.List;
 public class DepositRule {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 存/贷款 额度

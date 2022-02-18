@@ -15,64 +15,57 @@ import java.util.List;
 @Table(name = "loan_rule_tb")
 public class LoanRule {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 贷款额度
-    @Column(nullable = false)
-    private boolean checkMaxMoney;
-    @Column()
-    private long MaxMoney;
+    @Column(nullable = true)
+    private long checkMaxMoney;
 
-    @Column(nullable = false)
-    private boolean checkMinMoney;
-    @Column()
-    private long MinMoney;
+    @Column(nullable = true)
+    private long checkMinMoney;
 
     // 贷款时间
-    @Column(nullable = false)
-    private boolean checkMaxTime;
-    @Column()
+    @Column(nullable = true)
     private Timestamp MaxTime;
 
-    @Column(nullable = false)
-    private boolean checkMinTime;
-    @Column()
+    @Column(nullable = true)
     private Timestamp MinTime;
 
     // 检查年龄
-    @Column(nullable = false)
-    private boolean checkMaxAge;
-    @Column()
+    @Column(nullable = true)
     private int MaxAge;
 
-    @Column(nullable = false)
-    private boolean checkMinAge;
-    @Column()
+    @Column(nullable = true)
     private int MinAge;
 
+    // 是否需要担保
+    @Column
+    private boolean checkGuarantee;
+
     // 检查就业状况
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean checkEmployment;
-    @Transient
-    private List<Employment> allowedEmployments;
 
     // 检查是否是失信人员
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean checkDishonest;
 
     // 检查是否逾期
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean checkOverDual;
 
+    // 是否需要抵押
+    @Column
+    private boolean checkPledge;
+
     // 是否限制地区
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean checkCountry;
-    @Transient
-    private List<String> allowedCountries;
 
     // 对应的活动
-    @JoinColumn(nullable = false)
-    @OneToOne
+    @JoinColumn(nullable = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private LoanActivity loanActivity;
 }

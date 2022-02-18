@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 public class DepositActivity {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

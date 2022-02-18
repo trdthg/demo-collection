@@ -11,10 +11,11 @@ import java.sql.Timestamp;
 public class LoanActivity {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String info;
+    private String name;
 
     // 统一使用 2022-01-01 20:00:00 时间格式
     @Column(nullable = false)
@@ -25,11 +26,17 @@ public class LoanActivity {
 
     // 贷款额度上限
     @Column(nullable = false)
-    private long depositLimit;
+    private double maxMoneyLimit;
 
-    // 贷款期限
+    @Column()
+    private double minMoneyLimit;
+
+    // 分几期
     @Column(nullable = false)
-    private Timestamp depositTerm;
+    private String timeLimit;
+    // 还几年
+    @Column
+    private String replayLimit;
 
     // 年利率
     @Column(nullable = false)
@@ -48,7 +55,8 @@ public class LoanActivity {
     private long shoppingTotal;
 
     // 对应的规则
+    // 一个活动对应一个规则
     @JoinColumn(nullable = false)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private LoanRule rule;
 }
