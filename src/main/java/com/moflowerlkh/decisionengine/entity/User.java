@@ -1,17 +1,23 @@
 package com.moflowerlkh.decisionengine.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.Gender;
-import lombok.Data;
-import org.hibernate.annotations.Check;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "user_tb")
 public class User {
@@ -59,7 +65,7 @@ public class User {
 
     // 近三年逾期还款数
     @Column(nullable = true)
-    private long overDual;
+    private Long overDual;
 
     // 就业状态
     @Column(nullable = true)
@@ -68,7 +74,25 @@ public class User {
 
     // 被列入失信人名单
     @Column(nullable = true)
-    private boolean dishonest;
+    private Boolean dishonest;
+
+    @JsonIgnoreProperties(value = {"users"})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column(nullable = true)
+    private Set<LoanActivity> loanActivities = new HashSet<LoanActivity>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
 
 

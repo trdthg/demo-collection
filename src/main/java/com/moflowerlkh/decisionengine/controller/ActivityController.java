@@ -6,6 +6,7 @@ import com.moflowerlkh.decisionengine.entity.LoanActivity;
 import com.moflowerlkh.decisionengine.entity.LoanRule;
 import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
 import com.moflowerlkh.decisionengine.enums.DateValue;
+import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,11 +29,13 @@ public class ActivityController {
     LoanActivityDao loanActivityDao;
     @Autowired
     ShoppingGoodsDao shoppingGoodsDao;
+    @Autowired
+    LoanService loanService;
 
     @PostMapping("/loan/")
     @ApiOperation("新增活动")
     public BaseResponse<LoanActivity> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
-        LoanActivity loanActivity = request.toEntity();
+        LoanActivity loanActivity = request.toLoanActivity();
         loanActivityDao.save(loanActivity);
         return new BaseResponse<>(HttpStatus.CREATED, "新增成功", loanActivity);
     }
@@ -40,7 +43,7 @@ public class ActivityController {
     @PutMapping("/loan/{id}")
     @ApiOperation("根据id修改活动信息")
     public BaseResponse<LoanActivity> editLoanActivity(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
-        LoanActivity loanActivity = request.toEntity();
+        LoanActivity loanActivity = request.toLoanActivity();
         loanActivity.setId(id);
         loanActivityDao.saveAndFlush(loanActivity);
         return new BaseResponse<>(HttpStatus.CREATED, "修改成功", loanActivity);
@@ -59,6 +62,16 @@ public class ActivityController {
     public BaseResponse<LoanActivity> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
         loanActivityDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.CREATED, "删除成功", null);
+    }
+
+    @GetMapping("/loan/{activity_id}/{user_id}/")
+    @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
+    public BaseResponse<Boolean> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id, @Valid @NotNull @PathVariable Long user_id) throws Exception {
+        if (loanService.checkUserInfo(activity_id, user_id)) {
+            loanService.tryJoin(activity_id, user_id);
+            return new BaseResponse<>(HttpStatus.CREATED, "初筛通过, 参加成功", true);
+        }
+        return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过", false);
     }
 
 }
@@ -97,7 +110,7 @@ class SetLoanActivityRuleRequest {
         loanRule.setCheckGuarantee(activity_guarantee);
         loanRule.setCheckPledge(activity_pledge);
         loanRule.setMaxAge(activity_ageUp);
-        loanRule.setMaxAge(activity_ageFloor);
+        loanRule.setMinAge(activity_ageFloor);
         loanRule.setCheckEmployment(activity_checkwork);
         loanRule.setCheckDishonest(activity_checkDishonest);
         loanRule.setCheckOverDual(activity_checkOverdual);
@@ -144,7 +157,7 @@ class SetLoanActivityRequest {
     @NotNull(message = "活动对应的商品id不能为空")
     private Long shoppinggoods_id;
 
-    public LoanActivity toEntity() {
+    public LoanActivity toLoanActivity() {
         LoanActivity loanActivity = new LoanActivity();
         // 设置基本信息
         loanActivity.setName(activity_name);
@@ -157,7 +170,6 @@ class SetLoanActivityRequest {
 
         // 添加规则
         LoanRule loanRule = ruler.toLoanRule();
-        //loanRule.setLoanActivity(loanActivity);
         loanActivity.setRule(loanRule);
 
         // 添加商品

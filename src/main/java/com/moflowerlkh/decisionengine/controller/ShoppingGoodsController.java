@@ -27,7 +27,7 @@ public class ShoppingGoodsController {
 
     @PostMapping("/")
     @ResponseBody
-    @ApiOperation(value = "新增", notes = "新增一个商品")
+    @ApiOperation(value = "新增商品", notes = "新增一个商品")
     public BaseResponse<ShoppingGoods> post(@RequestBody @Valid PostShoppingGoodsRequest request) {
         ShoppingGoods shoppingGoods = request.toShoppingGoods();
         shoppingGoodsDao.save(shoppingGoods);
@@ -36,7 +36,7 @@ public class ShoppingGoodsController {
 
     @PutMapping("/{id}")
     @ResponseBody
-    @ApiOperation(value = "编辑", notes = "根据id修改商品信息")
+    @ApiOperation(value = "编辑商品", notes = "根据id修改商品信息")
     public BaseResponse<ShoppingGoods> put(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id, @RequestBody @Valid PostShoppingGoodsRequest request) {
         ShoppingGoods shoppingGoods = request.toShoppingGoods();
         shoppingGoods.setId(id);
@@ -46,7 +46,7 @@ public class ShoppingGoodsController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    @ApiOperation(value = "查询", notes = "根据id查找商品信息")
+    @ApiOperation(value = "查询商品", notes = "根据id查找商品信息")
     public BaseResponse<ShoppingGoods> put(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
         Optional<ShoppingGoods> shoppingGoods = shoppingGoodsDao.findById(id);
         if (shoppingGoods.isEmpty()) {
@@ -57,7 +57,7 @@ public class ShoppingGoodsController {
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    @ApiOperation(value = "删除", notes = "根据id删除商品")
+    @ApiOperation(value = "删除商品", notes = "根据id删除商品")
     public BaseResponse<String> delete(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
         shoppingGoodsDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", null);

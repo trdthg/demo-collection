@@ -21,10 +21,10 @@ public class LoanRule {
 
     // 贷款额度
     @Column(nullable = true)
-    private long checkMaxMoney;
+    private Long checkMaxMoney;
 
     @Column(nullable = true)
-    private long checkMinMoney;
+    private Long checkMinMoney;
 
     // 贷款时间
     @Column(nullable = true)
@@ -35,34 +35,34 @@ public class LoanRule {
 
     // 检查年龄
     @Column(nullable = true)
-    private int MaxAge;
+    private Integer MaxAge;
 
     @Column(nullable = true)
-    private int MinAge;
+    private Integer MinAge;
 
     // 是否需要担保
     @Column
-    private boolean checkGuarantee;
+    private Boolean checkGuarantee;
 
     // 检查就业状况
     @Column(nullable = true)
-    private boolean checkEmployment;
+    private Boolean checkEmployment;
 
     // 检查是否是失信人员
     @Column(nullable = true)
-    private boolean checkDishonest;
+    private Boolean checkDishonest;
 
     // 检查是否逾期
     @Column(nullable = true)
-    private boolean checkOverDual;
+    private Boolean checkOverDual;
 
     // 是否需要抵押
     @Column
-    private boolean checkPledge;
+    private Boolean checkPledge;
 
     // 是否限制地区
     @Column(nullable = true)
-    private boolean checkCountry;
+    private Boolean checkCountry;
 
     //// 对应的活动
     //@JoinColumn(nullable = true)

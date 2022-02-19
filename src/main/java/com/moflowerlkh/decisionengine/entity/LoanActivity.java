@@ -1,13 +1,20 @@
 package com.moflowerlkh.decisionengine.entity;
 
-import lombok.Data;
-import org.hibernate.annotations.OnDelete;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "loan_activity_tb")
 public class LoanActivity {
     @Id
@@ -57,7 +64,26 @@ public class LoanActivity {
 
     // 对应的规则
     // 一个活动对应一个规则
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private LoanRule rule;
+
+    // 参加活动的人
+    @JsonIgnoreProperties(value = {"loanActivities"})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(nullable = true)
+    private Set<User> users = new HashSet<User>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        LoanActivity that = (LoanActivity) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

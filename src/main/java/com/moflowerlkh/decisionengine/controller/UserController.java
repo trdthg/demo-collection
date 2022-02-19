@@ -1,5 +1,6 @@
 package com.moflowerlkh.decisionengine.controller;
 
+import com.moflowerlkh.decisionengine.dao.UserDao;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.EnumValue;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,13 +34,38 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserDao userDao;
 
-    @PostMapping("/register")
+    @PostMapping("/")
     @ApiOperation("注册")
-    public BaseResponse<Long> register(@RequestBody @Valid UserRequest userRequest) throws Exception {
+    public BaseResponse<User> register(@RequestBody @Valid UserRequest userRequest) throws Exception {
         User user = userRequest.toUser();
-        userService.register(user);
-        return new BaseResponse<>(HttpStatus.CREATED, "成功", user.getId());
+        userDao.save(user);
+        return new BaseResponse<>(HttpStatus.CREATED, "注册成功", user);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id获取用户信息")
+    public BaseResponse<User> get(@Valid @NotNull @PathVariable Long id) throws Exception {
+        User user = userDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + id));
+        return new BaseResponse<User>(HttpStatus.OK, "查询成功", user);
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("根据id编辑用户信息")
+    public BaseResponse<User> put(@Valid @PathVariable Long id, @RequestBody @Valid UserRequest userRequest) throws Exception {
+        User user = userRequest.toUser();
+        user.setId(id);
+        userDao.saveAndFlush(user);
+        return new BaseResponse<>(HttpStatus.CREATED, "编辑成功", user);
+    }
+
+    @PostMapping("/{id}")
+    @ApiOperation("根据id删除用户")
+    public BaseResponse<Void> felete(@Valid @PathVariable Long id) throws Exception {
+        userDao.deleteById(id);
+        return new BaseResponse<>(HttpStatus.OK, "删除成功", null);
     }
 
     @GetMapping("/hello")

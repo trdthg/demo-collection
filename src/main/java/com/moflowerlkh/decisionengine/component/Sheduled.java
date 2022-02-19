@@ -1,6 +1,8 @@
 package com.moflowerlkh.decisionengine.component;
 
+import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.dao.UserDao;
+import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.Gender;
@@ -22,6 +24,8 @@ public class Sheduled {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    ShoppingGoodsDao shoppingGoodsDao;
 
     @Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     public void testRedis(){
@@ -49,15 +53,19 @@ public class Sheduled {
             newUser.setEmployment(Employment.Employed);
             newUser.setAge(18);
             newUser.setName("小明");
+            newUser.setDishonest(false);
+            newUser.setCountry("中国");
             userDao.save(newUser);
-        } else {
-            users.get(0).setAge(users.get(0).getAge() + 1);
-            users.get(0).setPassword(new BCryptPasswordEncoder().encode("asd"));
-
-            userDao.saveAndFlush(users.get(0));
-            //userDao.deleteAll();
         }
-        System.out.println("A22-mysql" + System.currentTimeMillis());
+
+        List<ShoppingGoods> shoppingGoods = shoppingGoodsDao.findAll();
+        if (shoppingGoods.isEmpty()) {
+            ShoppingGoods shoppingGoods1 = new ShoppingGoods();
+            shoppingGoods1.setName("商品1");
+            shoppingGoods1.setInfo("商品1的信息");
+            shoppingGoods1.setGoodsTotal(10L);
+            shoppingGoodsDao.save(shoppingGoods1);
+        }
     }
 
 }
