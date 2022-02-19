@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -32,13 +29,38 @@ public class ActivityController {
     @Autowired
     ShoppingGoodsDao shoppingGoodsDao;
 
-    @PostMapping("/set-loan-activity")
+    @PostMapping("/loan/")
     @ApiOperation("新增活动")
-    public BaseResponse<Long> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
-        LoanActivity loanActivity = request.toEntity(shoppingGoodsDao);
+    public BaseResponse<LoanActivity> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
+        LoanActivity loanActivity = request.toEntity();
         loanActivityDao.save(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "成功", loanActivity.getId());
+        return new BaseResponse<>(HttpStatus.CREATED, "新增成功", loanActivity);
     }
+
+    @PutMapping("/loan/{id}")
+    @ApiOperation("根据id修改活动信息")
+    public BaseResponse<LoanActivity> editLoanActivity(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
+        LoanActivity loanActivity = request.toEntity();
+        loanActivity.setId(id);
+        loanActivityDao.saveAndFlush(loanActivity);
+        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", loanActivity);
+    }
+
+    @GetMapping("/loan/{id}")
+    @ApiOperation("根据id查询活动信息")
+    public BaseResponse<LoanActivity> getLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+        Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
+        LoanActivity loanActivity = _loanActivity.orElse(null);
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", loanActivity);
+    }
+
+    @DeleteMapping("/loan/{id}")
+    @ApiOperation("根据id删除活动")
+    public BaseResponse<LoanActivity> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+        loanActivityDao.deleteById(id);
+        return new BaseResponse<>(HttpStatus.CREATED, "删除成功", null);
+    }
+
 }
 
 @Data
@@ -122,7 +144,7 @@ class SetLoanActivityRequest {
     @NotNull(message = "活动对应的商品id不能为空")
     private Long shoppinggoods_id;
 
-    public LoanActivity toEntity(ShoppingGoodsDao shoppingGoodsDao) {
+    public LoanActivity toEntity() {
         LoanActivity loanActivity = new LoanActivity();
         // 设置基本信息
         loanActivity.setName(activity_name);
@@ -135,15 +157,12 @@ class SetLoanActivityRequest {
 
         // 添加规则
         LoanRule loanRule = ruler.toLoanRule();
-        loanRule.setLoanActivity(loanActivity);
+        //loanRule.setLoanActivity(loanActivity);
         loanActivity.setRule(loanRule);
 
         // 添加商品
-        Optional<ShoppingGoods> _shoppingGoods = shoppingGoodsDao.findById(shoppinggoods_id);
-        ShoppingGoods shoppingGoods = null;
-        if (_shoppingGoods.isPresent()) {
-            shoppingGoods = _shoppingGoods.get();
-        }
+        ShoppingGoods shoppingGoods = new ShoppingGoods();
+        shoppingGoods.setId(shoppinggoods_id);
         loanActivity.setShoppingGoods(shoppingGoods);
         return loanActivity;
     }

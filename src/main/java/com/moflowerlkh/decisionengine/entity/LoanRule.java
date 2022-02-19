@@ -64,8 +64,8 @@ public class LoanRule {
     @Column(nullable = true)
     private boolean checkCountry;
 
-    // 对应的活动
-    @JoinColumn(nullable = true)
-    @OneToOne(cascade = CascadeType.ALL)
-    private LoanActivity loanActivity;
+    //// 对应的活动
+    //@JoinColumn(nullable = true)
+    //@OneToOne(cascade = CascadeType.ALL)
+    //private LoanActivity loanActivity;
 }
