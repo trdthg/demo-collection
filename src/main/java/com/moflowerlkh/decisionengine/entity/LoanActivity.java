@@ -69,10 +69,15 @@ public class LoanActivity {
     private LoanRule rule;
 
     // 参加活动的人
-    @JsonIgnoreProperties(value = {"loanActivities"})
+    @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Column(nullable = true)
-    private Set<User> users = new HashSet<User>();
+    private Set<User> unPassedUser = new HashSet<User>();
+
+    @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(nullable = true)
+    private Set<User> passedUser = new HashSet<User>();
 
     @Override
     public boolean equals(Object o) {

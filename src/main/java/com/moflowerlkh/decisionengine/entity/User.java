@@ -76,10 +76,15 @@ public class User {
     @Column(nullable = true)
     private Boolean dishonest;
 
-    @JsonIgnoreProperties(value = {"users"})
+    @JsonIgnoreProperties(value = {"unPassedUser", "passedUser"})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
-    private Set<LoanActivity> loanActivities = new HashSet<LoanActivity>();
+    private Set<LoanActivity> passedLoanActivities = new HashSet<LoanActivity>();
+
+    @JsonIgnoreProperties(value = {"unPassedUser", "passedUser"})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column(nullable = true)
+    private Set<LoanActivity> unPassedLoanActivities = new HashSet<LoanActivity>();
 
     @Override
     public boolean equals(Object o) {
