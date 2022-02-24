@@ -1,19 +1,15 @@
- 
-import sys,os
-sys.path.append(os.path.dirname(__file__) + os.sep + '../')
-
 import time
 import jwt
 
 class TokenHelper(object):
-    exptime = time.time() + 60 * 30 * 2 * 24
+    exptime = time.time() + 60 * 30 * 2 * 24 * 3
     secret = 'iam'
 
     def __init__(self):
         pass
 
     @classmethod
-    def encrpyt_token(cls, user_id):
+    def encrpyt_token(cls, username):
         """
         iss：该JWT的签发者，是否使用是可以选择的。
         sub：该JWT所面向的用户，是否使用是可选的。
@@ -27,7 +23,7 @@ class TokenHelper(object):
             'iss': 'issue by class Token',
             'sub': 'sub for all user when trying to login',
             'iat': time.time(),
-            'user_id':user_id,
+            'username':username,
             "exp": cls.exptime
         }
         encoded_jwt = jwt.encode(payloads, cls.secret, algorithm='HS256')
@@ -50,9 +46,10 @@ class TokenHelper(object):
             return {'error':'Signature verification failed'}
 
 if __name__ == "__main__":
-    a = TokenHelper().encrpyt_token("username")
-    print(a)
+    # a = TokenHelper().encrpyt_token("username")
+    a = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1ZSBieSBjbGFzcyBUb2tlbiIsInN1YiI6InN1YiBmb3IgYWxsIHVzZXIgd2hlbiB0cnlpbmcgdG8gbG9naW4iLCJpYXQiOjE2Mjk1NDAzMjEuODA4NDQ4MywidXNlcm5hbWUiOiIxIiwiZXhwIjoxNjI5NTQyMTIxLjQzMjU1NTR9._gQ0fOlqhM-NzV_Ca3T5eyOtFedbwdApm-OkYr5y3Aw"
+    # print(a)
     a = TokenHelper().decrypt_token(a)
     print(a)
-
+    
 

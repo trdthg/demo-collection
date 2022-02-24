@@ -1,9 +1,5 @@
- 
-import sys,os
-sys.path.append(os.path.dirname(__file__) + os.sep + '../')
-
-from flask import current_app
 import pymysql
+from flask import current_app
 #第一一个数据库连接池的方法的类，用于处理链接，查找， 断开链接等功能
 #当使用某种方法的时候直接调用即可
 class SQLHelper(object):
@@ -58,16 +54,9 @@ class SQLHelper(object):
         obj = cursor.execute(sql, args)
         cls.close(conn, cursor)
         return obj
-
+    
     @classmethod
     def update(cls, sql, args, cursor = pymysql.cursors.DictCursor):
-        conn, cursor = cls.open(cursor)
-        obj = cursor.execute(sql, args)
-        cls.close(conn, cursor)
-        return obj
-
-    @classmethod
-    def delete(cls, sql, args, cursor = pymysql.cursors.DictCursor):
         conn, cursor = cls.open(cursor)
         obj = cursor.execute(sql, args)
         cls.close(conn, cursor)

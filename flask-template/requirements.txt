@@ -1,8 +1,8 @@
- 
-Flask==1.0.2
-werkzeug==0.16.0
-PyMySQL
+PyMySQL==1.0.2
+Flask==2.0.1
+Werkzeug==2.0.1
+numpy==1.19.3
 DBUtils==2.0.1
+nanoid==2.0.0
 Flask_Uploads==0.2.1
-PyJWT
-nanoid
+PyJWT==2.1.0
