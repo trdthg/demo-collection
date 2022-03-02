@@ -5,6 +5,7 @@ import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.entity.LoanActivity;
 import com.moflowerlkh.decisionengine.entity.LoanRule;
 import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
+import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.DateValue;
 import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -12,14 +13,19 @@ import com.moflowerlkh.decisionengine.vo.BaseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"活动设置相关"})
@@ -28,8 +34,6 @@ public class ActivityController {
 
     @Autowired
     LoanActivityDao loanActivityDao;
-    @Autowired
-    ShoppingGoodsDao shoppingGoodsDao;
     @Autowired
     LoanService loanService;
 
@@ -50,17 +54,25 @@ public class ActivityController {
         return new BaseResponse<>(HttpStatus.CREATED, "修改成功", loanActivity);
     }
 
+    @GetMapping("/loan")
+    @ApiOperation("查询活动列表")
+    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityById(@Valid @NotNull Integer page_number, @Valid @NotNull Integer page_size) {
+        List<LoanActivity> loanActivities = loanActivityDao.findAll();
+        List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+    }
+
     @GetMapping("/loan/{id}")
     @ApiOperation("根据id查询活动信息")
-    public BaseResponse<LoanActivity> getLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+    public BaseResponse<LoanActivityResponse> getLoanActivityById(@Valid @NotNull @PathVariable Long id) {
         Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
-        LoanActivity loanActivity = _loanActivity.orElse(null);
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", loanActivity);
+        LoanActivity loanActivity = _loanActivity.orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
     @DeleteMapping("/loan/{id}")
     @ApiOperation("根据id删除活动")
-    public BaseResponse<LoanActivity> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+    public BaseResponse<Void> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
         loanActivityDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.CREATED, "删除成功", null);
     }
@@ -76,7 +88,92 @@ public class ActivityController {
             return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过: " + checkResult.getMessage(), false);
         }
     }
+}
 
+@Data
+class JoinLoanActivityUserResponse {
+    private String user_name;
+    private String user_gender;
+    private String user_IDnumber;
+    private String user_nation;
+    private Integer user_age;
+    private Long user_overdual;
+    private String user_employment;
+    private Boolean user_dishonest;
+
+    public static JoinLoanActivityUserResponse fromUser(User user) {
+        JoinLoanActivityUserResponse response = new JoinLoanActivityUserResponse();
+        response.setUser_name(user.getName());
+        response.setUser_gender(user.getGender().name());
+        response.setUser_IDnumber(user.getIDNumber());
+        response.setUser_nation(user.getCountry());
+        response.setUser_age(user.getAge());
+        response.setUser_overdual(user.getOverDual());
+        response.setUser_employment(user.getEmployment().name());
+        response.setUser_dishonest(user.getDishonest());
+        return response;
+    }
+
+    public static List<JoinLoanActivityUserResponse> fromUser(List<User> users) {
+        List<JoinLoanActivityUserResponse> responses = new ArrayList<>();
+        return users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+    }
+}
+
+@Data
+class LoanActivitySimpleResponse {
+    private Long activity_id;
+    private String activity_name;
+    private String activity_timeLimit;
+    private Double activity_initMoney;
+    private Double activity_apr;
+
+    public static LoanActivitySimpleResponse fromLoanActivity(LoanActivity loanActivity) {
+        LoanActivitySimpleResponse response = new LoanActivitySimpleResponse();
+        response.setActivity_id(loanActivity.getId());
+        response.setActivity_name(loanActivity.getName());
+        response.setActivity_timeLimit(loanActivity.getTimeLimit());
+        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
+        response.setActivity_apr(loanActivity.getApr());
+        return response;
+    }
+}
+
+@Data
+class LoanActivityResponse {
+    private Long activity_id;
+    private String activity_name;
+    private String activity_timeLimit;
+    private Double activity_initMoney;
+    private Double activity_apr;
+
+    private List<JoinLoanActivityUserResponse> passed_users;
+    private List<JoinLoanActivityUserResponse> unPassed_users;
+
+    public static LoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
+        LoanActivityResponse response = new LoanActivityResponse();
+        response.setActivity_id(loanActivity.getId());
+        response.setActivity_name(loanActivity.getName());
+        response.setActivity_timeLimit(loanActivity.getTimeLimit());
+        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
+        response.setActivity_apr(loanActivity.getApr());
+        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
+        response.setUnPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+        return response;
+    }
+}
+
+@Data
+class JoinLoanActivityResponse {
+    private List<JoinLoanActivityUserResponse> passed_users;
+    private List<JoinLoanActivityUserResponse> unPassed_users;
+
+    public static JoinLoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
+        JoinLoanActivityResponse response = new JoinLoanActivityResponse();
+        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
+        response.setUnPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+        return response;
+    }
 }
 
 @Data

@@ -19,3 +19,8 @@ public class UserService {
     }
 
 }
+
+class PartialUser {
+    Long id;
+    String name;
+}

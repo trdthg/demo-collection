@@ -1,6 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.dao.UserDao;
+import com.moflowerlkh.decisionengine.entity.LoanActivity;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.EnumValue;
@@ -26,6 +27,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = {"用户相关"})
@@ -51,6 +55,14 @@ public class UserController {
         User user = userDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + id));
         return new BaseResponse<User>(HttpStatus.OK, "查询成功", user);
     }
+
+    //@GetMapping("/{user_id}/{activity_id}")
+    //@ApiOperation("根据id判断用户是否通过")
+    //public BaseResponse<Boolean> get(@Valid @NotNull @PathVariable Long user_id, @Valid @NotNull @PathVariable Long activity_id) throws Exception {
+    //    User user = userDao.findById(user_id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + user_id));
+    //    List<LoanActivity> loanActivitys = user.getPassedLoanActivities().stream().filter(activity -> Objects.equals(activity.getId(), activity_id)).collect(Collectors.toList());
+    //    return new BaseResponse<Boolean>(HttpStatus.OK, "查询成功", loanActivitys.isEmpty());
+    //}
 
     @PutMapping("/{id}")
     @ApiOperation("根据id编辑用户信息")
