@@ -70,12 +70,12 @@ public class LoanActivity {
 
     // 参加活动的人
     @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<User> unPassedUser = new HashSet<User>();
 
     @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<User> passedUser = new HashSet<User>();
 

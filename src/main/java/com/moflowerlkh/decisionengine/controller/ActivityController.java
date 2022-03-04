@@ -38,60 +38,115 @@ public class ActivityController {
     LoanService loanService;
 
     @PostMapping("/loan/")
-    @ApiOperation("新增活动")
-    public BaseResponse<LoanActivity> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
+    @ApiOperation(value = "新增活动", notes = "")
+    public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
         LoanActivity loanActivity = request.toLoanActivity();
         loanActivityDao.save(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "新增成功", loanActivity);
+        return new BaseResponse<>(HttpStatus.CREATED, "新增成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
     @PutMapping("/loan/{id}")
-    @ApiOperation("根据id修改活动信息")
-    public BaseResponse<LoanActivity> editLoanActivity(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
+    @ApiOperation(value = "根据id修改活动信息-全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
+    public BaseResponse<LoanActivityResponse> editLoanActivityPut(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
         LoanActivity loanActivity = request.toLoanActivity();
         loanActivity.setId(id);
         loanActivityDao.saveAndFlush(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", loanActivity);
+        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", LoanActivityResponse.fromLoanActivity(loanActivity));
+    }
+
+    @PatchMapping("/loan/{id}")
+    @ApiOperation(value = "根据id修改活动信息-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
+    public BaseResponse<LoanActivityResponse> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
+        LoanActivity loanActivity = request.toLoanActivity();
+        loanActivity.setId(id);
+        loanActivityDao.saveAndFlush(loanActivity);
+        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
     @GetMapping("/loan")
-    @ApiOperation("查询活动列表")
-    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityById(@Valid @NotNull Integer page_number, @Valid @NotNull Integer page_size) {
+    @ApiOperation(value = "查询活动列表-不带初筛信息", notes = "只有一些活动的基本信息")
+    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple() {
         List<LoanActivity> loanActivities = loanActivityDao.findAll();
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
     }
 
+    @GetMapping("/loan/full")
+    @ApiOperation(value = "查询活动列表-带有初筛信息", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
+    public BaseResponse<List<LoanActivityResponse>> getLoanActivityByIdFull() {
+        List<LoanActivity> loanActivities = loanActivityDao.findAll();
+        List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity).collect(Collectors.toList());
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+    }
+
     @GetMapping("/loan/{id}")
-    @ApiOperation("根据id查询活动信息")
-    public BaseResponse<LoanActivityResponse> getLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+    @ApiOperation(value = "根据id查询活动信息-简略", notes = "不带有活动的参加信息")
+    public BaseResponse<LoanActivitySimpleResponse> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
+        Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
+        LoanActivity loanActivity = _loanActivity.orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", LoanActivitySimpleResponse.fromLoanActivity(loanActivity));
+    }
+
+    @GetMapping("/loan/{id}/full")
+    @ApiOperation(value = "根据id查询活动信息-完整", notes = "带有活动的参加信息")
+    public BaseResponse<LoanActivityResponse> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
         Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
         LoanActivity loanActivity = _loanActivity.orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         return new BaseResponse<>(HttpStatus.CREATED, "查询成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
-    @DeleteMapping("/loan/{id}")
-    @ApiOperation("根据id删除活动")
-    public BaseResponse<Void> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
-        loanActivityDao.deleteById(id);
-        return new BaseResponse<>(HttpStatus.CREATED, "删除成功", null);
+    @GetMapping("/loan/{id}/passed")
+    @ApiOperation("查询活动通过者信息")
+    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdA(@Valid @NotNull @PathVariable Long id) {
+        LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<JoinLoanActivityUserResponse> res = loanActivity.getPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
     }
 
-    @GetMapping("/loan/{activity_id}/{user_id}/")
-    @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
-    public BaseResponse<Boolean> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id, @Valid @NotNull @PathVariable Long user_id) throws Exception {
-        BaseResult<Boolean> checkResult = loanService.checkUserInfo(activity_id, user_id);
-        loanService.tryJoin(activity_id, user_id, checkResult.getResult());
-        if (checkResult.getResult()) {
-            return new BaseResponse<>(HttpStatus.CREATED, "初筛通过, 参加成功", true);
-        } else {
-            return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过: " + checkResult.getMessage(), false);
-        }
+    @GetMapping("/loan/{id}/unpassed")
+    @ApiOperation("查询活动不通过者信息")
+    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdB(@Valid @NotNull @PathVariable Long id) {
+        LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<JoinLoanActivityUserResponse> res = loanActivity.getUnPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
     }
+
+    @GetMapping("/{activity_id}/passed")
+    @ApiOperation("查看通过某活动筛选的某用户信息")
+    public BaseResponse<JoinLoanActivityUserResponse> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id, @NotNull @RequestParam String name) throws Exception {
+        LoanActivity activity = loanActivityDao.findById(activity_id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<User> users = activity.getPassedUser().stream().filter(user -> {
+            return Objects.equals(user.getName(), name);
+        }).collect(Collectors.toList());
+        if (users.isEmpty()) {
+            throw new DataRetrievalFailureException("该用户没有参加该活动或者未通过筛选");
+        }
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", JoinLoanActivityUserResponse.fromUser(users.get(0)));
+    }
+
+    @GetMapping("/{activity_id}/unpassed/{user_id}")
+    @ApiOperation("查看未通过某活动筛选的某用户信息")
+    public BaseResponse<JoinLoanActivityUserResponse> ifUserUnPassed(@Valid @NotNull @PathVariable Long user_id, @Valid @NotNull @PathVariable Long activity_id) throws Exception {
+        LoanActivity activity = loanActivityDao.findById(activity_id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<User> users = activity.getUnPassedUser().stream().filter(user -> Objects.equals(user.getId(), user_id)).collect(Collectors.toList());
+        if (users.isEmpty()) {
+            throw new DataRetrievalFailureException("该用户没有参加该活动或者已经通过筛选");
+        }
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", JoinLoanActivityUserResponse.fromUser(users.get(0)));
+    }
+
+    @DeleteMapping("/loan/{id}")
+    @ApiOperation("根据id删除活动")
+    public BaseResponse<Boolean> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
+        loanActivityDao.deleteById(id);
+        return new BaseResponse<>(HttpStatus.CREATED, "删除成功", true);
+    }
+
 }
 
 @Data
 class JoinLoanActivityUserResponse {
+    private Long user_id;
     private String user_name;
     private String user_gender;
     private String user_IDnumber;
@@ -103,6 +158,7 @@ class JoinLoanActivityUserResponse {
 
     public static JoinLoanActivityUserResponse fromUser(User user) {
         JoinLoanActivityUserResponse response = new JoinLoanActivityUserResponse();
+        response.setUser_id(user.getId());
         response.setUser_name(user.getName());
         response.setUser_gender(user.getGender().name());
         response.setUser_IDnumber(user.getIDNumber());

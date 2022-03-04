@@ -6,8 +6,10 @@ import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.Employment;
 import com.moflowerlkh.decisionengine.enums.EnumValue;
 import com.moflowerlkh.decisionengine.enums.Gender;
+import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.service.UserService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
+import com.moflowerlkh.decisionengine.vo.BaseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
@@ -39,6 +41,8 @@ public class UserController {
     @Autowired
     UserService userService;
     @Autowired
+    LoanService loanService;
+    @Autowired
     UserDao userDao;
 
     @PostMapping("/")
@@ -56,14 +60,6 @@ public class UserController {
         return new BaseResponse<User>(HttpStatus.OK, "查询成功", user);
     }
 
-    //@GetMapping("/{user_id}/{activity_id}")
-    //@ApiOperation("根据id判断用户是否通过")
-    //public BaseResponse<Boolean> get(@Valid @NotNull @PathVariable Long user_id, @Valid @NotNull @PathVariable Long activity_id) throws Exception {
-    //    User user = userDao.findById(user_id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + user_id));
-    //    List<LoanActivity> loanActivitys = user.getPassedLoanActivities().stream().filter(activity -> Objects.equals(activity.getId(), activity_id)).collect(Collectors.toList());
-    //    return new BaseResponse<Boolean>(HttpStatus.OK, "查询成功", loanActivitys.isEmpty());
-    //}
-
     @PutMapping("/{id}")
     @ApiOperation("根据id编辑用户信息")
     public BaseResponse<User> put(@Valid @PathVariable Long id, @RequestBody @Valid UserRequest userRequest) throws Exception {
@@ -80,10 +76,16 @@ public class UserController {
         return new BaseResponse<>(HttpStatus.OK, "删除成功", null);
     }
 
-    @GetMapping("/hello")
-    @ApiOperation("打印hello xxx")
-    public String hello(String username) {
-        return "Hello" + username;
+    @GetMapping("/loan/{activity_id}/{user_id}/")
+    @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
+    public BaseResponse<Boolean> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id, @Valid @NotNull @PathVariable Long user_id) throws Exception {
+        BaseResult<Boolean> checkResult = loanService.checkUserInfo(activity_id, user_id);
+        loanService.tryJoin(activity_id, user_id, checkResult.getResult());
+        if (checkResult.getResult()) {
+            return new BaseResponse<>(HttpStatus.CREATED, "初筛通过, 参加成功", true);
+        } else {
+            return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过: " + checkResult.getMessage(), false);
+        }
     }
 }
 

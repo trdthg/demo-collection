@@ -41,7 +41,7 @@ public class LoanService {
             baseResult.setMessage("用户年龄不能高于" + loanRule.getMaxAge());
             return baseResult;
         }
-        if (loanRule.getMinAge() != null && user.getAge() <= loanRule.getMinAge()) {
+        if (loanRule.getMinAge() != null && user.getAge() < loanRule.getMinAge()) {
             baseResult.setMessage("用户年龄不能低于" + loanRule.getMinAge());
             return baseResult;
         }
