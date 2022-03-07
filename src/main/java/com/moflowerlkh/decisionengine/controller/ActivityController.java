@@ -373,6 +373,11 @@ class SetLoanActivityRequest {
     @NotNull(message = "年利率不能为空")
     @PositiveOrZero(message = "年利率不能为负数")
     private double activity_apr;
+
+    @NotNull(message = "产品总数量不能为空")
+    @PositiveOrZero(message = "产品总数量必须为0或正整数")
+    private Long activity_sum;
+
     // 活动规则
     @Valid
     @NotNull(message = "活动规则不能为空")
@@ -392,6 +397,7 @@ class SetLoanActivityRequest {
         loanActivity.setEndTime(Timestamp.valueOf(activity_endTime));
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
+        loanActivity.setShoppingTotal(activity_sum);
 
         // 添加规则
         LoanRule loanRule = ruler.toLoanRule();
