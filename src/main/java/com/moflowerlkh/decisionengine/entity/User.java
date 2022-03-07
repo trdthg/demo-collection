@@ -50,7 +50,7 @@ public class User {
     private Long yearIncome;
 
     // 身份证号
-    @Column(nullable = true)
+    @Column(nullable = true, unique = true)
     private String IDNumber;
 
     // 国家
