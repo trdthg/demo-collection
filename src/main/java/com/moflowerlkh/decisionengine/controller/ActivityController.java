@@ -181,18 +181,45 @@ class JoinLoanActivityUserResponse {
 @Data
 class LoanActivitySimpleResponse {
     private Long activity_id;
+    //activity_id	string	活动序号
     private String activity_name;
+    //activity_name	string	活动名称
+    private Double activity_moneyLimit;
+    //activity_moneyLimit	number	借款额度
     private String activity_timeLimit;
-    private Double activity_initMoney;
+    //activity_timeLimit	string	借款期限
+    private String activity_replayTime;
+    //activity_replayTime	string	还款期限
     private Double activity_apr;
+    //activity_apr	string	年利率
+    private SetLoanActivityRuleRequest rule;
+    //activity_dateRate	bool	是否当日起息
+    //activity_dawa	bool	是否随存随取
+    //activity_sum	number	产品总数量
+    //activity_startTime	date	产品秒杀开始时间
+    //activity_endTime	date	产品秒杀结束时间
+    private Long activity_sum;
+    //activity_sum	number	产品总数量
+    private String activity_startTime;
+    //activity_startTime	date	产品秒杀开始时间
+    private String activity_endTime;
+    //activity_endTime	date	产品秒杀结束时间
 
     public static LoanActivitySimpleResponse fromLoanActivity(LoanActivity loanActivity) {
         LoanActivitySimpleResponse response = new LoanActivitySimpleResponse();
         response.setActivity_id(loanActivity.getId());
         response.setActivity_name(loanActivity.getName());
+        response.setActivity_moneyLimit(loanActivity.getMaxMoneyLimit());
         response.setActivity_timeLimit(loanActivity.getTimeLimit());
-        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
+        response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
+
+        response.setActivity_sum(loanActivity.getShoppingTotal());
+        response.setActivity_startTime(loanActivity.getBeginTime().toString());
+        response.setActivity_endTime(loanActivity.getEndTime().toString());
+
+        response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
+
         return response;
     }
 }
@@ -200,10 +227,29 @@ class LoanActivitySimpleResponse {
 @Data
 class LoanActivityResponse {
     private Long activity_id;
+    //activity_id	string	活动序号
     private String activity_name;
+    //activity_name	string	活动名称
+    private Double activity_moneyLimit;
+    //activity_moneyLimit	number	借款额度
     private String activity_timeLimit;
-    private Double activity_initMoney;
+    //activity_timeLimit	string	借款期限
+    private String activity_replayTime;
+    //activity_replayTime	string	还款期限
     private Double activity_apr;
+    //activity_apr	string	年利率
+    private SetLoanActivityRuleRequest rule;
+    //activity_dateRate	bool	是否当日起息
+    //activity_dawa	bool	是否随存随取
+    //activity_sum	number	产品总数量
+    //activity_startTime	date	产品秒杀开始时间
+    //activity_endTime	date	产品秒杀结束时间
+    private Long activity_sum;
+    //activity_sum	number	产品总数量
+    private String activity_startTime;
+    //activity_startTime	date	产品秒杀开始时间
+    private String activity_endTime;
+    //activity_endTime	date	产品秒杀结束时间
 
     private List<JoinLoanActivityUserResponse> passed_users;
     private List<JoinLoanActivityUserResponse> unPassed_users;
@@ -212,9 +258,17 @@ class LoanActivityResponse {
         LoanActivityResponse response = new LoanActivityResponse();
         response.setActivity_id(loanActivity.getId());
         response.setActivity_name(loanActivity.getName());
+        response.setActivity_moneyLimit(loanActivity.getMaxMoneyLimit());
         response.setActivity_timeLimit(loanActivity.getTimeLimit());
-        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
+        response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
+
+        response.setActivity_sum(loanActivity.getShoppingTotal());
+        response.setActivity_startTime(loanActivity.getBeginTime().toString());
+        response.setActivity_endTime(loanActivity.getEndTime().toString());
+
+        response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
+
         response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
         response.setUnPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
         return response;
@@ -274,6 +328,19 @@ class SetLoanActivityRuleRequest {
         loanRule.setCheckOverDual(activity_checkOverdual);
         loanRule.setCheckCountry(activity_checkNation);
         return loanRule;
+    }
+
+    public static SetLoanActivityRuleRequest fromLoanRule(LoanRule loanRule) {
+        SetLoanActivityRuleRequest res = new SetLoanActivityRuleRequest();
+        res.setActivity_guarantee(loanRule.getCheckGuarantee());
+        res.setActivity_pledge(loanRule.getCheckPledge());
+        res.setActivity_ageUp(loanRule.getMaxAge());
+        res.setActivity_ageFloor(loanRule.getMinAge());
+        res.setActivity_checkwork(loanRule.getCheckEmployment());
+        res.setActivity_checkDishonest(loanRule.getCheckDishonest());
+        res.setActivity_checkOverdual(loanRule.getCheckOverDual());
+        res.setActivity_checkNation(loanRule.getCheckCountry());
+        return res;
     }
 }
 
