@@ -96,7 +96,7 @@ public class Sheduled {
             loanActivity.setApr(4.00);
             loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
             loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
-            loanActivity.setShoppingTotal(10000);
+            loanActivity.setAmount(10000);
             loanActivity.setRule(loanRule);
             loanActivityDao.save(loanActivity);
             System.out.println("activity和rule初始化成功");

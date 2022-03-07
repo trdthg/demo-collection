@@ -198,7 +198,9 @@ class LoanActivitySimpleResponse {
     //activity_sum	number	产品总数量
     //activity_startTime	date	产品秒杀开始时间
     //activity_endTime	date	产品秒杀结束时间
-    private Long activity_sum;
+    private Long activity_totalQuantity;
+    private Long activity_totalAmount;
+    private double activity_initMoney;
     //activity_sum	number	产品总数量
     private String activity_startTime;
     //activity_startTime	date	产品秒杀开始时间
@@ -214,7 +216,9 @@ class LoanActivitySimpleResponse {
         response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
 
-        response.setActivity_sum(loanActivity.getShoppingTotal());
+        response.setActivity_totalQuantity(loanActivity.getAmount());
+        response.setActivity_totalAmount(loanActivity.getMoneyTotal());
+        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
         response.setActivity_startTime(loanActivity.getBeginTime().toString());
         response.setActivity_endTime(loanActivity.getEndTime().toString());
 
@@ -244,7 +248,9 @@ class LoanActivityResponse {
     //activity_sum	number	产品总数量
     //activity_startTime	date	产品秒杀开始时间
     //activity_endTime	date	产品秒杀结束时间
-    private Long activity_sum;
+    private Long activity_totalQuantity;
+    private Long activity_totalAmount;
+    private double activity_initMoney;
     //activity_sum	number	产品总数量
     private String activity_startTime;
     //activity_startTime	date	产品秒杀开始时间
@@ -263,7 +269,9 @@ class LoanActivityResponse {
         response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
 
-        response.setActivity_sum(loanActivity.getShoppingTotal());
+        response.setActivity_totalQuantity(loanActivity.getAmount());
+        response.setActivity_totalAmount(loanActivity.getMoneyTotal());
+        response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
         response.setActivity_startTime(loanActivity.getBeginTime().toString());
         response.setActivity_endTime(loanActivity.getEndTime().toString());
 
@@ -376,7 +384,13 @@ class SetLoanActivityRequest {
 
     @NotNull(message = "产品总数量不能为空")
     @PositiveOrZero(message = "产品总数量必须为0或正整数")
-    private Long activity_sum;
+    private Long activity_totalQuantity;
+    @NotNull(message = "产品总金额不能为空")
+    @PositiveOrZero(message = "产品总金额必须为0或正整数")
+    private Long activity_totalAmount;
+    @NotNull(message = "起贷金额不能为空")
+    @PositiveOrZero(message = "起贷金额必须为>=0")
+    private double activity_initMoney;
 
     // 活动规则
     @Valid
@@ -397,7 +411,9 @@ class SetLoanActivityRequest {
         loanActivity.setEndTime(Timestamp.valueOf(activity_endTime));
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
-        loanActivity.setShoppingTotal(activity_sum);
+        loanActivity.setAmount(activity_totalQuantity);
+        loanActivity.setMoneyTotal(activity_totalAmount);
+        loanActivity.setMinMoneyLimit(activity_initMoney);
 
         // 添加规则
         LoanRule loanRule = ruler.toLoanRule();

@@ -33,7 +33,7 @@ public class LoanActivity {
     private Timestamp endTime;
 
     // 贷款额度上限
-    @Column(nullable = false)
+    @Column()
     private double maxMoneyLimit;
 
     @Column()
@@ -60,8 +60,10 @@ public class LoanActivity {
 
     // 活动销售总数，不能超卖
     @Column(nullable = false)
-    private long shoppingTotal;
+    private long amount;
 
+    @Column(nullable = false)
+    private long moneyTotal;
     // 对应的规则
     // 一个活动对应一个规则
     @JoinColumn(nullable = true)
