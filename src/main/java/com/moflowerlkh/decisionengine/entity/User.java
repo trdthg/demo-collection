@@ -22,15 +22,15 @@ import java.util.Set;
 @Table(name = "user_tb")
 public class User {
     @Id
-    @Column(name = "id")
+    @Column(nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = true)
+    @Column(name = "name", nullable = false, unique = true)
     @Length(min = 1, max = 64)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)

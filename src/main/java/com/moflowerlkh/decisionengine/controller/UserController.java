@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @RestController
@@ -35,8 +36,10 @@ public class UserController {
 
     @PostMapping("/")
     @ApiOperation("注册")
-    public BaseResponse<UserResponse> register(@RequestBody @Valid UserRequest userRequest) throws Exception {
+    public BaseResponse<UserResponse> register(@RequestBody @Valid @NotNull UserRequest userRequest) throws Exception {
+        System.out.println(userRequest);
         User user = userRequest.toUser();
+        System.out.println(user);
         userDao.save(user);
         return new BaseResponse<>(HttpStatus.CREATED, "注册成功", UserResponse.fromUser(user));
     }
@@ -50,7 +53,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ApiOperation("根据id编辑用户信息")
-    public BaseResponse<UserResponse> put(@Valid @PathVariable Long id, @RequestBody @Valid UserRequest userRequest) throws Exception {
+    public BaseResponse<UserResponse> put(@Valid @PathVariable Long id, @RequestBody @Valid @NotNull UserRequest userRequest) throws Exception {
         User user = userRequest.toUser();
         user.setId(id);
         userDao.saveAndFlush(user);
@@ -86,7 +89,7 @@ class UserRequest {
     private String password;
     //user_name	string	姓名
     @NotBlank(message = "姓名不能为空")
-    @Size(min = 6, max = 11, message = "姓名长度必须是1-50个字符")
+    @Size(min = 1, max = 50, message = "姓名长度必须是1-50个字符")
     private String user_name;
     //user_gender	string	性别
     @NotBlank
@@ -99,18 +102,19 @@ class UserRequest {
     @NotBlank(message = "国籍不能为空")
     private String user_nation;
     //user_age	number	年龄
-    @NotBlank(message = "年龄不能为空")
+    @NotNull(message = "年龄不能为空")
+    @PositiveOrZero(message = "年龄必须为0或正整数")
     private Integer user_age;
     //user_overdual	number	近三年逾期还款次数
-    @NotBlank(message = "近三年逾期还款次数不能为空")
+    @NotNull(message = "近三年逾期还款次数不能为空")
+    @PositiveOrZero(message = "近三年逾期还款次数必须为0或正整数")
     private Long user_overdual;
     //user_employment	string	就业状态
     @NotBlank(message = "就业状态不能为空")
     @EnumValue(enumClass=Employment.class, message = "就业类型不合法: [Employed, Unemployed, Retired, Other, ..]")
     private String user_employment;
     //user_dishonest	string	被列入失信人名单
-    @NonNull
-    @NotBlank(message = "是否被列入失信人名单不能为空")
+    @NotNull(message = "是否被列入失信人名单不能为空")
     private Boolean user_dishonest;
 
     public User toUser() {

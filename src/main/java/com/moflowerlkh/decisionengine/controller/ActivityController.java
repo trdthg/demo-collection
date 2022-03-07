@@ -17,6 +17,10 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,16 +67,16 @@ public class ActivityController {
 
     @GetMapping("/loan")
     @ApiOperation(value = "查询活动列表-不带初筛信息", notes = "只有一些活动的基本信息")
-    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple() {
-        List<LoanActivity> loanActivities = loanActivityDao.findAll();
+    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
     }
 
     @GetMapping("/loan/full")
     @ApiOperation(value = "查询活动列表-带有初筛信息", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
-    public BaseResponse<List<LoanActivityResponse>> getLoanActivityByIdFull() {
-        List<LoanActivity> loanActivities = loanActivityDao.findAll();
+    public BaseResponse<List<LoanActivityResponse>> getLoanActivityByIdFull(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
         List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
     }
