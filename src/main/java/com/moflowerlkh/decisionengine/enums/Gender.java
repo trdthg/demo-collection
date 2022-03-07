@@ -6,7 +6,7 @@ public enum Gender {
 
     public static boolean isValid(String s) {
         for (Gender gender : Gender.values()) {
-            if (gender.name().equals(s)) {
+            if (gender.name().equalsIgnoreCase(s)) {
                 return true;
             }
         }

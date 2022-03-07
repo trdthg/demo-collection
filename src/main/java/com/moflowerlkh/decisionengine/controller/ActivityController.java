@@ -34,8 +34,6 @@ public class ActivityController {
 
     @Autowired
     LoanActivityDao loanActivityDao;
-    @Autowired
-    LoanService loanService;
 
     @PostMapping("/loan/")
     @ApiOperation(value = "新增活动", notes = "")
@@ -56,11 +54,11 @@ public class ActivityController {
 
     @PatchMapping("/loan/{id}")
     @ApiOperation(value = "根据id修改活动信息-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
-    public BaseResponse<LoanActivityResponse> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
-        LoanActivity loanActivity = request.toLoanActivity();
-        loanActivity.setId(id);
-        loanActivityDao.saveAndFlush(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", LoanActivityResponse.fromLoanActivity(loanActivity));
+    public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id, @RequestBody SetLoanActivityRequest request) {
+        //LoanActivity loanActivity = request.toLoanActivity();
+        //loanActivity.setId(id);
+        //loanActivityDao.saveAndFlush(loanActivity);
+        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", request);
     }
 
     @GetMapping("/loan")
@@ -310,8 +308,8 @@ class SetLoanActivityRequest {
     private SetLoanActivityRuleRequest ruler;
 
     // 活动对应的商品
-    @NotNull(message = "活动对应的商品id不能为空")
-    private Long shoppinggoods_id;
+    //@NotNull(message = "活动对应的商品id不能为空")
+    //private Long shoppinggoods_id;
 
     public LoanActivity toLoanActivity() {
         LoanActivity loanActivity = new LoanActivity();
@@ -328,10 +326,6 @@ class SetLoanActivityRequest {
         LoanRule loanRule = ruler.toLoanRule();
         loanActivity.setRule(loanRule);
 
-        // 添加商品
-        ShoppingGoods shoppingGoods = new ShoppingGoods();
-        shoppingGoods.setId(shoppinggoods_id);
-        loanActivity.setShoppingGoods(shoppingGoods);
         return loanActivity;
     }
 }

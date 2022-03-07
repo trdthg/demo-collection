@@ -40,14 +40,14 @@ public class Sheduled {
     @Autowired
     LoanRuleDao loanRuleDao;
 
-    @Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
-    public void testRedis(){
-        String s = String.valueOf(redisUtil.get("a"));
-        System.out.println(s);
-        redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
-
-        System.out.println("A22-redis" + System.currentTimeMillis());
-    }
+    //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
+    //public void testRedis(){
+    //    String s = String.valueOf(redisUtil.get("a"));
+    //    System.out.println(s);
+    //    redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
+    //
+    //    System.out.println("A22-redis" + System.currentTimeMillis());
+    //}
 
     //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     @PostConstruct
@@ -87,7 +87,6 @@ public class Sheduled {
             loanRule.setCheckOverDual(true);
             loanRule.setCheckCountry(true);
             //loanRuleDao.save(loanRule);
-            System.out.println("rule初始化成功");
 
             LoanActivity loanActivity = new LoanActivity();
             loanActivity.setName("活动1");
@@ -95,13 +94,12 @@ public class Sheduled {
             loanActivity.setTimeLimit("3/6");
             loanActivity.setReplayLimit("3");
             loanActivity.setApr(4.00);
-            loanActivity.setShoppingGoods(shoppingGoods1);
             loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
             loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
             loanActivity.setShoppingTotal(10000);
             loanActivity.setRule(loanRule);
             loanActivityDao.save(loanActivity);
-            System.out.println("activity初始化成功");
+            System.out.println("activity和rule初始化成功");
         }
     }
 

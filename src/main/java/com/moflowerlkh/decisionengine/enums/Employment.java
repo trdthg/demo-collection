@@ -12,7 +12,7 @@ public enum Employment {
 
     public static boolean isValid(String s) {
         for (Employment employment : Employment.values()) {
-            if (employment.name().equals(s)) {
+            if (employment.name().equalsIgnoreCase(s)) {
                 return true;
             }
         }

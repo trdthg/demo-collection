@@ -54,9 +54,9 @@ public class LoanActivity {
      * 一个秒杀活动只能对应一个商品
      * 一个商品可能有多个秒杀活动
      */
-    @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
-    private ShoppingGoods shoppingGoods;
+    //@JoinColumn(nullable = false)
+    //@ManyToOne(fetch = FetchType.EAGER)
+    //private ShoppingGoods shoppingGoods;
 
     // 活动销售总数，不能超卖
     @Column(nullable = false)
