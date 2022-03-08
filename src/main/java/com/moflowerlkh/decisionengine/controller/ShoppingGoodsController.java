@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,11 +49,8 @@ public class ShoppingGoodsController {
     @ResponseBody
     @ApiOperation(value = "查询商品", notes = "根据id查找商品信息")
     public BaseResponse<ShoppingGoods> put(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
-        Optional<ShoppingGoods> shoppingGoods = shoppingGoodsDao.findById(id);
-        if (shoppingGoods.isEmpty()) {
-            return new BaseResponse<>(HttpStatus.OK, "查询结果为空，没有该商品", null);
-        }
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", shoppingGoods.get());
+        ShoppingGoods shoppingGoods = shoppingGoodsDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("查询结果为空，没有该商品"));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", shoppingGoods);
     }
 
     @DeleteMapping("/{id}")

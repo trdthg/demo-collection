@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.moflowerlkh</groupId>
     <artifactId>decsion-engine</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.5</version>
     <name>decsion-engine</name>
     <description>decsion-engine</description>
     <properties>
@@ -106,23 +106,23 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
                     <from>
                         <image>adoptopenjdk/openjdk8</image>
+                        <credHelper>pass</credHelper>
                     </from>
+                    <container>
+                    </container>
                     <to>
-                        <image>docker.io/trdthg/decision-enjine</image>
+                        <image>trdthg/decision-engine</image>
+                        <credHelper>pass</credHelper>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
                     </to>
                 </configuration>
             </plugin>
