@@ -41,13 +41,14 @@ public class Sheduled {
     LoanRuleDao loanRuleDao;
 
     //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
-    //public void testRedis(){
-    //    String s = String.valueOf(redisUtil.get("a"));
-    //    System.out.println(s);
-    //    redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
-    //
-    //    System.out.println("A22-redis" + System.currentTimeMillis());
-    //}
+    @PostConstruct
+    public void testRedis(){
+        String s = String.valueOf(redisUtil.get("a"));
+        System.out.println(s);
+        redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
+
+        System.out.println("A22-redis" + System.currentTimeMillis());
+    }
 
     //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     @PostConstruct

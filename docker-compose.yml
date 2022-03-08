@@ -1,0 +1,24 @@
+services:
+  web:
+#    image: "trdthg/decision-engine:latest"
+    build: .
+    ports:
+      - "8848:8848"
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: dev
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: 2022A22db
+    ports:
+      - "4205:3306"
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "5470:6379"

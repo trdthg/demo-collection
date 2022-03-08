@@ -15,6 +15,7 @@
     <description>decsion-engine</description>
     <properties>
         <java.version>1.8</java.version>
+        <skipTests>true</skipTests>
     </properties>
     <dependencies>
         <!-- 数据库 -->
@@ -105,27 +106,27 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <from>
-                        <image>adoptopenjdk/openjdk8</image>
-                        <credHelper>pass</credHelper>
-                    </from>
-                    <container>
-                    </container>
-                    <to>
-                        <image>trdthg/decision-engine</image>
-                        <credHelper>pass</credHelper>
-                        <tags>
-                            <tag>${project.version}</tag>
-                            <tag>latest</tag>
-                        </tags>
-                    </to>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <configuration>-->
+<!--                    <from>-->
+<!--                        <image>adoptopenjdk/openjdk8</image>-->
+<!--                        <credHelper>pass</credHelper>-->
+<!--                    </from>-->
+<!--                    <container>-->
+<!--                    </container>-->
+<!--                    <to>-->
+<!--                        <image>trdthg/decision-engine</image>-->
+<!--                        <credHelper>pass</credHelper>-->
+<!--                        <tags>-->
+<!--                            <tag>${project.version}</tag>-->
+<!--                            <tag>latest</tag>-->
+<!--                        </tags>-->
+<!--                    </to>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

@@ -1,7 +1,6 @@
 //改配置文件和Swagger配置文件一致，只是添加了两个注解
 package com.moflowerlkh.decisionengine.config;
 
-import com.fasterxml.classmate.TypeResolver;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -10,17 +9,10 @@ import org.springframework.core.env.Environment;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.schema.JacksonEnumTypeDeterminer;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider;
-import springfox.documentation.swagger.readers.operation.SwaggerOperationTagsReader;
-import springfox.documentation.swagger.readers.parameter.ApiParamParameterBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
