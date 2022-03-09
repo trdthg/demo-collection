@@ -21,9 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class Sheduled {
@@ -69,6 +67,10 @@ public class Sheduled {
             newUser.setName("小明");
             newUser.setDishonest(false);
             newUser.setCountry("中国");
+
+            Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
+            newUser.setRoles(roles);
+
             userDao.save(newUser);
             System.out.println("user初始化成功");
 

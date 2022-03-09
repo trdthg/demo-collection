@@ -78,6 +78,7 @@ public class UserController {
             return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过: " + checkResult.getMessage(), false);
         }
     }
+
 }
 
 @Data

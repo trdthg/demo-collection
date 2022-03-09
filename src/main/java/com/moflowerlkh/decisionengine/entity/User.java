@@ -86,6 +86,10 @@ public class User {
     @Column(nullable = true)
     private Set<LoanActivity> unPassedLoanActivities = new HashSet<LoanActivity>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(nullable = true)
+    private Set<String> roles = new HashSet<String>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

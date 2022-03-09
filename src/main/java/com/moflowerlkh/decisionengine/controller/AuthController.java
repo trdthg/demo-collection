@@ -1,27 +1,23 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.dao.UserDao;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.Gender;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
-import com.moflowerlkh.decisionengine.vo.LoginUser;
+import com.moflowerlkh.decisionengine.service.LoginUser;
 import io.swagger.annotations.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @RestController
 @Api(value = "authController", tags = {"登陆授权相关"})
@@ -66,7 +62,7 @@ public class AuthController {
         return new BaseResponse<>(jwtResponse);
     }
 
-    @GetMapping("/user/logout")
+    @GetMapping("/logout")
     @ResponseBody
     @ApiOperation(value = "登出", notes = "登陆状态(需要token)下🥬使用")
     public BaseResponse<String> logout() {
@@ -75,6 +71,30 @@ public class AuthController {
         Long userid = loginUser.getUser().getId();
         redisUtil.del("pc_token_" + userid);
         return new BaseResponse<>("登出成功");
+    }
+
+    @GetMapping("/hello")
+    @ResponseBody
+    @ApiOperation(value = "hello", notes = "登陆状态(需要token)下🥬使用")
+    public BaseResponse<String> aaaa() {
+        return new BaseResponse<>("hello");
+    }
+
+    @GetMapping("/hello2")
+    @PreAuthorize("hasAuthority('test')")
+    @ResponseBody
+    @ApiOperation(value = "hello2", notes = "登陆状态(需要token)下🥬使用")
+    public BaseResponse<String> aaaab() {
+        return new BaseResponse<>("hello");
+    }
+
+
+    @GetMapping("/hello3")
+    @PreAuthorize("hasAuthority('fuck')")
+    @ResponseBody
+    @ApiOperation(value = "hello3", notes = "登陆状态(需要token)下🥬使用")
+    public BaseResponse<String> aaaabc() {
+        return new BaseResponse<>("hello");
     }
 
     @PostMapping("/refreshtoken")
