@@ -1,13 +1,17 @@
 package com.moflowerlkh.decisionengine.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moflowerlkh.decisionengine.dao.UserDao;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.filter.JwtTokenFilter;
 import com.moflowerlkh.decisionengine.service.LoginUser;
 import com.moflowerlkh.decisionengine.service.UserdetailsService;
+import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,10 +20,19 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 
 import static java.lang.String.format;
 
@@ -40,14 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-           .csrf().disable()
-           .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-           .and()
-           .authorizeRequests()
-           .antMatchers("/api/auth/signin").permitAll()
-           .antMatchers("/swagger-ui/**").permitAll()
-           .antMatchers("/doc.html","/webjars/**","/img.icons/**","/swagger-resources/**","/v2/api-docs").permitAll()
-           .anyRequest().authenticated()
+            .exceptionHandling().authenticationEntryPoint(new SimpleAuthenticationEntryPoint()).and()
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/api/auth/signin").permitAll()
+            .antMatchers("/swagger-ui/**").permitAll()
+            .antMatchers("/doc.html","/webjars/**","/img.icons/**","/swagger-resources/**","/v2/api-docs").permitAll()
+            .anyRequest().authenticated()
         ;
 
         //Add JWT token filter
@@ -82,4 +96,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
        return new BCryptPasswordEncoder();
     }
 
+}
+
+class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setCharacterEncoding("utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String resBody = objectMapper.writeValueAsString(new BaseResponse<>(HttpStatus.UNAUTHORIZED, "认证失败: " + authException.getMessage()));
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print(resBody);
+        printWriter.flush();
+        printWriter.close();
+    }
 }

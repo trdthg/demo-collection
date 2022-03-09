@@ -11,6 +11,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,10 +65,21 @@ public class ExceptionControllerAdvice {
         }
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public BaseResponse<String> AccessDeniedExceptionHandler(AccessDeniedException e) {
+        return new BaseResponse<>(HttpStatus.FORBIDDEN, "没有访问权限: " + e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    public BaseResponse<String> AuthenticationExceptionHandler(AuthenticationException e) {
+        return new BaseResponse<>(HttpStatus.UNAUTHORIZED, "用户认证失败: " + e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public BaseResponse<String> UnknownExceptionHandler(Exception e) {
-        e.printStackTrace();
-        return new BaseResponse<String>(HttpStatus.INTERNAL_SERVER_ERROR, "服务端异常: " + e.getMessage());
+        return new BaseResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "服务端异常: " + e.getMessage());
     }
 }

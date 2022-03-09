@@ -75,7 +75,7 @@ public class AuthController {
 
     @GetMapping("/hello")
     @ResponseBody
-    @ApiOperation(value = "hello", notes = "登陆状态(需要token)下🥬使用")
+    @ApiOperation(value = "hello", notes = "不需要登陆")
     public BaseResponse<String> aaaa() {
         return new BaseResponse<>("hello");
     }
@@ -83,7 +83,7 @@ public class AuthController {
     @GetMapping("/hello2")
     @PreAuthorize("hasAuthority('test')")
     @ResponseBody
-    @ApiOperation(value = "hello2", notes = "登陆状态(需要token)下🥬使用")
+    @ApiOperation(value = "hello2", notes = "登陆状态(需要token)下🥬使用 + 需要的角色: ['test']")
     public BaseResponse<String> aaaab() {
         return new BaseResponse<>("hello");
     }
@@ -92,7 +92,7 @@ public class AuthController {
     @GetMapping("/hello3")
     @PreAuthorize("hasAuthority('fuck')")
     @ResponseBody
-    @ApiOperation(value = "hello3", notes = "登陆状态(需要token)下🥬使用")
+    @ApiOperation(value = "hello3", notes = "登陆状态(需要token)下🥬使用 + 需要的角色: ['fuck']")
     public BaseResponse<String> aaaabc() {
         return new BaseResponse<>("hello");
     }

@@ -6,7 +6,10 @@ import com.moflowerlkh.decisionengine.service.LoginUser;
 import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -37,7 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 校验
         System.out.println(token);
         if (!JwtUtil.validate(token)) {
-            throw new RuntimeException("token已经过期");
+            throw new CredentialsExpiredException("token已经过期");
         }
         // 解析
         try {
@@ -49,7 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            throw new RuntimeException("token不合法");
+            throw new BadCredentialsException("token不合法");
         }
         // 放行
         chain.doFilter(request, response);
