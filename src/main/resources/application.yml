@@ -16,8 +16,8 @@ spring:
         format_sql: true
 #        show_sql: true
         hbm2ddl:
-#          auto: update
-          auto: create
+          auto: update
+#          auto: create
   redis:
 #    database: 0
     host: tguio.club
