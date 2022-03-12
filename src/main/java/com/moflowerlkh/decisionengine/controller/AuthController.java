@@ -77,7 +77,7 @@ public class AuthController {
     @ResponseBody
     @ApiOperation(value = "hello", notes = "不需要登陆")
     public BaseResponse<String> aaaa() {
-        return new BaseResponse<>("hello");
+        return new BaseResponse<>("hello: aa");
     }
 
     @GetMapping("/hello2")
