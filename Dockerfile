@@ -2,6 +2,7 @@ FROM adoptopenjdk/openjdk8
 VOLUME ["/tmp", "/logs"]
 EXPOSE 8848
 ADD /target/decsion-engine-0.1.5.jar app.jar
+ADD src/main/resources/application-dc.yml application-dc.yml
 # ADD ./agent agent
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.config.location=application-dc.yml", "app.jar"]
 # CMD java -javaagent:agent/skywalking-agent.jar -Dskywalking.agent.service_name=xxx -Dskywalking.collector.backend_service=oap:11800 -jar app.jar

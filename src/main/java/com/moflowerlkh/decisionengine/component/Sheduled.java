@@ -95,7 +95,7 @@ public class Sheduled {
             loanActivity.setName("活动1");
             loanActivity.setMaxMoneyLimit(10000);
             loanActivity.setTimeLimit("3/6");
-            loanActivity.setReplayLimit("3");
+            loanActivity.setReplayLimit(3);
             loanActivity.setApr(4.00);
             loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
             loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));

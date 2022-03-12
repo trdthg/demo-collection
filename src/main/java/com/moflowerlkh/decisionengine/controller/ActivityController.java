@@ -188,7 +188,7 @@ class LoanActivitySimpleResponse {
     //activity_moneyLimit	number	借款额度
     private String activity_timeLimit;
     //activity_timeLimit	string	借款期限
-    private String activity_replayTime;
+    private Integer activity_replayTime;
     //activity_replayTime	string	还款期限
     private Double activity_apr;
     //activity_apr	string	年利率
@@ -219,8 +219,11 @@ class LoanActivitySimpleResponse {
         response.setActivity_totalQuantity(loanActivity.getAmount());
         response.setActivity_totalAmount(loanActivity.getMoneyTotal());
         response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
-        response.setActivity_startTime(loanActivity.getBeginTime().toString());
-        response.setActivity_endTime(loanActivity.getEndTime().toString());
+
+        String s = loanActivity.getBeginTime().toString();
+        response.setActivity_startTime(s.substring(0, s.indexOf('.')));
+        s = loanActivity.getEndTime().toString();
+        response.setActivity_endTime(s.substring(0, s.indexOf('.')));
 
         response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
 
@@ -238,7 +241,7 @@ class LoanActivityResponse {
     //activity_moneyLimit	number	借款额度
     private String activity_timeLimit;
     //activity_timeLimit	string	借款期限
-    private String activity_replayTime;
+    private Integer activity_replayTime;
     //activity_replayTime	string	还款期限
     private Double activity_apr;
     //activity_apr	string	年利率
@@ -272,8 +275,11 @@ class LoanActivityResponse {
         response.setActivity_totalQuantity(loanActivity.getAmount());
         response.setActivity_totalAmount(loanActivity.getMoneyTotal());
         response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
-        response.setActivity_startTime(loanActivity.getBeginTime().toString());
-        response.setActivity_endTime(loanActivity.getEndTime().toString());
+
+        String s = loanActivity.getBeginTime().toString();
+        response.setActivity_startTime(s.substring(0, s.indexOf('.')));
+        s = loanActivity.getEndTime().toString();
+        response.setActivity_endTime(s.substring(0, s.indexOf('.')));
 
         response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
 
@@ -360,7 +366,7 @@ class SetLoanActivityRequest {
     private String activity_name;
     //activity_moneyLimit	number	借款额度
     @NotNull(message = "借款额度不能为空")
-    @PositiveOrZero
+    @PositiveOrZero(message = "借款额度不能为负")
     private Long activity_moneyLimit;
 
     // 分几期
@@ -368,8 +374,9 @@ class SetLoanActivityRequest {
     private String activity_timeLimit;
 
     // 还几年
-    @NotEmpty(message = "还款期限不能为空")
-    private String activity_replayTime;
+    @NotNull(message = "还款期限不能为空")
+    @PositiveOrZero(message = "还款期限不能为负")
+    private Integer activity_replayTime;
 
     // 活动开始时间
     @DateValue(message = "活动开始时间格式必须为: `yyyy-mm-dd hh:mm:ss[.fffffffff]`")
@@ -395,7 +402,7 @@ class SetLoanActivityRequest {
     // 活动规则
     @Valid
     @NotNull(message = "活动规则不能为空")
-    private SetLoanActivityRuleRequest ruler;
+    private SetLoanActivityRuleRequest rule;
 
     // 活动对应的商品
     //@NotNull(message = "活动对应的商品id不能为空")
@@ -416,11 +423,9 @@ class SetLoanActivityRequest {
         loanActivity.setMinMoneyLimit(activity_initMoney);
 
         // 添加规则
-        LoanRule loanRule = ruler.toLoanRule();
+        LoanRule loanRule = rule.toLoanRule();
         loanActivity.setRule(loanRule);
 
         return loanActivity;
     }
 }
-
-

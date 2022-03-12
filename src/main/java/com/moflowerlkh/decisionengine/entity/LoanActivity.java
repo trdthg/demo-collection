@@ -44,7 +44,7 @@ public class LoanActivity {
     private String timeLimit;
     // 还几年
     @Column
-    private String replayLimit;
+    private Integer replayLimit;
 
     // 年利率
     @Column(nullable = false)
