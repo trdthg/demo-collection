@@ -1,7 +1,9 @@
 services:
   web:
 #    image: "trdthg/decision-engine:latest"
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8848:8848"
     depends_on:
@@ -14,7 +16,7 @@ services:
       MYSQL_DATABASE: dev
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: 2022A22db
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - "4205:3306"
     logging:

@@ -53,7 +53,7 @@ public class ActivityController {
         LoanActivity loanActivity = request.toLoanActivity();
         loanActivity.setId(id);
         loanActivityDao.saveAndFlush(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", LoanActivityResponse.fromLoanActivity(loanActivity));
+        return new BaseResponse<>(HttpStatus.OK, "修改成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
     @PatchMapping("/loan/{id}")
@@ -62,7 +62,7 @@ public class ActivityController {
         //LoanActivity loanActivity = request.toLoanActivity();
         //loanActivity.setId(id);
         //loanActivityDao.saveAndFlush(loanActivity);
-        return new BaseResponse<>(HttpStatus.CREATED, "修改成功", request);
+        return new BaseResponse<>(HttpStatus.OK, "修改成功", request);
     }
 
     @GetMapping("/loan")
@@ -70,7 +70,7 @@ public class ActivityController {
     public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
         Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/loan/full")
@@ -78,7 +78,7 @@ public class ActivityController {
     public BaseResponse<List<LoanActivityResponse>> getLoanActivityByIdFull(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
         Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
         List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/loan/{id}")
@@ -86,7 +86,7 @@ public class ActivityController {
     public BaseResponse<LoanActivitySimpleResponse> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
         Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
         LoanActivity loanActivity = _loanActivity.orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", LoanActivitySimpleResponse.fromLoanActivity(loanActivity));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", LoanActivitySimpleResponse.fromLoanActivity(loanActivity));
     }
 
     @GetMapping("/loan/{id}/full")
@@ -94,7 +94,7 @@ public class ActivityController {
     public BaseResponse<LoanActivityResponse> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
         Optional<LoanActivity> _loanActivity = loanActivityDao.findById(id);
         LoanActivity loanActivity = _loanActivity.orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", LoanActivityResponse.fromLoanActivity(loanActivity));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", LoanActivityResponse.fromLoanActivity(loanActivity));
     }
 
     @GetMapping("/loan/{id}/passed")
@@ -102,7 +102,7 @@ public class ActivityController {
     public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdA(@Valid @NotNull @PathVariable Long id) {
         LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         List<JoinLoanActivityUserResponse> res = loanActivity.getPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/loan/{id}/unpassed")
@@ -110,7 +110,7 @@ public class ActivityController {
     public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdB(@Valid @NotNull @PathVariable Long id) {
         LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         List<JoinLoanActivityUserResponse> res = loanActivity.getUnPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.CREATED, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/{activity_id}/passed")
@@ -141,9 +141,8 @@ public class ActivityController {
     @ApiOperation("根据id删除活动")
     public BaseResponse<Boolean> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
         loanActivityDao.deleteById(id);
-        return new BaseResponse<>(HttpStatus.CREATED, "删除成功", true);
+        return new BaseResponse<>(HttpStatus.OK, "删除成功", true);
     }
-
 }
 
 @Data
