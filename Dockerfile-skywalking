@@ -1,3 +1,5 @@
+# 带skywalking探针
+
 FROM adoptopenjdk/openjdk8
 VOLUME ["/tmp", "/logs"]
 EXPOSE 8848
