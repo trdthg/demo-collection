@@ -1,30 +1,23 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.dao.LoanActivityDao;
-import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.entity.LoanActivity;
 import com.moflowerlkh.decisionengine.entity.LoanRule;
-import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
 import com.moflowerlkh.decisionengine.entity.User;
 import com.moflowerlkh.decisionengine.enums.DateValue;
-import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
-import com.moflowerlkh.decisionengine.vo.BaseResult;
+import com.moflowerlkh.decisionengine.vo.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
@@ -67,19 +60,20 @@ public class ActivityController {
 
     @GetMapping("/loan")
     @ApiOperation(value = "查询活动列表-不带初筛信息", notes = "只有一些活动的基本信息")
-    public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
-        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
-        //loanActivities.
+    public BaseResponse<PageResult<List<LoanActivitySimpleResponse>>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+        Integer pages = loanActivities.getTotalPages();
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
     @GetMapping("/loan/full")
     @ApiOperation(value = "查询活动列表-带有初筛信息", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
-    public BaseResponse<List<LoanActivityResponse>> getLoanActivityByIdFull(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
-        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
+    public BaseResponse<PageResult<List<LoanActivityResponse>>> getLoanActivityByIdFull(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+        Integer pages = loanActivities.getTotalPages();
         List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
     @GetMapping("/loan/{id}")

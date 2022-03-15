@@ -5,8 +5,8 @@ services:
     build:
       context: .
       # 请根据情况自选dockerfile
-      # dockerfile: Dockerfile
-      dockerfile: Dockerfile-skywalking
+      dockerfile: Dockerfile
+      # dockerfile: Dockerfile-skywalking
     ports:
       - "8848:8848"
     depends_on:
