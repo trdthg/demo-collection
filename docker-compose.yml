@@ -1,15 +1,19 @@
 services:
+
   web:
-#    image: "trdthg/decision-engine:latest"
+    # image: "trdthg/decision-engine:latest"
     build:
       context: .
-      dockerfile: Dockerfile
+      # 请根据情况自选dockerfile
+      # dockerfile: Dockerfile
+      dockerfile: Dockerfile-skywalking
     ports:
       - "8848:8848"
     depends_on:
       - mysql
       - redis
     restart: always
+
   mysql:
     image: mysql:latest
     environment:

@@ -69,6 +69,7 @@ public class ActivityController {
     @ApiOperation(value = "查询活动列表-不带初筛信息", notes = "只有一些活动的基本信息")
     public BaseResponse<List<LoanActivitySimpleResponse>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
         Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.DESC, "id")));
+        //loanActivities.
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
