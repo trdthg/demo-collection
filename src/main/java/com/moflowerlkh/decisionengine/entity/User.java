@@ -36,12 +36,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Min(value = 0)
     @Max(value = 9999)
     private Integer age;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -50,7 +50,7 @@ public class User {
     private Long yearIncome;
 
     // 身份证号
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private String IDNumber;
 
     // 国家

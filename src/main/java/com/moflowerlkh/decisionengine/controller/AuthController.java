@@ -6,6 +6,9 @@ import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.service.LoginUser;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.annotations.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +22,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 @RestController
 @Api(value = "authController", tags = {"登陆授权相关"})
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private final Counter counter;
+
+    public AuthController(final MeterRegistry registry) {
+        this.counter = registry.counter("/auth/hello count");
+    }
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -73,18 +84,21 @@ public class AuthController {
         return new BaseResponse<>("登出成功");
     }
 
+    @Timed(value = "auth.hello", description = "Time taken to request hello1 endpoint")
     @GetMapping("/hello")
     @ResponseBody
     @ApiOperation(value = "hello", notes = "不需要登陆")
-    public BaseResponse<String> aaaa() {
+    public BaseResponse<String> hello() {
+        this.counter.increment();
         return new BaseResponse<>("hello: aa");
     }
 
+    @Timed(value = "auth.hello2", description = "Time taken to request hello1 endpoint")
     @GetMapping("/hello2")
     @PreAuthorize("hasAuthority('test')")
     @ResponseBody
     @ApiOperation(value = "hello2", notes = "登陆状态(需要token)下🥬使用 + 需要的角色: ['test']")
-    public BaseResponse<String> aaaab() {
+    public BaseResponse<String> hello2() {
         return new BaseResponse<>("hello");
     }
 
@@ -93,7 +107,7 @@ public class AuthController {
     @PreAuthorize("hasAuthority('fuck')")
     @ResponseBody
     @ApiOperation(value = "hello3", notes = "登陆状态(需要token)下🥬使用 + 需要的角色: ['fuck']")
-    public BaseResponse<String> aaaabc() {
+    public BaseResponse<String> hello3() {
         return new BaseResponse<>("hello");
     }
 

@@ -5,6 +5,8 @@ HELP.md
 target
 !**/./**/agent/
 
+log.a
+
 target/
 agent/
 !.mvn/wrapper/maven-wrapper.jar
