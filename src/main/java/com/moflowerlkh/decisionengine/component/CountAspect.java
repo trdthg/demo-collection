@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
-// @Aspect
-// @Component
+@Aspect
+@Component
 public class CountAspect {
     @Autowired
     MeterRegistry registry;
@@ -32,7 +32,7 @@ public class CountAspect {
         this.counter = registry.counter("global_requests_count", "v1", "all");
     }
 
-    @Before("pointCut()")
+    @Before("globalCount()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         startTime.set(System.currentTimeMillis());
         counter.increment();
