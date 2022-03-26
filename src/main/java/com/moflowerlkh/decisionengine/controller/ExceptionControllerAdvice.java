@@ -1,27 +1,20 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * 统一参数校验失败时的处理
@@ -45,9 +38,10 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(DataAccessException.class)
     @ResponseBody
-    public BaseResponse<String> DataAccessExceptionHandler(DataAccessException e){
+    public BaseResponse<String> DataAccessExceptionHandler(DataAccessException e) {
         if (e instanceof DataIntegrityViolationException) {
-            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "字段不能重复: " + Objects.requireNonNull(e.getRootCause()).getMessage());
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST,
+                    "字段不能重复: " + Objects.requireNonNull(e.getRootCause()).getMessage());
         } else if (e instanceof DataRetrievalFailureException) {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST, "数据获取失败: " + e.getMessage());
         } else {

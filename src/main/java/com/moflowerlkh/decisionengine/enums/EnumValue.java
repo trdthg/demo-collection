@@ -1,7 +1,5 @@
 package com.moflowerlkh.decisionengine.enums;
 
-import lombok.val;
-
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -56,22 +54,27 @@ public @interface EnumValue {
 
             Class<?> valueClass = value.getClass();
             try {
-                //String s = Arrays.toString((Object[])enumClass.getMethod("values").invoke(null));
+                // String s =
+                // Arrays.toString((Object[])enumClass.getMethod("values").invoke(null));
                 Method method = enumClass.getMethod(enumMethod, valueClass);
                 if (!Boolean.TYPE.equals(method.getReturnType()) && !Boolean.class.equals(method.getReturnType())) {
-                    throw new RuntimeException(String.format("%s method return is not boolean type in the %s class", enumMethod, enumClass));
+                    throw new RuntimeException(String.format("%s method return is not boolean type in the %s class",
+                            enumMethod, enumClass));
                 }
 
-                if(!Modifier.isStatic(method.getModifiers())) {
-                    throw new RuntimeException(String.format("%s method is not static method in the %s class", enumMethod, enumClass));
+                if (!Modifier.isStatic(method.getModifiers())) {
+                    throw new RuntimeException(
+                            String.format("%s method is not static method in the %s class", enumMethod, enumClass));
                 }
 
-                Boolean result = (Boolean)method.invoke(null, value);
+                Boolean result = (Boolean) method.invoke(null, value);
                 return result != null && result;
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             } catch (NoSuchMethodException | SecurityException e) {
-                throw new RuntimeException(String.format("This %s(%s) method does not exist in the %s", enumMethod, valueClass, enumClass), e);
+                throw new RuntimeException(
+                        String.format("This %s(%s) method does not exist in the %s", enumMethod, valueClass, enumClass),
+                        e);
             }
         }
 

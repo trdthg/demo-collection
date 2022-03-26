@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@Api(tags = {"活动设置相关"})
+@Api(tags = { "活动设置相关" })
 @RequestMapping("/api/activity")
 public class ActivityController {
 
@@ -42,7 +42,8 @@ public class ActivityController {
 
     @PutMapping("/loan/{id}")
     @ApiOperation(value = "根据id修改活动信息-全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
-    public BaseResponse<LoanActivityResponse> editLoanActivityPut(@Valid @NotNull @PathVariable Long id, @RequestBody @Valid SetLoanActivityRequest request) {
+    public BaseResponse<LoanActivityResponse> editLoanActivityPut(@Valid @NotNull @PathVariable Long id,
+            @RequestBody @Valid SetLoanActivityRequest request) {
         LoanActivity loanActivity = request.toLoanActivity();
         loanActivity.setId(id);
         loanActivityDao.saveAndFlush(loanActivity);
@@ -51,28 +52,35 @@ public class ActivityController {
 
     @PatchMapping("/loan/{id}")
     @ApiOperation(value = "根据id修改活动信息-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
-    public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id, @RequestBody SetLoanActivityRequest request) {
-        //LoanActivity loanActivity = request.toLoanActivity();
-        //loanActivity.setId(id);
-        //loanActivityDao.saveAndFlush(loanActivity);
+    public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id,
+            @RequestBody SetLoanActivityRequest request) {
+        // LoanActivity loanActivity = request.toLoanActivity();
+        // loanActivity.setId(id);
+        // loanActivityDao.saveAndFlush(loanActivity);
         return new BaseResponse<>(HttpStatus.OK, "修改成功", request);
     }
 
     @GetMapping("/loan")
     @ApiOperation(value = "查询活动列表-不带初筛信息", notes = "只有一些活动的基本信息")
-    public BaseResponse<PageResult<List<LoanActivitySimpleResponse>>> getLoanActivityByIdSimple(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
-        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+    public BaseResponse<PageResult<List<LoanActivitySimpleResponse>>> getLoanActivityByIdSimple(
+            @RequestParam Integer page_num, @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao
+                .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
         Integer pages = loanActivities.getTotalPages();
-        List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity).collect(Collectors.toList());
+        List<LoanActivitySimpleResponse> res = loanActivities.stream().map(LoanActivitySimpleResponse::fromLoanActivity)
+                .collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
     @GetMapping("/loan/full")
     @ApiOperation(value = "查询活动列表-带有初筛信息", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
-    public BaseResponse<PageResult<List<LoanActivityResponse>>> getLoanActivityByIdFull(@RequestParam Integer page_num, @RequestParam Integer page_limit) {
-        Page<LoanActivity> loanActivities = loanActivityDao.findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+    public BaseResponse<PageResult<List<LoanActivityResponse>>> getLoanActivityByIdFull(@RequestParam Integer page_num,
+            @RequestParam Integer page_limit) {
+        Page<LoanActivity> loanActivities = loanActivityDao
+                .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
         Integer pages = loanActivities.getTotalPages();
-        List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity).collect(Collectors.toList());
+        List<LoanActivityResponse> res = loanActivities.stream().map(LoanActivityResponse::fromLoanActivity)
+                .collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
@@ -94,24 +102,32 @@ public class ActivityController {
 
     @GetMapping("/loan/{id}/passed")
     @ApiOperation("查询活动通过者信息")
-    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdA(@Valid @NotNull @PathVariable Long id) {
-        LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<JoinLoanActivityUserResponse> res = loanActivity.getPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdA(
+            @Valid @NotNull @PathVariable Long id) {
+        LoanActivity loanActivity = loanActivityDao.findById(id)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<JoinLoanActivityUserResponse> res = loanActivity.getPassedUser().stream()
+                .map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/loan/{id}/unpassed")
     @ApiOperation("查询活动不通过者信息")
-    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdB(@Valid @NotNull @PathVariable Long id) {
-        LoanActivity loanActivity = loanActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<JoinLoanActivityUserResponse> res = loanActivity.getUnPassedUser().stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+    public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdB(
+            @Valid @NotNull @PathVariable Long id) {
+        LoanActivity loanActivity = loanActivityDao.findById(id)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<JoinLoanActivityUserResponse> res = loanActivity.getUnPassedUser().stream()
+                .map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
     @GetMapping("/{activity_id}/passed")
     @ApiOperation("查看通过某活动筛选的某用户信息")
-    public BaseResponse<JoinLoanActivityUserResponse> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id, @NotNull @RequestParam String name) throws Exception {
-        LoanActivity activity = loanActivityDao.findById(activity_id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+    public BaseResponse<JoinLoanActivityUserResponse> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id,
+            @NotNull @RequestParam String name) throws Exception {
+        LoanActivity activity = loanActivityDao.findById(activity_id)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         List<User> users = activity.getPassedUser().stream().filter(user -> {
             return Objects.equals(user.getName(), name);
         }).collect(Collectors.toList());
@@ -123,9 +139,12 @@ public class ActivityController {
 
     @GetMapping("/{activity_id}/unpassed/{user_id}")
     @ApiOperation("查看未通过某活动筛选的某用户信息")
-    public BaseResponse<JoinLoanActivityUserResponse> ifUserUnPassed(@Valid @NotNull @PathVariable Long user_id, @Valid @NotNull @PathVariable Long activity_id) throws Exception {
-        LoanActivity activity = loanActivityDao.findById(activity_id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<User> users = activity.getUnPassedUser().stream().filter(user -> Objects.equals(user.getId(), user_id)).collect(Collectors.toList());
+    public BaseResponse<JoinLoanActivityUserResponse> ifUserUnPassed(@Valid @NotNull @PathVariable Long user_id,
+            @Valid @NotNull @PathVariable Long activity_id) throws Exception {
+        LoanActivity activity = loanActivityDao.findById(activity_id)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        List<User> users = activity.getUnPassedUser().stream().filter(user -> Objects.equals(user.getId(), user_id))
+                .collect(Collectors.toList());
         if (users.isEmpty()) {
             throw new DataRetrievalFailureException("该用户没有参加该活动或者已经通过筛选");
         }
@@ -167,7 +186,6 @@ class JoinLoanActivityUserResponse {
     }
 
     public static List<JoinLoanActivityUserResponse> fromUser(List<User> users) {
-        List<JoinLoanActivityUserResponse> responses = new ArrayList<>();
         return users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
     }
 }
@@ -175,31 +193,31 @@ class JoinLoanActivityUserResponse {
 @Data
 class LoanActivitySimpleResponse {
     private Long activity_id;
-    //activity_id	string	活动序号
+    // activity_id string 活动序号
     private String activity_name;
-    //activity_name	string	活动名称
+    // activity_name string 活动名称
     private Double activity_moneyLimit;
-    //activity_moneyLimit	number	借款额度
+    // activity_moneyLimit number 借款额度
     private String activity_timeLimit;
-    //activity_timeLimit	string	借款期限
+    // activity_timeLimit string 借款期限
     private Integer activity_replayTime;
-    //activity_replayTime	string	还款期限
+    // activity_replayTime string 还款期限
     private Double activity_apr;
-    //activity_apr	string	年利率
+    // activity_apr string 年利率
     private SetLoanActivityRuleRequest rule;
-    //activity_dateRate	bool	是否当日起息
-    //activity_dawa	bool	是否随存随取
-    //activity_sum	number	产品总数量
-    //activity_startTime	date	产品秒杀开始时间
-    //activity_endTime	date	产品秒杀结束时间
+    // activity_dateRate bool 是否当日起息
+    // activity_dawa bool 是否随存随取
+    // activity_sum number 产品总数量
+    // activity_startTime date 产品秒杀开始时间
+    // activity_endTime date 产品秒杀结束时间
     private Long activity_totalQuantity;
     private Long activity_totalAmount;
     private double activity_initMoney;
-    //activity_sum	number	产品总数量
+    // activity_sum number 产品总数量
     private String activity_startTime;
-    //activity_startTime	date	产品秒杀开始时间
+    // activity_startTime date 产品秒杀开始时间
     private String activity_endTime;
-    //activity_endTime	date	产品秒杀结束时间
+    // activity_endTime date 产品秒杀结束时间
 
     public static LoanActivitySimpleResponse fromLoanActivity(LoanActivity loanActivity) {
         LoanActivitySimpleResponse response = new LoanActivitySimpleResponse();
@@ -228,31 +246,31 @@ class LoanActivitySimpleResponse {
 @Data
 class LoanActivityResponse {
     private Long activity_id;
-    //activity_id	string	活动序号
+    // activity_id string 活动序号
     private String activity_name;
-    //activity_name	string	活动名称
+    // activity_name string 活动名称
     private Double activity_moneyLimit;
-    //activity_moneyLimit	number	借款额度
+    // activity_moneyLimit number 借款额度
     private String activity_timeLimit;
-    //activity_timeLimit	string	借款期限
+    // activity_timeLimit string 借款期限
     private Integer activity_replayTime;
-    //activity_replayTime	string	还款期限
+    // activity_replayTime string 还款期限
     private Double activity_apr;
-    //activity_apr	string	年利率
+    // activity_apr string 年利率
     private SetLoanActivityRuleRequest rule;
-    //activity_dateRate	bool	是否当日起息
-    //activity_dawa	bool	是否随存随取
-    //activity_sum	number	产品总数量
-    //activity_startTime	date	产品秒杀开始时间
-    //activity_endTime	date	产品秒杀结束时间
+    // activity_dateRate bool 是否当日起息
+    // activity_dawa bool 是否随存随取
+    // activity_sum number 产品总数量
+    // activity_startTime date 产品秒杀开始时间
+    // activity_endTime date 产品秒杀结束时间
     private Long activity_totalQuantity;
     private Long activity_totalAmount;
     private double activity_initMoney;
-    //activity_sum	number	产品总数量
+    // activity_sum number 产品总数量
     private String activity_startTime;
-    //activity_startTime	date	产品秒杀开始时间
+    // activity_startTime date 产品秒杀开始时间
     private String activity_endTime;
-    //activity_endTime	date	产品秒杀结束时间
+    // activity_endTime date 产品秒杀结束时间
 
     private List<JoinLoanActivityUserResponse> passed_users;
     private List<JoinLoanActivityUserResponse> unPassed_users;
@@ -278,7 +296,8 @@ class LoanActivityResponse {
         response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
 
         response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
-        response.setUnPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+        response.setUnPassed_users(
+                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
         return response;
     }
 }
@@ -291,37 +310,38 @@ class JoinLoanActivityResponse {
     public static JoinLoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
         JoinLoanActivityResponse response = new JoinLoanActivityResponse();
         response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
-        response.setUnPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+        response.setUnPassed_users(
+                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
         return response;
     }
 }
 
 @Data
 class SetLoanActivityRuleRequest {
-    //activity_guarantee	string	是否需要担保
+    // activity_guarantee string 是否需要担保
     @NotNull(message = "是否需要担保不能为空")
     private Boolean activity_guarantee;
-    //activity_pledge	string	是否需要抵押
+    // activity_pledge string 是否需要抵押
     @NotNull(message = "是否需要抵押不能为空")
     private Boolean activity_pledge;
-    //activity_ageUp	number	年龄上限
+    // activity_ageUp number 年龄上限
     @NotNull(message = "年龄上限不能为空")
     @PositiveOrZero(message = "年龄上限必须为0或正整数")
     private Integer activity_ageUp;
-    //activity_ageFloor	number	年龄下限
+    // activity_ageFloor number 年龄下限
     @PositiveOrZero(message = "年龄下限必须为0或正整数")
     @NotNull(message = "年龄下限不能为空")
     private Integer activity_ageFloor;
-    //activity_checkwork	string	是否检查在职
+    // activity_checkwork string 是否检查在职
     @NotNull(message = "是否检查在职不能为空")
     private Boolean activity_checkwork;
-    //activity_checkDishonest	string	是否检查失信
+    // activity_checkDishonest string 是否检查失信
     @NotNull(message = "是否检查失信人员不能为空")
     private Boolean activity_checkDishonest;
-    //activity_checkOverdual	string	是否检查逾期
+    // activity_checkOverdual string 是否检查逾期
     @NotNull(message = "是否检查逾期不能为空")
     private Boolean activity_checkOverdual;
-    //activity_checkNation	string	是否限制国内
+    // activity_checkNation string 是否限制国内
     @NotNull(message = "是否限制国内")
     private Boolean activity_checkNation;
 
@@ -354,11 +374,11 @@ class SetLoanActivityRuleRequest {
 
 @Data
 class SetLoanActivityRequest {
-    //activity_id	string	活动序号
-    //activity_name	string	活动名称
+    // activity_id string 活动序号
+    // activity_name string 活动名称
     @NotEmpty(message = "活动名称不能为空")
     private String activity_name;
-    //activity_moneyLimit	number	借款额度
+    // activity_moneyLimit number 借款额度
     @NotNull(message = "借款额度不能为空")
     @PositiveOrZero(message = "借款额度不能为负")
     private Long activity_moneyLimit;
@@ -399,8 +419,8 @@ class SetLoanActivityRequest {
     private SetLoanActivityRuleRequest rule;
 
     // 活动对应的商品
-    //@NotNull(message = "活动对应的商品id不能为空")
-    //private Long shoppinggoods_id;
+    // @NotNull(message = "活动对应的商品id不能为空")
+    // private Long shoppinggoods_id;
 
     public LoanActivity toLoanActivity() {
         LoanActivity loanActivity = new LoanActivity();

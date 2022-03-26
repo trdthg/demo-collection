@@ -1,6 +1,5 @@
 package com.moflowerlkh.decisionengine.util;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,20 +15,20 @@ public class JwtUtil {
     private static final long tokenExpiration = 1000 * 60 * 60 * 6;
     private static final long refreshTokenExpiration = 1000 * 60 * 60 * 24 * 7;
     private static final String tokenSignKey = "123456";
-    private static final String userRoleKey = "userRole";
+    // private static final String userRoleKey = "userRole";
 
     public static String createToken(String username) {
         return Jwts.builder()
-            .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
-            .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
+                .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
     }
 
     public static String createRefreshToken(String username) {
         return Jwts.builder()
-            .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
-            .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+                .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
     }
 
     public static String getUserIDFromToken(String token) {

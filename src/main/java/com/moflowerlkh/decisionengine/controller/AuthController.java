@@ -22,10 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.logging.Logger;
-
 @RestController
-@Api(value = "authController", tags = {"登陆授权相关"})
+@Api(value = "authController", tags = { "登陆授权相关" })
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -43,15 +41,16 @@ public class AuthController {
     @PostMapping("/signin")
     @ResponseBody
     @ApiOperation(value = "登陆", notes = "token 6小时过期，refreshToken 7天过期")
-    //@ApiResponses(value={
-    //    @ApiResponse(code=200, message="OK", response = JwtResponse.class),
-    //    @ApiResponse(code = 403, message = "用户名和密码错误", response = String.class),
-    //    @ApiResponse(code = 500, message = "未知错误，请联系管理员", response = String.class),
-    //})
+    // @ApiResponses(value={
+    // @ApiResponse(code=200, message="OK", response = JwtResponse.class),
+    // @ApiResponse(code = 403, message = "用户名和密码错误", response = String.class),
+    // @ApiResponse(code = 500, message = "未知错误，请联系管理员", response = String.class),
+    // })
     public BaseResponse<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication;
         try {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (UsernameNotFoundException e) {
             return new BaseResponse<>(HttpStatus.FORBIDDEN, "没有该用户");
         } catch (BadCredentialsException e) {
@@ -77,7 +76,8 @@ public class AuthController {
     @ResponseBody
     @ApiOperation(value = "登出", notes = "登陆状态(需要token)下🥬使用")
     public BaseResponse<String> logout() {
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+                .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
         Long userid = loginUser.getUser().getId();
         redisUtil.del("pc_token_" + userid);

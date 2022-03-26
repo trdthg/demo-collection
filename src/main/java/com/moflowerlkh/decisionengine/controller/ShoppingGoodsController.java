@@ -11,15 +11,13 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Optional;
 
 @RestController
-@Api(tags = {"商品相关"})
+@Api(tags = { "商品相关" })
 @RequestMapping("/api/shoppinggoods")
 public class ShoppingGoodsController {
 
@@ -38,7 +36,9 @@ public class ShoppingGoodsController {
     @PutMapping("/{id}")
     @ResponseBody
     @ApiOperation(value = "编辑商品", notes = "根据id修改商品信息")
-    public BaseResponse<ShoppingGoods> put(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id, @RequestBody @Valid PostShoppingGoodsRequest request) {
+    public BaseResponse<ShoppingGoods> put(
+            @NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id,
+            @RequestBody @Valid PostShoppingGoodsRequest request) {
         ShoppingGoods shoppingGoods = request.toShoppingGoods();
         shoppingGoods.setId(id);
         shoppingGoodsDao.saveAndFlush(shoppingGoods);
@@ -48,15 +48,18 @@ public class ShoppingGoodsController {
     @GetMapping("/{id}")
     @ResponseBody
     @ApiOperation(value = "查询商品", notes = "根据id查找商品信息")
-    public BaseResponse<ShoppingGoods> put(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
-        ShoppingGoods shoppingGoods = shoppingGoodsDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("查询结果为空，没有该商品"));
+    public BaseResponse<ShoppingGoods> put(
+            @NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
+        ShoppingGoods shoppingGoods = shoppingGoodsDao.findById(id)
+                .orElseThrow(() -> new DataRetrievalFailureException("查询结果为空，没有该商品"));
         return new BaseResponse<>(HttpStatus.OK, "查询成功", shoppingGoods);
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     @ApiOperation(value = "删除商品", notes = "根据id删除商品")
-    public BaseResponse<String> delete(@NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
+    public BaseResponse<String> delete(
+            @NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
         shoppingGoodsDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", null);
     }

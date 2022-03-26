@@ -1,6 +1,5 @@
 package com.moflowerlkh.decisionengine.dao;
 
-import com.moflowerlkh.decisionengine.entity.DepositActivity;
 import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
 import org.springframework.data.jpa.repository.JpaRepository;
 

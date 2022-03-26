@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,9 +27,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain)
-        throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain chain)
+            throws ServletException, IOException {
         // 拿到token, 没有就走其他过滤器
         final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!Strings.hasText(token)) {
@@ -49,7 +48,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             LoginUser loginUser = (LoginUser) o;
             System.out.println("3: " + loginUser);
             System.out.println("4: " + loginUser.getAuthorities());
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser,
+                    null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             throw new BadCredentialsException("token不合法");

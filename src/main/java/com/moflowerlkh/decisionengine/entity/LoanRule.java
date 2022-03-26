@@ -1,14 +1,12 @@
 package com.moflowerlkh.decisionengine.entity;
 
-import com.moflowerlkh.decisionengine.enums.Employment;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
- * @Description 秒杀规则  商品 1 - 1 活动
+ * @Description 秒杀规则 商品 1 - 1 活动
  */
 @Entity
 @Data
@@ -65,7 +63,7 @@ public class LoanRule {
     private Boolean checkCountry;
 
     //// 对应的活动
-    //@JoinColumn(nullable = true)
-    //@OneToOne(cascade = CascadeType.ALL)
-    //private LoanActivity loanActivity;
+    // @JoinColumn(nullable = true)
+    // @OneToOne(cascade = CascadeType.ALL)
+    // private LoanActivity loanActivity;
 }
