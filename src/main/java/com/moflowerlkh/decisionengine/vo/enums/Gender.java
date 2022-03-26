@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.enums;
+package com.moflowerlkh.decisionengine.vo.enums;
 
 public enum Gender {
     Male,

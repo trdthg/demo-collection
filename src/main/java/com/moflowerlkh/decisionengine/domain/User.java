@@ -1,8 +1,9 @@
-package com.moflowerlkh.decisionengine.entity;
+package com.moflowerlkh.decisionengine.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.moflowerlkh.decisionengine.enums.Employment;
-import com.moflowerlkh.decisionengine.enums.Gender;
+import com.moflowerlkh.decisionengine.vo.enums.Employment;
+import com.moflowerlkh.decisionengine.vo.enums.Gender;
+
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
@@ -103,5 +104,3 @@ public class User {
         return getClass().hashCode();
     }
 }
-
-

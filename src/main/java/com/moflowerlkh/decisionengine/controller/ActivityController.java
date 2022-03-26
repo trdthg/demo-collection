@@ -1,12 +1,13 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.dao.LoanActivityDao;
-import com.moflowerlkh.decisionengine.entity.LoanActivity;
-import com.moflowerlkh.decisionengine.entity.LoanRule;
-import com.moflowerlkh.decisionengine.entity.User;
-import com.moflowerlkh.decisionengine.enums.DateValue;
+import com.moflowerlkh.decisionengine.domain.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.LoanRule;
+import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
+import com.moflowerlkh.decisionengine.vo.enums.DateValue;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;

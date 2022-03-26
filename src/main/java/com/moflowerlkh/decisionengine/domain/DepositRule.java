@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.entity;
+package com.moflowerlkh.decisionengine.domain;
 
 import lombok.Data;
 

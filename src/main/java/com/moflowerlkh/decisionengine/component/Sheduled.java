@@ -1,26 +1,24 @@
 package com.moflowerlkh.decisionengine.component;
 
-import com.moflowerlkh.decisionengine.dao.LoanActivityDao;
-import com.moflowerlkh.decisionengine.dao.LoanRuleDao;
-import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
-import com.moflowerlkh.decisionengine.dao.UserDao;
-import com.moflowerlkh.decisionengine.entity.LoanActivity;
-import com.moflowerlkh.decisionengine.entity.LoanRule;
-import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
-import com.moflowerlkh.decisionengine.entity.User;
-import com.moflowerlkh.decisionengine.enums.Employment;
-import com.moflowerlkh.decisionengine.enums.Gender;
+import com.moflowerlkh.decisionengine.domain.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.LoanRule;
+import com.moflowerlkh.decisionengine.domain.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
+import com.moflowerlkh.decisionengine.domain.dao.LoanRuleDao;
+import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
+import com.moflowerlkh.decisionengine.vo.enums.Employment;
+import com.moflowerlkh.decisionengine.vo.enums.Gender;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -38,9 +36,9 @@ public class Sheduled {
     @Autowired
     LoanRuleDao loanRuleDao;
 
-    //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
+    // @Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     @PostConstruct
-    public void testRedis(){
+    public void testRedis() {
         String s = String.valueOf(redisUtil.get("a"));
         System.out.println(s);
         redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
@@ -48,7 +46,7 @@ public class Sheduled {
         System.out.println("A22-redis" + System.currentTimeMillis());
     }
 
-    //@Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
+    // @Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     @PostConstruct
     public void testMysql() {
         List<User> users = userDao.findAll();
@@ -90,7 +88,7 @@ public class Sheduled {
             loanRule.setCheckDishonest(true);
             loanRule.setCheckOverDual(true);
             loanRule.setCheckCountry(true);
-            //loanRuleDao.save(loanRule);
+            // loanRuleDao.save(loanRule);
 
             LoanActivity loanActivity = new LoanActivity();
             loanActivity.setName("活动1");

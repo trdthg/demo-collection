@@ -1,7 +1,8 @@
 package com.moflowerlkh.decisionengine.service;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.domain.User;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

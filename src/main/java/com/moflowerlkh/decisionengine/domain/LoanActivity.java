@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.entity;
+package com.moflowerlkh.decisionengine.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

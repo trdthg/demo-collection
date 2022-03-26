@@ -1,0 +1,40 @@
+services:
+
+  web:
+    # image: "trdthg/decision-engine:latest"
+    build:
+      context: .
+      # 请根据情况自选dockerfile
+      dockerfile: Dockerfile
+      # dockerfile: Dockerfile-skywalking
+    ports:
+      - "13001:8848"
+    depends_on:
+      - mysql
+      - redis
+    restart: always
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: dev
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: ms
+    ports:
+      - "13002:3306"
+    logging:
+      driver: "none"
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "13003:6379"
+    logging:
+      driver: "none"
+
+networks:
+  default:
+    external:
+      name: allinone

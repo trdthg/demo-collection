@@ -1,7 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.dao.ShoppingGoodsDao;
-import com.moflowerlkh.decisionengine.entity.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

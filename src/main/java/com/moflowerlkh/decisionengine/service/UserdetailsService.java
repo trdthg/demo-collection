@@ -1,7 +1,8 @@
 package com.moflowerlkh.decisionengine.service;
 
-import com.moflowerlkh.decisionengine.dao.UserDao;
-import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

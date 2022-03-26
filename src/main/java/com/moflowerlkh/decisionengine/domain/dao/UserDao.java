@@ -1,6 +1,7 @@
-package com.moflowerlkh.decisionengine.dao;
+package com.moflowerlkh.decisionengine.domain.dao;
 
-import com.moflowerlkh.decisionengine.entity.User;
+import com.moflowerlkh.decisionengine.domain.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDao extends JpaRepository<User, Long> {

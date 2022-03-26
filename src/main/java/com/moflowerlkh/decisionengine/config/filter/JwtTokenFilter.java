@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.filter;
+package com.moflowerlkh.decisionengine.config.filter;
 
 import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.util.RedisUtil;

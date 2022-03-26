@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.enums;
+package com.moflowerlkh.decisionengine.vo.enums;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;

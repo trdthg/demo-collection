@@ -1,9 +1,10 @@
 package com.moflowerlkh.decisionengine.service;
 
-import com.moflowerlkh.decisionengine.dao.*;
-import com.moflowerlkh.decisionengine.entity.*;
-import com.moflowerlkh.decisionengine.enums.Employment;
+import com.moflowerlkh.decisionengine.domain.*;
+import com.moflowerlkh.decisionengine.domain.dao.*;
 import com.moflowerlkh.decisionengine.vo.BaseResult;
+import com.moflowerlkh.decisionengine.vo.enums.Employment;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;

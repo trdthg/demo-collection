@@ -1,8 +1,8 @@
 package com.moflowerlkh.decisionengine.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moflowerlkh.decisionengine.dao.UserDao;
-import com.moflowerlkh.decisionengine.filter.JwtTokenFilter;
+import com.moflowerlkh.decisionengine.config.filter.JwtTokenFilter;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.service.UserdetailsService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;

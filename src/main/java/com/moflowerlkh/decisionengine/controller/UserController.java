@@ -1,13 +1,14 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.dao.UserDao;
-import com.moflowerlkh.decisionengine.entity.User;
-import com.moflowerlkh.decisionengine.enums.Employment;
-import com.moflowerlkh.decisionengine.enums.EnumValue;
-import com.moflowerlkh.decisionengine.enums.Gender;
+import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.BaseResult;
+import com.moflowerlkh.decisionengine.vo.enums.Employment;
+import com.moflowerlkh.decisionengine.vo.enums.EnumValue;
+import com.moflowerlkh.decisionengine.vo.enums.Gender;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;

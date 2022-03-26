@@ -1,6 +1,5 @@
 package com.moflowerlkh.decisionengine.component;
 
-import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.context.annotation.Bean;
@@ -14,4 +13,3 @@ public class Aspect {
     }
 
 }
-

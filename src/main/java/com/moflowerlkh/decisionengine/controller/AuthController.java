@@ -1,10 +1,10 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.entity.User;
-import com.moflowerlkh.decisionengine.enums.Gender;
+import com.moflowerlkh.decisionengine.domain.User;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
+import com.moflowerlkh.decisionengine.vo.enums.Gender;
 import com.moflowerlkh.decisionengine.service.LoginUser;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;

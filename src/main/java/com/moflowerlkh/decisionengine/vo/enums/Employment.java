@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.enums;
+package com.moflowerlkh.decisionengine.vo.enums;
 
 //取值"在职"/"待业"/"失业"/"退休"/"离休"/"退职"/"退养"/"病休"/"其他
 public enum Employment {
