@@ -2,12 +2,15 @@ package com.moflowerlkh.decisionengine.service;
 
 import com.moflowerlkh.decisionengine.domain.*;
 import com.moflowerlkh.decisionengine.domain.dao.*;
-import com.moflowerlkh.decisionengine.vo.BaseResult;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
+import com.moflowerlkh.decisionengine.vo.po.BaseResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
+
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,11 +35,15 @@ public class LoanService {
         loanActivityDao.save(loanActivity);
     }
 
+    @Timed("检查用户信息访问耗时")
+    @Counted("检查用户信息访问频率")
     public BaseResult<Boolean> checkUserInfo(long activityId, long userId) throws Exception {
         BaseResult<Boolean> baseResult = new BaseResult<>();
         baseResult.setResult(false);
-        User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + userId));
-        LoanActivity loanActivity = loanActivityDao.findById(activityId).orElseThrow(() -> new DataRetrievalFailureException("没有该活动: id = " + activityId));
+        User user = userDao.findById(userId)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + userId));
+        LoanActivity loanActivity = loanActivityDao.findById(activityId)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动: id = " + activityId));
         LoanRule loanRule = loanActivity.getRule();
         if (loanRule.getMaxAge() != null && user.getAge() >= loanRule.getMaxAge()) {
             baseResult.setMessage("用户年龄不能高于" + loanRule.getMaxAge());
@@ -66,8 +73,11 @@ public class LoanService {
         return baseResult;
     }
 
+    @Timed("写入数据库耗时")
+    @Counted("写入数据库频率")
     public void tryJoin(Long activityId, Long userId, Boolean checkPass) {
-        LoanActivity loanActivity = loanActivityDao.findById(activityId).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        LoanActivity loanActivity = loanActivityDao.findById(activityId)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
         if (checkPass) {
             loanActivity.getPassedUser().add(user);

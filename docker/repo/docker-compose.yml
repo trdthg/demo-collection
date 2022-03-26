@@ -10,6 +10,7 @@ services:
       - "13002:3306"
     logging:
       driver: "none"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: always
 
   redis:

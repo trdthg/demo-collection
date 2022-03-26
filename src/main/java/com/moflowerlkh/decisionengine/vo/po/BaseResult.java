@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.vo;
+package com.moflowerlkh.decisionengine.vo.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

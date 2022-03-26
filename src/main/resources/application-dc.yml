@@ -16,6 +16,7 @@ management:
         bucket: decision-engine
         token: IzKmlQva1QsAxhK5UmlTa7jIP3YpFtMEN37qDJrY-FFMs9Sdob-A2PDXqzhXtmsmeEaaeXEt20XCLO4y8stiUw==
         org: ms
+        step: 10s
 
 spring:
   datasource:

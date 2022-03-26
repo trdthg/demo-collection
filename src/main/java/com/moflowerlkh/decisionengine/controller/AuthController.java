@@ -38,6 +38,7 @@ public class AuthController {
     @Autowired
     RedisUtil redisUtil;
 
+    @Timed("登陆")
     @PostMapping("/signin")
     @ResponseBody
     @ApiOperation(value = "登陆", notes = "token 6小时过期，refreshToken 7天过期")
