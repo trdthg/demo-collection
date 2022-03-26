@@ -66,6 +66,7 @@ public class Sheduled {
             newUser.setAge(18);
             newUser.setName("小明");
             newUser.setDishonest(false);
+            newUser.setIDNumber("dfsdasfgdfsfgfd");
             newUser.setCountry("中国");
 
             Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));

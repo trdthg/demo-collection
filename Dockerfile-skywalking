@@ -7,4 +7,4 @@ ADD /target/decsion-engine-0.1.5.jar app.jar
 ADD src/main/resources/application-dc.yml application-dc.yml
 ADD ./skywalking-agent agent
 # 注意!!!, 需要手动修改skywalking的host，port
-ENTRYPOINT ["java", "-javaagent:agent/skywalking-agent.jar", "-Dskywalking.agent.service_name=xxx", "-Dskywalking.collector.backend_service=tguio.club:22001", "-jar", "-Dspring.config.location=application-dc.yml", "app.jar"]
+ENTRYPOINT ["java", "-javaagent:agent/skywalking-agent.jar", "-Dskywalking.agent.service_name=决策引擎", "-Dskywalking.collector.backend_service=oap:11800", "-jar", "-Dspring.config.location=application-dc.yml", "app.jar"]

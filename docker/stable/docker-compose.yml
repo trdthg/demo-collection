@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  oap:
+    image: apache/skywalking-oap-server:8.9.0
+    container_name: oap
+    # restart: always
+    ports:
+      - 22001:11800 # agent 上报数据的端口，这是 gRPC 端口
+      - 22002:12800 # ui 读取数据的端口， 这是 http 端口
+    # logging:
+    #   driver: "none"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 900M
+  skywaling-ui:
+    image: apache/skywalking-ui:8.9.0
+    container_name: ui
+    depends_on:
+      - oap
+    links:
+      - oap
+    ports:
+      - 22003:8080
+    environment:
+      - SW_OAP_ADDRESS=http://oap:12800
+    # logging:
+    #   driver: "none"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 300M
+  influxdb:
+    image: "influxdb:2.1.1"
+    ports:
+      - "11004:8086"
+
+networks:
+  default:
+    external:
+      name: allinone

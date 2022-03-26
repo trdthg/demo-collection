@@ -33,3 +33,7 @@ services:
     #     limits:
     #       cpus: '0.50'
     #       memory: 300M
+networks:
+  default:
+    external:
+      name: allinone

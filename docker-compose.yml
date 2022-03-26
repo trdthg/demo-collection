@@ -5,8 +5,8 @@ services:
     build:
       context: .
       # 请根据情况自选dockerfile
-      dockerfile: Dockerfile
-      # dockerfile: Dockerfile-skywalking
+      # dockerfile: Dockerfile
+      dockerfile: Dockerfile-skywalking
     ports:
       - "13001:8848"
     depends_on:
@@ -15,12 +15,12 @@ services:
     restart: always
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     environment:
       MYSQL_DATABASE: dev
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ms
     ports:
       - "13002:3306"
     logging:
@@ -36,5 +36,5 @@ services:
 
 networks:
   default:
-      external:
-        name: allinone
+    external:
+      name: allinone

@@ -1,0 +1,374 @@
+2022-03-25 22:53:49,680 INFO o.a.j.u.JMeterUtils: Setting Locale to zh_CN
+2022-03-25 22:53:49,720 INFO o.a.j.JMeter: Loading user properties from: /home/trdthg/bin/apache-jmeter-5.4.3/bin/user.properties
+2022-03-25 22:53:49,720 INFO o.a.j.JMeter: Loading system properties from: /home/trdthg/bin/apache-jmeter-5.4.3/bin/system.properties
+2022-03-25 22:53:49,729 INFO o.a.j.JMeter: Copyright (c) 1998-2021 The Apache Software Foundation
+2022-03-25 22:53:49,729 INFO o.a.j.JMeter: Version 5.4.3
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: java.version=11.0.15
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: os.name=Linux
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: os.arch=amd64
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: os.version=5.16.15-arch1-1
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: file.encoding=UTF-8
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: java.awt.headless=true
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: Max memory     =1073741824
+2022-03-25 22:53:49,730 INFO o.a.j.JMeter: Available Processors =16
+2022-03-25 22:53:49,743 INFO o.a.j.JMeter: Default Locale=English (EN)
+2022-03-25 22:53:49,743 INFO o.a.j.JMeter: JMeter  Locale=Chinese (China)
+2022-03-25 22:53:49,743 INFO o.a.j.JMeter: JMeterHome=/home/trdthg/bin/apache-jmeter-5.4.3
+2022-03-25 22:53:49,743 INFO o.a.j.JMeter: user.dir  =/home/trdthg/otherproject/decision-engine/docker/jmeter
+2022-03-25 22:53:49,743 INFO o.a.j.JMeter: PWD       =/home/trdthg/otherproject/decision-engine/docker/jmeter
+2022-03-25 22:53:49,744 INFO o.a.j.JMeter: IP: 127.0.1.1 Name: trdthg-arch-pc FullName: trdthg-arch-pc
+2022-03-25 22:53:49,750 INFO o.a.j.s.FileServer: Default base='/home/trdthg/otherproject/decision-engine/docker/jmeter'
+2022-03-25 22:53:49,752 INFO o.a.j.s.FileServer: Set new base='/home/trdthg/otherproject/decision-engine/docker/jmeter/.'
+2022-03-25 22:53:49,984 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2022-03-25 22:53:50,010 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2022-03-25 22:53:50,014 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2022-03-25 22:53:50,019 INFO o.a.j.s.SaveService: Loading file: ./test1.jmx
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2022-03-25 22:53:50,079 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2022-03-25 22:53:50,086 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2022-03-25 22:53:50,086 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to ISO-8859-1
+2022-03-25 22:53:50,086 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2022-03-25 22:53:50,086 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2022-03-25 22:53:50,122 INFO o.a.j.JMeter: Creating summariser <summary>
+2022-03-25 22:53:50,129 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2022-03-25 22:53:50,132 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2022-03-25 22:53:50,132 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2022-03-25 22:53:50,150 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2022-03-25 22:53:50,151 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2022-03-25 22:53:50,534 INFO o.a.j.v.b.BackendListener: 后端监听器: Starting worker with class: class org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient and queue capacity: 5000
+2022-03-25 22:53:50,536 INFO o.a.j.v.b.BackendListener: 后端监听器: Started  worker with class: class org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient
+2022-03-25 22:53:50,828 INFO o.a.j.JMeter: 正在运行的测试 (1648220030828)
+2022-03-25 22:53:50,840 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : 线程组
+2022-03-25 22:53:50,841 INFO o.a.j.e.StandardJMeterEngine: Starting 200 threads for group 线程组.
+2022-03-25 22:53:50,841 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2022-03-25 22:53:50,841 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=200 ramp-up=10 delayedStart=false
+2022-03-25 22:53:50,862 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-1
+2022-03-25 22:53:50,904 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-2
+2022-03-25 22:53:50,905 ERROR o.a.j.v.b.i.HttpMetricsSender: failed to send data to influxDB server.
+java.net.UnknownHostException: influxdb: 没有与主机名关联的地址
+	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[?:?]
+	at java.net.InetAddress$PlatformNameService.lookupAllHostAddr(InetAddress.java:929) ~[?:?]
+	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1519) ~[?:?]
+	at java.net.InetAddress$NameServiceAddresses.get(InetAddress.java:848) ~[?:?]
+	at java.net.InetAddress.getAllByName0(InetAddress.java:1509) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1368) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1302) ~[?:?]
+	at org.apache.http.impl.conn.SystemDefaultDnsResolver.resolve(SystemDefaultDnsResolver.java:45) ~[httpclient-4.5.12.jar:4.5.12]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:664) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:635) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.processPendingRequest(AbstractNIOConnPool.java:474) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.lease(AbstractNIOConnPool.java:280) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager.requestConnection(PoolingNHttpClientConnectionManager.java:295) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.AbstractClientExchangeHandler.requestConnection(AbstractClientExchangeHandler.java:377) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.DefaultClientExchangeHandlerImpl.start(DefaultClientExchangeHandlerImpl.java:129) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.InternalHttpAsyncClient.execute(InternalHttpAsyncClient.java:141) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:75) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:108) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:92) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:196) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:173) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.sendMetrics(InfluxdbBackendListenerClient.java:168) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.run(InfluxdbBackendListenerClient.java:135) [ApacheJMeter_components.jar:5.4.3]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) [?:?]
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:829) [?:?]
+2022-03-25 22:53:50,939 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2022-03-25 22:53:50,939 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2022-03-25 22:53:50,953 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-3
+2022-03-25 22:53:51,002 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-4
+2022-03-25 22:53:51,051 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-5
+2022-03-25 22:53:51,101 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-6
+2022-03-25 22:53:51,149 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-7
+2022-03-25 22:53:51,197 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-8
+2022-03-25 22:53:51,247 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-9
+2022-03-25 22:53:51,296 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-10
+2022-03-25 22:53:51,345 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-11
+2022-03-25 22:53:51,394 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-12
+2022-03-25 22:53:51,444 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-13
+2022-03-25 22:53:51,496 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-14
+2022-03-25 22:53:51,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-15
+2022-03-25 22:53:51,592 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-16
+2022-03-25 22:53:51,642 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-17
+2022-03-25 22:53:51,692 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-18
+2022-03-25 22:53:51,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-19
+2022-03-25 22:53:51,792 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-20
+2022-03-25 22:53:51,842 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-21
+2022-03-25 22:53:51,893 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-22
+2022-03-25 22:53:51,914 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = trdthg-arch-pc
+2022-03-25 22:53:51,931 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2022-03-25 22:53:51,943 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-23
+2022-03-25 22:53:51,992 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-24
+2022-03-25 22:53:52,042 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-25
+2022-03-25 22:53:52,092 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-26
+2022-03-25 22:53:52,142 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-27
+2022-03-25 22:53:52,192 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-28
+2022-03-25 22:53:52,242 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-29
+2022-03-25 22:53:52,291 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-30
+2022-03-25 22:53:52,342 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-31
+2022-03-25 22:53:52,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-32
+2022-03-25 22:53:52,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-33
+2022-03-25 22:53:52,492 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-34
+2022-03-25 22:53:52,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-35
+2022-03-25 22:53:52,593 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-36
+2022-03-25 22:53:52,643 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-37
+2022-03-25 22:53:52,692 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-38
+2022-03-25 22:53:52,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-39
+2022-03-25 22:53:52,792 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-40
+2022-03-25 22:53:52,842 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-41
+2022-03-25 22:53:52,892 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-42
+2022-03-25 22:53:52,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-43
+2022-03-25 22:53:52,992 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-44
+2022-03-25 22:53:53,042 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-45
+2022-03-25 22:53:53,092 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-46
+2022-03-25 22:53:53,141 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-47
+2022-03-25 22:53:53,192 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-48
+2022-03-25 22:53:53,241 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-49
+2022-03-25 22:53:53,291 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-50
+2022-03-25 22:53:53,342 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-51
+2022-03-25 22:53:53,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-52
+2022-03-25 22:53:53,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-53
+2022-03-25 22:53:53,492 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-54
+2022-03-25 22:53:53,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-55
+2022-03-25 22:53:53,592 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-56
+2022-03-25 22:53:53,642 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-57
+2022-03-25 22:53:53,693 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-58
+2022-03-25 22:53:53,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-59
+2022-03-25 22:53:53,793 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-60
+2022-03-25 22:53:53,843 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-61
+2022-03-25 22:53:53,892 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-62
+2022-03-25 22:53:53,943 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-63
+2022-03-25 22:53:53,992 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-64
+2022-03-25 22:53:54,043 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-65
+2022-03-25 22:53:54,091 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-66
+2022-03-25 22:53:54,142 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-67
+2022-03-25 22:53:54,191 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-68
+2022-03-25 22:53:54,242 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-69
+2022-03-25 22:53:54,292 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-70
+2022-03-25 22:53:54,341 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-71
+2022-03-25 22:53:54,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-72
+2022-03-25 22:53:54,443 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-73
+2022-03-25 22:53:54,493 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-74
+2022-03-25 22:53:54,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-75
+2022-03-25 22:53:54,592 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-76
+2022-03-25 22:53:54,641 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-77
+2022-03-25 22:53:54,692 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-78
+2022-03-25 22:53:54,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-79
+2022-03-25 22:53:54,791 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-80
+2022-03-25 22:53:54,842 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-81
+2022-03-25 22:53:54,892 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-82
+2022-03-25 22:53:54,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-83
+2022-03-25 22:53:54,991 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-84
+2022-03-25 22:53:55,042 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-85
+2022-03-25 22:53:55,093 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-86
+2022-03-25 22:53:55,142 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-87
+2022-03-25 22:53:55,192 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-88
+2022-03-25 22:53:55,241 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-89
+2022-03-25 22:53:55,293 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-90
+2022-03-25 22:53:55,341 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-91
+2022-03-25 22:53:55,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-92
+2022-03-25 22:53:55,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-93
+2022-03-25 22:53:55,491 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-94
+2022-03-25 22:53:55,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-95
+2022-03-25 22:53:55,593 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-96
+2022-03-25 22:53:55,641 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-97
+2022-03-25 22:53:55,692 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-98
+2022-03-25 22:53:55,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-99
+2022-03-25 22:53:55,792 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-100
+2022-03-25 22:53:55,833 ERROR o.a.j.v.b.i.HttpMetricsSender: failed to send data to influxDB server.
+java.net.UnknownHostException: influxdb
+	at java.net.InetAddress$CachedAddresses.get(InetAddress.java:797) ~[?:?]
+	at java.net.InetAddress.getAllByName0(InetAddress.java:1509) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1368) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1302) ~[?:?]
+	at org.apache.http.impl.conn.SystemDefaultDnsResolver.resolve(SystemDefaultDnsResolver.java:45) ~[httpclient-4.5.12.jar:4.5.12]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:664) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:635) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.processPendingRequest(AbstractNIOConnPool.java:474) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.lease(AbstractNIOConnPool.java:280) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager.requestConnection(PoolingNHttpClientConnectionManager.java:295) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.AbstractClientExchangeHandler.requestConnection(AbstractClientExchangeHandler.java:377) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.DefaultClientExchangeHandlerImpl.start(DefaultClientExchangeHandlerImpl.java:129) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.InternalHttpAsyncClient.execute(InternalHttpAsyncClient.java:141) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:75) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:108) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:92) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:196) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:173) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.sendMetrics(InfluxdbBackendListenerClient.java:168) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.run(InfluxdbBackendListenerClient.java:135) [ApacheJMeter_components.jar:5.4.3]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) [?:?]
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:829) [?:?]
+2022-03-25 22:53:55,842 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-101
+2022-03-25 22:53:55,891 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-102
+2022-03-25 22:53:55,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-103
+2022-03-25 22:53:55,993 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-104
+2022-03-25 22:53:56,041 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-105
+2022-03-25 22:53:56,092 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-106
+2022-03-25 22:53:56,142 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-107
+2022-03-25 22:53:56,193 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-108
+2022-03-25 22:53:56,242 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-109
+2022-03-25 22:53:56,293 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-110
+2022-03-25 22:53:56,342 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-111
+2022-03-25 22:53:56,391 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-112
+2022-03-25 22:53:56,444 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-113
+2022-03-25 22:53:56,491 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-114
+2022-03-25 22:53:56,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-115
+2022-03-25 22:53:56,593 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-116
+2022-03-25 22:53:56,641 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-117
+2022-03-25 22:53:56,692 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-118
+2022-03-25 22:53:56,743 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-119
+2022-03-25 22:53:56,791 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-120
+2022-03-25 22:53:56,841 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-121
+2022-03-25 22:53:56,892 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-122
+2022-03-25 22:53:56,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-123
+2022-03-25 22:53:56,991 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-124
+2022-03-25 22:53:57,043 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-125
+2022-03-25 22:53:57,092 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-126
+2022-03-25 22:53:57,143 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-127
+2022-03-25 22:53:57,192 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-128
+2022-03-25 22:53:57,242 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-129
+2022-03-25 22:53:57,292 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-130
+2022-03-25 22:53:57,341 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-131
+2022-03-25 22:53:57,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-132
+2022-03-25 22:53:57,441 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-133
+2022-03-25 22:53:57,492 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-134
+2022-03-25 22:53:57,542 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-135
+2022-03-25 22:53:57,593 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-136
+2022-03-25 22:53:57,643 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-137
+2022-03-25 22:53:57,691 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-138
+2022-03-25 22:53:57,743 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-139
+2022-03-25 22:53:57,791 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-140
+2022-03-25 22:53:57,841 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-141
+2022-03-25 22:53:57,893 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-142
+2022-03-25 22:53:57,941 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-143
+2022-03-25 22:53:57,991 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-144
+2022-03-25 22:53:58,042 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-145
+2022-03-25 22:53:58,091 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-146
+2022-03-25 22:53:58,141 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-147
+2022-03-25 22:53:58,193 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-148
+2022-03-25 22:53:58,242 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-149
+2022-03-25 22:53:58,291 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-150
+2022-03-25 22:53:58,343 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-151
+2022-03-25 22:53:58,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-152
+2022-03-25 22:53:58,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-153
+2022-03-25 22:53:58,493 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-154
+2022-03-25 22:53:58,541 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-155
+2022-03-25 22:53:58,591 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-156
+2022-03-25 22:53:58,642 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-157
+2022-03-25 22:53:58,693 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-158
+2022-03-25 22:53:58,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-159
+2022-03-25 22:53:58,792 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-160
+2022-03-25 22:53:58,842 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-161
+2022-03-25 22:53:58,891 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-162
+2022-03-25 22:53:58,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-163
+2022-03-25 22:53:58,993 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-164
+2022-03-25 22:53:59,042 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-165
+2022-03-25 22:53:59,092 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-166
+2022-03-25 22:53:59,143 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-167
+2022-03-25 22:53:59,192 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-168
+2022-03-25 22:53:59,241 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-169
+2022-03-25 22:53:59,291 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-170
+2022-03-25 22:53:59,343 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-171
+2022-03-25 22:53:59,393 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-172
+2022-03-25 22:53:59,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-173
+2022-03-25 22:53:59,492 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-174
+2022-03-25 22:53:59,543 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-175
+2022-03-25 22:53:59,593 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-176
+2022-03-25 22:53:59,641 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-177
+2022-03-25 22:53:59,691 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-178
+2022-03-25 22:53:59,742 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-179
+2022-03-25 22:53:59,793 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-180
+2022-03-25 22:53:59,841 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-181
+2022-03-25 22:53:59,892 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-182
+2022-03-25 22:53:59,942 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-183
+2022-03-25 22:53:59,992 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-184
+2022-03-25 22:54:00,011 INFO o.a.j.r.Summariser: summary +    750 in 00:00:09 =   81.8/s Avg:     1 Min:     0 Max:    96 Err:   750 (100.00%) Active: 184 Started: 184 Finished: 0
+2022-03-25 22:54:00,043 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-185
+2022-03-25 22:54:00,093 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-186
+2022-03-25 22:54:00,142 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-187
+2022-03-25 22:54:00,193 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-188
+2022-03-25 22:54:00,243 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-189
+2022-03-25 22:54:00,291 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-190
+2022-03-25 22:54:00,342 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-191
+2022-03-25 22:54:00,392 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-192
+2022-03-25 22:54:00,442 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-193
+2022-03-25 22:54:00,491 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-194
+2022-03-25 22:54:00,541 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-195
+2022-03-25 22:54:00,591 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-196
+2022-03-25 22:54:00,642 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-197
+2022-03-25 22:54:00,693 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-198
+2022-03-25 22:54:00,743 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-199
+2022-03-25 22:54:00,791 INFO o.a.j.t.JMeterThread: Thread started: 线程组 1-200
+2022-03-25 22:54:00,826 ERROR o.a.j.v.b.i.HttpMetricsSender: failed to send data to influxDB server.
+java.net.UnknownHostException: influxdb
+	at java.net.InetAddress$CachedAddresses.get(InetAddress.java:797) ~[?:?]
+	at java.net.InetAddress.getAllByName0(InetAddress.java:1509) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1368) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1302) ~[?:?]
+	at org.apache.http.impl.conn.SystemDefaultDnsResolver.resolve(SystemDefaultDnsResolver.java:45) ~[httpclient-4.5.12.jar:4.5.12]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:664) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:635) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.processPendingRequest(AbstractNIOConnPool.java:474) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.lease(AbstractNIOConnPool.java:280) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager.requestConnection(PoolingNHttpClientConnectionManager.java:295) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.AbstractClientExchangeHandler.requestConnection(AbstractClientExchangeHandler.java:377) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.DefaultClientExchangeHandlerImpl.start(DefaultClientExchangeHandlerImpl.java:129) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.InternalHttpAsyncClient.execute(InternalHttpAsyncClient.java:141) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:75) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:108) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:92) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:196) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:173) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.sendMetrics(InfluxdbBackendListenerClient.java:168) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.run(InfluxdbBackendListenerClient.java:135) [ApacheJMeter_components.jar:5.4.3]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) [?:?]
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:829) [?:?]
+2022-03-25 22:54:05,900 ERROR o.a.j.v.b.i.HttpMetricsSender: failed to send data to influxDB server.
+java.net.UnknownHostException: influxdb: 没有与主机名关联的地址
+	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method) ~[?:?]
+	at java.net.InetAddress$PlatformNameService.lookupAllHostAddr(InetAddress.java:929) ~[?:?]
+	at java.net.InetAddress.getAddressesFromNameService(InetAddress.java:1519) ~[?:?]
+	at java.net.InetAddress$NameServiceAddresses.get(InetAddress.java:848) ~[?:?]
+	at java.net.InetAddress.getAllByName0(InetAddress.java:1509) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1368) ~[?:?]
+	at java.net.InetAddress.getAllByName(InetAddress.java:1302) ~[?:?]
+	at org.apache.http.impl.conn.SystemDefaultDnsResolver.resolve(SystemDefaultDnsResolver.java:45) ~[httpclient-4.5.12.jar:4.5.12]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:664) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager$InternalAddressResolver.resolveRemoteAddress(PoolingNHttpClientConnectionManager.java:635) ~[httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.processPendingRequest(AbstractNIOConnPool.java:474) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.nio.pool.AbstractNIOConnPool.lease(AbstractNIOConnPool.java:280) [httpcore-nio-4.4.13.jar:4.4.13]
+	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager.requestConnection(PoolingNHttpClientConnectionManager.java:295) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.AbstractClientExchangeHandler.requestConnection(AbstractClientExchangeHandler.java:377) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.DefaultClientExchangeHandlerImpl.start(DefaultClientExchangeHandlerImpl.java:129) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.InternalHttpAsyncClient.execute(InternalHttpAsyncClient.java:141) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:75) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:108) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.http.impl.nio.client.CloseableHttpAsyncClient.execute(CloseableHttpAsyncClient.java:92) [httpasyncclient-4.1.4.jar:4.1.4]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:196) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender.writeAndSendMetrics(HttpMetricsSender.java:173) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.sendMetrics(InfluxdbBackendListenerClient.java:168) [ApacheJMeter_components.jar:5.4.3]
+	at org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient.run(InfluxdbBackendListenerClient.java:135) [ApacheJMeter_components.jar:5.4.3]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515) [?:?]
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) [?:?]
+	at java.lang.Thread.run(Thread.java:829) [?:?]
+2022-03-25 22:54:06,688 INFO o.a.j.r.ResultCollector: Shutdown hook started
+2022-03-25 22:54:06,690 INFO o.a.j.r.ResultCollector: Shutdown hook ended

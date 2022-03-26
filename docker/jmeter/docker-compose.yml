@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  jmeter:
+    image: "justb4/jmeter"
+    ports:
+      - "11005:9270"
+    volumes:
+      - ./test1.jmx:/opt/apache-jmeter-5.4.3/test1.jmx
+    command: [ "-n -t test1.jmx" ]
+
+networks:
+  default:
+    external:
+      name: allinone

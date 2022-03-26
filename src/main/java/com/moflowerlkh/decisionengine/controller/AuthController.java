@@ -102,7 +102,6 @@ public class AuthController {
         return new BaseResponse<>("hello");
     }
 
-
     @GetMapping("/hello3")
     @PreAuthorize("hasAuthority('fuck')")
     @ResponseBody
