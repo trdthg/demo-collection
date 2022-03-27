@@ -85,16 +85,6 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "unPassedUser", "passedUser" })
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(nullable = true)
-    private Set<LoanActivity> passedLoanActivities = new HashSet<LoanActivity>();
-
-    @JsonIgnoreProperties(value = { "unPassedUser", "passedUser" })
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(nullable = true)
-    private Set<LoanActivity> unPassedLoanActivities = new HashSet<LoanActivity>();
-
     // 用户拥有的角色
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = true)

@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -107,9 +108,11 @@ public class ActivityController {
             @Valid @NotNull @PathVariable Long id) {
         LoanActivity loanActivity = loanActivityDao.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<JoinLoanActivityUserResponse> res = loanActivity.getPassedUser().stream()
+        List<JoinLoanActivityUserResponse> res = loanActivity.getUserLoanActivities().stream()
+                .filter(x -> x.getIsPassed()).map(x -> x.getUser())
                 .map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
+
     }
 
     @GetMapping("/loan/{id}/unpassed")
@@ -118,7 +121,8 @@ public class ActivityController {
             @Valid @NotNull @PathVariable Long id) {
         LoanActivity loanActivity = loanActivityDao.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<JoinLoanActivityUserResponse> res = loanActivity.getUnPassedUser().stream()
+        List<JoinLoanActivityUserResponse> res = loanActivity.getUserLoanActivities().stream()
+                .filter(x -> !x.getIsPassed()).map(x -> x.getUser())
                 .map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
@@ -129,9 +133,9 @@ public class ActivityController {
             @NotNull @RequestParam String name) throws Exception {
         LoanActivity activity = loanActivityDao.findById(activity_id)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<User> users = activity.getPassedUser().stream().filter(user -> {
-            return Objects.equals(user.getName(), name);
-        }).collect(Collectors.toList());
+        List<User> users = activity.getUserLoanActivities().stream().filter(x -> {
+            return Objects.equals(x.getUser().getName(), name);
+        }).map(x -> x.getUser()).collect(Collectors.toList());
         if (users.isEmpty()) {
             throw new DataRetrievalFailureException("该用户没有参加该活动或者未通过筛选");
         }
@@ -144,7 +148,8 @@ public class ActivityController {
             @Valid @NotNull @PathVariable Long activity_id) throws Exception {
         LoanActivity activity = loanActivityDao.findById(activity_id)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<User> users = activity.getUnPassedUser().stream().filter(user -> Objects.equals(user.getId(), user_id))
+        List<User> users = activity.getUserLoanActivities().stream()
+                .filter(x -> !x.getIsPassed() && Objects.equals(x.getUser().getId(), user_id)).map(x -> x.getUser())
                 .collect(Collectors.toList());
         if (users.isEmpty()) {
             throw new DataRetrievalFailureException("该用户没有参加该活动或者已经通过筛选");
@@ -295,10 +300,20 @@ class LoanActivityResponse {
         response.setActivity_endTime(s.substring(0, s.indexOf('.')));
 
         response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
+        // return
+        // users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
 
-        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
+        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
+                loanActivity.getUserLoanActivities().stream()
+                        .filter(x -> x.getIsPassed())
+                        .map(x -> x.getUser())
+                        .collect(Collectors.toList()))));
         response.setUnPassed_users(
-                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
+                        loanActivity.getUserLoanActivities().stream()
+                                .filter(x -> !x.getIsPassed())
+                                .map(x -> x.getUser())
+                                .collect(Collectors.toList()))));
         return response;
     }
 }
@@ -310,9 +325,16 @@ class JoinLoanActivityResponse {
 
     public static JoinLoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
         JoinLoanActivityResponse response = new JoinLoanActivityResponse();
-        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getPassedUser())));
+        response.setPassed_users(
+                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUserLoanActivities().stream()
+                        .filter(x -> x.getIsPassed())
+                        .map(x -> x.getUser())
+                        .collect(Collectors.toList()))));
         response.setUnPassed_users(
-                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUnPassedUser())));
+                JoinLoanActivityUserResponse.fromUser(new ArrayList<>(loanActivity.getUserLoanActivities().stream()
+                        .filter(x -> !x.getIsPassed())
+                        .map(x -> x.getUser())
+                        .collect(Collectors.toList()))));
         return response;
     }
 }

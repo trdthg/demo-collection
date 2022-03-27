@@ -7,7 +7,6 @@ import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.enums.EnumValue;
 import com.moflowerlkh.decisionengine.vo.enums.Gender;
-import com.moflowerlkh.decisionengine.vo.po.BaseResult;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;

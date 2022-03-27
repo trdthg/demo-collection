@@ -76,17 +76,6 @@ public class LoanActivity {
     @OneToMany(mappedBy = "loanActivity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
 
-    // 参加活动的人
-    @JsonIgnoreProperties(value = { "passedLoanActivities", "unPassedLoanActivities" })
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(nullable = true)
-    private Set<User> unPassedUser = new HashSet<User>();
-
-    @JsonIgnoreProperties(value = { "passedLoanActivities", "unPassedLoanActivities" })
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(nullable = true)
-    private Set<User> passedUser = new HashSet<User>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
