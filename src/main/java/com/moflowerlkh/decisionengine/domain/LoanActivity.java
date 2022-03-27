@@ -10,10 +10,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @ToString
+@Entity
 @RequiredArgsConstructor
 @Table(name = "loan_activity_tb")
 public class LoanActivity {
@@ -22,26 +22,28 @@ public class LoanActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 活动名称
     @Column(nullable = false)
     private String name;
 
-    // 统一使用 2022-01-01 20:00:00 时间格式
+    // 活动开始时间，统一使用 2022-01-01 20:00:00 时间格式
     @Column(nullable = false)
     private Timestamp beginTime;
-
+    // 活动结束时间
     @Column(nullable = false)
     private Timestamp endTime;
 
     // 贷款额度上限
     @Column()
     private double maxMoneyLimit;
-
+    // 贷款额度下限
     @Column()
     private double minMoneyLimit;
 
     // 分几期
     @Column(nullable = false)
     private String timeLimit;
+
     // 还几年
     @Column
     private Integer replayLimit;
@@ -54,29 +56,33 @@ public class LoanActivity {
      * 一个秒杀活动只能对应一个商品
      * 一个商品可能有多个秒杀活动
      */
-    //@JoinColumn(nullable = false)
-    //@ManyToOne(fetch = FetchType.EAGER)
-    //private ShoppingGoods shoppingGoods;
+    // @JoinColumn(nullable = false)
+    // @ManyToOne(fetch = FetchType.EAGER)
+    // private ShoppingGoods shoppingGoods;
 
     // 活动销售总数，不能超卖
     @Column(nullable = false)
     private long amount;
 
+    // 总共可贷款金额
     @Column(nullable = false)
     private long moneyTotal;
-    // 对应的规则
-    // 一个活动对应一个规则
+
+    // 活动对应的规则，一个活动对应一个规则
     @JoinColumn(nullable = true)
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private LoanRule rule;
 
+    @OneToMany(mappedBy = "loanActivity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
+
     // 参加活动的人
-    @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
+    @JsonIgnoreProperties(value = { "passedLoanActivities", "unPassedLoanActivities" })
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<User> unPassedUser = new HashSet<User>();
 
-    @JsonIgnoreProperties(value = {"passedLoanActivities", "unPassedLoanActivities"})
+    @JsonIgnoreProperties(value = { "passedLoanActivities", "unPassedLoanActivities" })
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<User> passedUser = new HashSet<User>();

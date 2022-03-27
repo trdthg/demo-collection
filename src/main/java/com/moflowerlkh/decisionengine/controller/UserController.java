@@ -76,13 +76,7 @@ public class UserController {
     @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
     public BaseResponse<Boolean> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id,
             @Valid @NotNull @PathVariable Long user_id) throws Exception {
-        BaseResult<Boolean> checkResult = loanService.checkUserInfo(activity_id, user_id);
-        if (checkResult.getResult()) {
-            loanService.tryJoin(activity_id, user_id, checkResult.getResult());
-            return new BaseResponse<>(HttpStatus.CREATED, "初筛通过, 参加成功", true);
-        } else {
-            return new BaseResponse<>(HttpStatus.FORBIDDEN, "初筛不通过: " + checkResult.getMessage(), false);
-        }
+        return loanService.tryJoin(activity_id, user_id);
     }
 
 }

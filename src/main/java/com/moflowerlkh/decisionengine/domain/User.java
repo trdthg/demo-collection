@@ -3,7 +3,6 @@ package com.moflowerlkh.decisionengine.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.enums.Gender;
-
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
@@ -15,10 +14,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
 @Table(name = "user_tb")
 public class User {
@@ -27,21 +26,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 姓名
     @Column(name = "name", nullable = false)
     @Length(min = 1, max = 64)
     private String name;
 
+    // 用户名
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    // 密码
     @Column(nullable = false)
     private String password;
 
+    // 年龄
     @Column(nullable = false)
     @Min(value = 0)
     @Max(value = 9999)
     private Integer age;
 
+    // 性别
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -77,24 +81,31 @@ public class User {
     @Column(nullable = true)
     private Boolean dishonest;
 
-    @JsonIgnoreProperties(value = {"unPassedUser", "passedUser"})
+    // 和活动的关系
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
+
+    @JsonIgnoreProperties(value = { "unPassedUser", "passedUser" })
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<LoanActivity> passedLoanActivities = new HashSet<LoanActivity>();
 
-    @JsonIgnoreProperties(value = {"unPassedUser", "passedUser"})
+    @JsonIgnoreProperties(value = { "unPassedUser", "passedUser" })
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private Set<LoanActivity> unPassedLoanActivities = new HashSet<LoanActivity>();
 
+    // 用户拥有的角色
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = true)
     private Set<String> roles = new HashSet<String>();
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         User user = (User) o;
         return id != null && Objects.equals(id, user.id);
     }

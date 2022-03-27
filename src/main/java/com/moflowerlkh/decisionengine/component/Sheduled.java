@@ -12,6 +12,7 @@ import com.moflowerlkh.decisionengine.util.RedisUtil;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.enums.Gender;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -69,7 +70,7 @@ public class Sheduled {
 
             Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
             newUser.setRoles(roles);
-
+            Hibernate.initialize(newUser.getUserLoanActivities());
             userDao.save(newUser);
             System.out.println("user初始化成功");
 
@@ -100,6 +101,7 @@ public class Sheduled {
             loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
             loanActivity.setAmount(10000);
             loanActivity.setRule(loanRule);
+            Hibernate.initialize(loanActivity.getUserLoanActivities());
             loanActivityDao.save(loanActivity);
             System.out.println("activity和rule初始化成功");
         }
