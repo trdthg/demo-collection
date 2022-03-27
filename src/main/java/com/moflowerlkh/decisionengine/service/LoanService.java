@@ -78,24 +78,12 @@ public class LoanService {
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
     public BaseResponse<Boolean> tryJoin(Long loanActivityId, Long userId) {
-
-        // loanActivity.getUserLoanActivities()
-        // .add(UserLoanActivity.builder().user(user).loanActivity(loanActivity).build());
-        // loanActivityDao.saveAndFlush(loanActivity);
-        // UserLoanActivity userLoanActivity =
-        // userLoanActivityDao.findByUserIdAndLoanActivityId(userId, loanActivityId);
-        // System.out.println(userLoanActivity);
-        System.out.println("打端点1");
         LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
-        System.out.println("打端点2");
         UserLoanActivity userLoanActivity = userLoanActivityDao.findByUserAndLoanActivity(user, loanActivity);
-        System.out.println("打端点3");
         if (userLoanActivity == null) {
-            System.out.println("打端点4");
             BaseResult<Boolean> baseResult = new LoanService().checkUserInfo(loanActivity, user);
-            System.out.println("打端点5");
             userLoanActivityDao.saveAndFlush(
                     UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
                             .build());
@@ -105,24 +93,7 @@ public class LoanService {
                 return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), false);
             }
         } else {
-            System.out.println("打端点4");
-            System.out.println(loanActivity.getUserLoanActivities());
-            System.out.println("打端点5");
             return new BaseResponse<>(HttpStatus.OK, "您已经参加过", userLoanActivity.getIsPassed());
         }
-
-        // if (checkPass) {
-        // loanActivity.getPassedUser().add(user);
-        // loanActivity.getUnPassedUser().remove(user);
-        // user.getPassedLoanActivities().add(loanActivity);
-        // user.getUnPassedLoanActivities().remove(loanActivity);
-        // } else {
-        // loanActivity.getUnPassedUser().add(user);
-        // loanActivity.getPassedUser().remove(user);
-        // user.getUnPassedLoanActivities().add(loanActivity);
-        // user.getPassedLoanActivities().remove(loanActivity);
-        // }
-        // loanActivityDao.saveAndFlush(loanActivity);
-        // userDao.saveAndFlush(user);
     }
 }
