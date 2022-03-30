@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.service;
 
-import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 
 import org.springframework.beans.factory.annotation.Autowired;

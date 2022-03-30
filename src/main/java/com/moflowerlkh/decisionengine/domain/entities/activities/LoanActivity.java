@@ -1,37 +1,22 @@
-package com.moflowerlkh.decisionengine.domain;
+package com.moflowerlkh.decisionengine.domain.entities.activities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity
-@RequiredArgsConstructor
 @Table(name = "loan_activity_tb")
-public class LoanActivity {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    // 活动名称
-    @Column(nullable = false)
-    private String name;
-
-    // 活动开始时间，统一使用 2022-01-01 20:00:00 时间格式
-    @Column(nullable = false)
-    private Timestamp beginTime;
-    // 活动结束时间
-    @Column(nullable = false)
-    private Timestamp endTime;
+public class LoanActivity extends BaseActivity {
 
     // 贷款额度上限
     @Column()
@@ -52,18 +37,6 @@ public class LoanActivity {
     @Column(nullable = false)
     private double apr;
 
-    /**
-     * 一个秒杀活动只能对应一个商品
-     * 一个商品可能有多个秒杀活动
-     */
-    // @JoinColumn(nullable = false)
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // private ShoppingGoods shoppingGoods;
-
-    // 活动销售总数，不能超卖
-    @Column(nullable = false)
-    private long amount;
-
     // 总共可贷款金额
     @Column(nullable = false)
     private long moneyTotal;
@@ -81,7 +54,7 @@ public class LoanActivity {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         LoanActivity that = (LoanActivity) o;
-        return id != null && Objects.equals(id, that.id);
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override

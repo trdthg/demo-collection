@@ -1,9 +1,9 @@
 package com.moflowerlkh.decisionengine.component;
 
-import com.moflowerlkh.decisionengine.domain.LoanActivity;
-import com.moflowerlkh.decisionengine.domain.LoanRule;
-import com.moflowerlkh.decisionengine.domain.ShoppingGoods;
-import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
+import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
 import com.moflowerlkh.decisionengine.domain.dao.LoanRuleDao;
 import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
@@ -52,59 +52,67 @@ public class Sheduled {
     public void testMysql() {
         List<User> users = userDao.findAll();
         System.out.println(users);
-        if (users.isEmpty()) {
-            User newUser = new User();
-            newUser.setUsername("admin");
+        User newUser = new User();
+        newUser.setUsername("admin");
 
-            String encodedPassword = new BCryptPasswordEncoder().encode("000000");
-            newUser.setPassword(encodedPassword);
+        String encodedPassword = new BCryptPasswordEncoder().encode("000000");
+        newUser.setPassword(encodedPassword);
 
-            newUser.setYearIncome(10L);
-            newUser.setGender(Gender.Male);
-            newUser.setEmployment(Employment.Employed);
-            newUser.setAge(18);
-            newUser.setName("小明");
-            newUser.setDishonest(false);
-            newUser.setIDNumber("dfsdasfgdfsfgfd");
-            newUser.setCountry("中国");
+        newUser.setYearIncome(10L);
+        newUser.setGender(Gender.Male);
+        newUser.setEmployment(Employment.Employed);
+        newUser.setAge(18);
+        newUser.setName("小明");
+        newUser.setDishonest(false);
+        newUser.setIDNumber("dfsdasfgdfsfgfd");
+        newUser.setCountry("中国");
 
-            Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
-            newUser.setRoles(roles);
-            Hibernate.initialize(newUser.getUserLoanActivities());
-            userDao.save(newUser);
-            System.out.println("user初始化成功");
+        Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
+        newUser.setRoles(roles);
+        Hibernate.initialize(newUser.getUserLoanActivities());
+        System.out.println("准备save User");
+        userDao.save(newUser);
 
-            ShoppingGoods shoppingGoods1 = new ShoppingGoods();
-            shoppingGoods1.setName("商品1");
-            shoppingGoods1.setInfo("商品1的信息");
-            shoppingGoods1.setGoodsTotal(1000000L);
-            shoppingGoodsDao.save(shoppingGoods1);
-            System.out.println("shoppinggoods初始化成功");
+        // ShoppingGoods shoppingGoods1 = new ShoppingGoods();
+        // shoppingGoods1.setName("商品1");
+        // shoppingGoods1.setInfo("商品1的信息");
+        // shoppingGoods1.setGoodsAmount(10000L);
+        // System.out.println("准备save规则");
+        // shoppingGoodsDao.save(shoppingGoods1);
 
-            LoanRule loanRule = new LoanRule();
-            loanRule.setCheckGuarantee(true);
-            loanRule.setMaxAge(65);
-            loanRule.setMinAge(18);
-            loanRule.setCheckEmployment(true);
-            loanRule.setCheckDishonest(true);
-            loanRule.setCheckOverDual(true);
-            loanRule.setCheckCountry(true);
-            // loanRuleDao.save(loanRule);
+        LoanRule loanRule = new LoanRule();
+        loanRule.setCheckGuarantee(true);
+        loanRule.setMaxAge(65);
+        loanRule.setMinAge(18);
+        loanRule.setCheckEmployment(true);
+        loanRule.setCheckDishonest(true);
+        loanRule.setCheckOverDual(true);
+        loanRule.setCheckCountry(true);
+        System.out.println("准备save规则");
+        // loanRuleDao.save(loanRule);
 
-            LoanActivity loanActivity = new LoanActivity();
-            loanActivity.setName("活动1");
-            loanActivity.setMaxMoneyLimit(10000);
-            loanActivity.setTimeLimit("3/6");
-            loanActivity.setReplayLimit(3);
-            loanActivity.setApr(4.00);
-            loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
-            loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
-            loanActivity.setAmount(10000);
-            loanActivity.setRule(loanRule);
-            Hibernate.initialize(loanActivity.getUserLoanActivities());
-            loanActivityDao.save(loanActivity);
-            System.out.println("activity和rule初始化成功");
-        }
+        LoanActivity loanActivity = new LoanActivity();
+        loanActivity.setName("活动1");
+        loanActivity.setMaxMoneyLimit(10000);
+        loanActivity.setTimeLimit("3/6");
+        loanActivity.setReplayLimit(3);
+        loanActivity.setApr(4.00);
+        loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
+        loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
+
+        ShoppingGoods shoppingGoods = new ShoppingGoods();
+        shoppingGoods.setGoodsAmount(10000L);
+        shoppingGoods.setName(loanActivity.getName());
+        System.out.println("准备save商品");
+        shoppingGoodsDao.save(shoppingGoods);
+
+        loanActivity.setShoppingGoods(shoppingGoods);
+        loanActivity.setRule(loanRule);
+        // Hibernate.initialize(loanActivity.getUserLoanActivities());
+        loanActivity.setId(154L);
+        System.out.println("准备save活动");
+        loanActivityDao.save(loanActivity);
+        System.out.println("activity和rule初始化成功");
     }
 
 }

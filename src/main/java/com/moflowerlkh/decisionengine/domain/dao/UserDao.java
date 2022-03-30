@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.domain.dao;
 
-import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.entities.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

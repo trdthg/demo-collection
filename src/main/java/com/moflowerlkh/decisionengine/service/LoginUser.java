@@ -1,7 +1,7 @@
 package com.moflowerlkh.decisionengine.service;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.entities.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

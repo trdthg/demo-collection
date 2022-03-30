@@ -1,9 +1,11 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.domain.LoanActivity;
-import com.moflowerlkh.decisionengine.domain.LoanRule;
-import com.moflowerlkh.decisionengine.domain.User;
+import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
+import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
+import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 import com.moflowerlkh.decisionengine.vo.enums.DateValue;
@@ -23,7 +25,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,6 +34,8 @@ public class ActivityController {
 
     @Autowired
     LoanActivityDao loanActivityDao;
+    @Autowired
+    ShoppingGoodsDao shoppingGoodsDao;
 
     @PostMapping("/loan/")
     @ApiOperation(value = "新增活动", notes = "")
@@ -234,7 +237,7 @@ class LoanActivitySimpleResponse {
         response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
 
-        response.setActivity_totalQuantity(loanActivity.getAmount());
+        response.setActivity_totalQuantity(loanActivity.getShoppingGoods().getGoodsAmount());
         response.setActivity_totalAmount(loanActivity.getMoneyTotal());
         response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
 
@@ -290,7 +293,7 @@ class LoanActivityResponse {
         response.setActivity_replayTime(loanActivity.getReplayLimit());
         response.setActivity_apr(loanActivity.getApr());
 
-        response.setActivity_totalQuantity(loanActivity.getAmount());
+        response.setActivity_totalQuantity(loanActivity.getShoppingGoods().getGoodsAmount());
         response.setActivity_totalAmount(loanActivity.getMoneyTotal());
         response.setActivity_initMoney(loanActivity.getMinMoneyLimit());
 
@@ -455,7 +458,12 @@ class SetLoanActivityRequest {
         loanActivity.setEndTime(Timestamp.valueOf(activity_endTime));
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
-        loanActivity.setAmount(activity_totalQuantity);
+
+        ShoppingGoods shoppingGoods = new ShoppingGoods();
+        shoppingGoods.setName(loanActivity.getName());
+        shoppingGoods.setGoodsAmount(activity_totalQuantity);
+
+        loanActivity.setShoppingGoods(shoppingGoods);
         loanActivity.setMoneyTotal(activity_totalAmount);
         loanActivity.setMinMoneyLimit(activity_initMoney);
 

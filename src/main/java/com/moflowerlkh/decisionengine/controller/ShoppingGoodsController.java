@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.domain.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
 import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 
@@ -86,7 +86,7 @@ class PostShoppingGoodsRequest {
         ShoppingGoods shoppingGoods = new ShoppingGoods();
         shoppingGoods.setName(goods_name);
         shoppingGoods.setInfo(goods_info);
-        shoppingGoods.setGoodsTotal(goods_total);
+        shoppingGoods.setGoodsAmount(goods_total);
         return shoppingGoods;
     }
 }

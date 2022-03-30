@@ -1,5 +1,6 @@
-package com.moflowerlkh.decisionengine.domain;
+package com.moflowerlkh.decisionengine.domain.entities;
 
+import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -14,10 +15,7 @@ import java.util.Objects;
 @ToString
 @Entity
 @Table(name = "user_loan_activity_tb")
-public class UserLoanActivity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserLoanActivity extends BasePO {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
@@ -38,7 +36,7 @@ public class UserLoanActivity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
         UserLoanActivity that = (UserLoanActivity) o;
-        return id != null && Objects.equals(id, that.id);
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override

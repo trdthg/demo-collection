@@ -1,8 +1,8 @@
 package com.moflowerlkh.decisionengine.domain.dao;
 
-import com.moflowerlkh.decisionengine.domain.LoanActivity;
-import com.moflowerlkh.decisionengine.domain.User;
-import com.moflowerlkh.decisionengine.domain.UserLoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.User;
+import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

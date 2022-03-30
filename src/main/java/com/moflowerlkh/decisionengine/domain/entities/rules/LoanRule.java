@@ -1,22 +1,24 @@
-package com.moflowerlkh.decisionengine.domain;
+package com.moflowerlkh.decisionengine.domain.entities.rules;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * @Description 秒杀规则 商品 1 - 1 活动
  */
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "loan_rule_tb")
-public class LoanRule {
-    @Id
-    @Column(name = "id", nullable = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class LoanRule extends BaseRule {
     // 贷款额度
     @Column(nullable = true)
     private Long checkMaxMoney;
@@ -27,16 +29,8 @@ public class LoanRule {
     // 贷款时间
     @Column(nullable = true)
     private Timestamp MaxTime;
-
     @Column(nullable = true)
     private Timestamp MinTime;
-
-    // 检查年龄
-    @Column(nullable = true)
-    private Integer MaxAge;
-
-    @Column(nullable = true)
-    private Integer MinAge;
 
     // 是否需要担保
     @Column
@@ -58,12 +52,16 @@ public class LoanRule {
     @Column
     private Boolean checkPledge;
 
-    // 是否限制地区
-    @Column(nullable = true)
-    private Boolean checkCountry;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        LoanRule loanRule = (LoanRule) o;
+        return getId() != null && Objects.equals(getId(), loanRule.getId());
+    }
 
-    //// 对应的活动
-    // @JoinColumn(nullable = true)
-    // @OneToOne(cascade = CascadeType.ALL)
-    // private LoanActivity loanActivity;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

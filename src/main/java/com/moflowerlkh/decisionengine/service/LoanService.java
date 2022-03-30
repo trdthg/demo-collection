@@ -1,6 +1,9 @@
 package com.moflowerlkh.decisionengine.service;
 
-import com.moflowerlkh.decisionengine.domain.*;
+import com.moflowerlkh.decisionengine.domain.entities.User;
+import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import com.moflowerlkh.decisionengine.domain.dao.*;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;

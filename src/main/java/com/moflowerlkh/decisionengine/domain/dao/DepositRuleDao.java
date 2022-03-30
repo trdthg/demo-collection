@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.domain.dao;
 
-import com.moflowerlkh.decisionengine.domain.DepositRule;
+import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,5 @@
-package com.moflowerlkh.decisionengine.domain;
+package com.moflowerlkh.decisionengine.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.enums.Gender;
 import lombok.*;
@@ -20,11 +19,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "user_tb")
-public class User {
-    @Id
-    @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BasePO {
 
     // 姓名
     @Column(name = "name", nullable = false)
@@ -92,12 +87,10 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-            return false;
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
+        return getId() != null && Objects.equals(getId(), user.getId());
     }
 
     @Override
