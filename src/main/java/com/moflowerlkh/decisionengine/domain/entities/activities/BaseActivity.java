@@ -35,7 +35,7 @@ public class BaseActivity extends BasePO {
      * 一个秒杀活动只能对应一个商品
      * 一个商品可能有多个秒杀活动
      */
-    @JoinColumn(nullable = false)
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Goods shoppingGoods;
+    // @JoinColumn(nullable = false)
+    // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Long goodsId;
 }

@@ -5,7 +5,9 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,7 +20,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "shopping_goods_tb")
+@Table(name = "goods")
 public class Goods extends BasePO {
     @Column(nullable = false)
     private Timestamp startTime;

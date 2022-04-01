@@ -49,7 +49,8 @@ public class DepositActivity extends BaseActivity {
     private long shoppingTotal;
 
     // 对应的规则
-    @JoinColumn(nullable = false)
-    @OneToOne
-    private DepositRule rule;
+    // @JoinColumn(nullable = false)
+    // @OneToOne
+    // private DepositRule rule;
+    private Long depositRultId;
 }

@@ -5,9 +5,11 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @Description 秒杀规则 商品 1 - 1 活动
@@ -18,6 +20,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "deposit_rule_tb")
+@EntityListeners(AuditingEntityListener.class)
 public class DepositRule extends BaseRule {
 
     // 存/贷款 额度

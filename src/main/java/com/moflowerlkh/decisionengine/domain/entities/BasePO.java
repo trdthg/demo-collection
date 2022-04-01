@@ -26,11 +26,11 @@ public class BasePO {
     private Long id;
 
     @CreatedDate
-    @Column(name = "create_time", nullable = false)
+    @Column(name = "create_time")
     private Date createDate;
 
     @LastModifiedDate
-    @Column(name = "modify_time", nullable = false)
+    @Column(name = "modify_time")
     private Date modifyDate;
 
 }

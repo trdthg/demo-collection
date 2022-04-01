@@ -6,7 +6,7 @@ import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
 import com.moflowerlkh.decisionengine.domain.dao.LoanRuleDao;
-import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
+import com.moflowerlkh.decisionengine.domain.dao.GoodsDao;
 import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.util.RedisUtil;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
@@ -31,7 +31,7 @@ public class Sheduled {
     @Autowired
     UserDao userDao;
     @Autowired
-    ShoppingGoodsDao shoppingGoodsDao;
+    GoodsDao shoppingGoodsDao;
     @Autowired
     LoanActivityDao loanActivityDao;
     @Autowired
@@ -66,21 +66,16 @@ public class Sheduled {
         newUser.setDishonest(false);
         newUser.setIDNumber("dfsdasfgdfsfgfd");
         newUser.setCountry("中国");
-
         Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
         newUser.setRoles(roles);
         Hibernate.initialize(newUser.getUserLoanActivities());
         System.out.println("准备save User");
-        userDao.save(newUser);
-
-        // ShoppingGoods shoppingGoods1 = new ShoppingGoods();
-        // shoppingGoods1.setName("商品1");
-        // shoppingGoods1.setInfo("商品1的信息");
-        // shoppingGoods1.setGoodsAmount(10000L);
-        // System.out.println("准备save规则");
-        // shoppingGoodsDao.save(shoppingGoods1);
+        if (users.isEmpty()) {
+            userDao.save(newUser);
+        }
 
         LoanRule loanRule = new LoanRule();
+        loanRule.setId(1L);
         loanRule.setCheckGuarantee(true);
         loanRule.setMaxAge(65);
         loanRule.setMinAge(18);
@@ -89,9 +84,22 @@ public class Sheduled {
         loanRule.setCheckOverDual(true);
         loanRule.setCheckCountry(true);
         System.out.println("准备save规则");
-        // loanRuleDao.save(loanRule);
+        if (loanRuleDao.findAll().isEmpty()) {
+            loanRuleDao.save(loanRule);
+        }
+
+        Goods goods = new Goods();
+        goods.setId(1L);
+        goods.setGoodsAmount(10000L);
+        goods.setStartTime(Timestamp.valueOf("2022-1-5 09:20:00"));
+        goods.setOneMaxAmount(1);
+        System.out.println("准备save商品");
+        if (loanActivityDao.findAll().isEmpty()) {
+            shoppingGoodsDao.save(goods);
+        }
 
         LoanActivity loanActivity = new LoanActivity();
+        loanActivity.setId(1L);
         loanActivity.setName("活动1");
         loanActivity.setMaxMoneyLimit(10000);
         loanActivity.setTimeLimit("3/6");
@@ -100,19 +108,13 @@ public class Sheduled {
         loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
         loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
 
-        Goods shoppingGoods = new Goods();
-        shoppingGoods.setGoodsAmount(10000L);
-        shoppingGoods.setStartTime(loanActivity.getBeginTime());
-        shoppingGoods.setOneMaxAmount(1);
-        System.out.println("准备save商品");
-        shoppingGoodsDao.save(shoppingGoods);
-
-        loanActivity.setShoppingGoods(shoppingGoods);
-        loanActivity.setRule(loanRule);
-        // Hibernate.initialize(loanActivity.getUserLoanActivities());
-        loanActivity.setId(154L);
+        loanActivity.setGoodsId(goods.getId());
+        loanActivity.setLoanRuleId(loanRule.getId());
+        
         System.out.println("准备save活动");
-        loanActivityDao.save(loanActivity);
+        if (loanActivityDao.findAll().isEmpty()) {
+            loanActivityDao.save(loanActivity);
+        }
         System.out.println("activity和rule初始化成功");
     }
 

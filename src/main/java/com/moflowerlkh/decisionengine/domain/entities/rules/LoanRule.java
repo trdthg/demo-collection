@@ -2,9 +2,11 @@ package com.moflowerlkh.decisionengine.domain.entities.rules;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,6 +20,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "loan_rule_tb")
+@EntityListeners(AuditingEntityListener.class)
 public class LoanRule extends BaseRule {
     // 贷款额度
     @Column(nullable = true)
@@ -54,8 +57,10 @@ public class LoanRule extends BaseRule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         LoanRule loanRule = (LoanRule) o;
         return getId() != null && Objects.equals(getId(), loanRule.getId());
     }

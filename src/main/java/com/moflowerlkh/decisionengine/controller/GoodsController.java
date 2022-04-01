@@ -1,7 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.domain.entities.Goods;
-import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
+import com.moflowerlkh.decisionengine.domain.dao.GoodsDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 
 import io.micrometer.core.annotation.Counted;
@@ -27,7 +27,7 @@ import javax.validation.constraints.PositiveOrZero;
 public class GoodsController {
 
     @Autowired
-    ShoppingGoodsDao shoppingGoodsDao;
+    GoodsDao shoppingGoodsDao;
 
     @PostMapping("/")
     @ResponseBody

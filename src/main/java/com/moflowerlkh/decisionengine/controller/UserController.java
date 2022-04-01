@@ -1,6 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.domain.entities.User;
+import com.moflowerlkh.decisionengine.service.LoanActivityService;
 import com.moflowerlkh.decisionengine.service.LoanService;
 import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -31,7 +32,7 @@ import javax.validation.constraints.Size;
 public class UserController {
 
     @Autowired
-    LoanService loanService;
+    LoanActivityService loanService;
     @Autowired
     UserDao userDao;
 

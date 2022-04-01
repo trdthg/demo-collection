@@ -4,25 +4,27 @@ import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
 @RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
 @Table(name = "loan_activity_tb")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class LoanActivity extends BaseActivity {
 
     // 贷款额度上限
-    @Column()
+    @Column
     private double maxMoneyLimit;
     // 贷款额度下限
-    @Column()
+    @Column
     private double minMoneyLimit;
 
     // 分几期
@@ -42,17 +44,21 @@ public class LoanActivity extends BaseActivity {
     private long moneyTotal;
 
     // 活动对应的规则，一个活动对应一个规则
-    @JoinColumn(nullable = true)
-    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-    private LoanRule rule;
+    // @JoinColumn(nullable = true)
+    // @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    // private LoanRule rule;
+    @Column
+    private Long loanRuleId;
 
     @OneToMany(mappedBy = "loanActivity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         LoanActivity that = (LoanActivity) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }

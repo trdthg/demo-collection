@@ -1,8 +1,9 @@
 package com.moflowerlkh.decisionengine.domain.entities.rules;
 
 import com.moflowerlkh.decisionengine.domain.entities.BasePO;
-import com.moflowerlkh.decisionengine.domain.entities.activities.BaseActivity;
-import com.moflowerlkh.decisionengine.domain.entities.activities.DepositActivity;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @ToString
 @RequiredArgsConstructor
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseRule extends BasePO {
     // 检查年龄
     @Column()
