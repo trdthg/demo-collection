@@ -2,7 +2,7 @@ package com.moflowerlkh.decisionengine.component;
 
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
-import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
 import com.moflowerlkh.decisionengine.domain.dao.LoanRuleDao;
@@ -100,9 +100,10 @@ public class Sheduled {
         loanActivity.setBeginTime(Timestamp.valueOf("2022-1-5 09:20:00"));
         loanActivity.setEndTime(Timestamp.valueOf("2022-1-9 18:00:00"));
 
-        ShoppingGoods shoppingGoods = new ShoppingGoods();
+        Goods shoppingGoods = new Goods();
         shoppingGoods.setGoodsAmount(10000L);
-        shoppingGoods.setName(loanActivity.getName());
+        shoppingGoods.setStartTime(loanActivity.getBeginTime());
+        shoppingGoods.setOneMaxAmount(1);
         System.out.println("准备save商品");
         shoppingGoodsDao.save(shoppingGoods);
 

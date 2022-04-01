@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.dao.ShoppingGoodsDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 
@@ -14,6 +14,8 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,7 +24,7 @@ import javax.validation.constraints.PositiveOrZero;
 @RestController
 @Api(tags = { "商品相关" })
 @RequestMapping("/api/shoppinggoods")
-public class ShoppingGoodsController {
+public class GoodsController {
 
     @Autowired
     ShoppingGoodsDao shoppingGoodsDao;
@@ -30,8 +32,8 @@ public class ShoppingGoodsController {
     @PostMapping("/")
     @ResponseBody
     @ApiOperation(value = "新增商品", notes = "新增一个商品")
-    public BaseResponse<ShoppingGoods> post(@RequestBody @Valid PostShoppingGoodsRequest request) {
-        ShoppingGoods shoppingGoods = request.toShoppingGoods();
+    public BaseResponse<Goods> post(@RequestBody @Valid PostShoppingGoodsRequest request) {
+        Goods shoppingGoods = request.toShoppingGoods();
         shoppingGoodsDao.save(shoppingGoods);
         return new BaseResponse<>(HttpStatus.CREATED, "新增商品成功", shoppingGoods);
     }
@@ -39,10 +41,10 @@ public class ShoppingGoodsController {
     @PutMapping("/{id}")
     @ResponseBody
     @ApiOperation(value = "编辑商品", notes = "根据id修改商品信息")
-    public BaseResponse<ShoppingGoods> put(
+    public BaseResponse<Goods> put(
             @NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id,
             @RequestBody @Valid PostShoppingGoodsRequest request) {
-        ShoppingGoods shoppingGoods = request.toShoppingGoods();
+        Goods shoppingGoods = request.toShoppingGoods();
         shoppingGoods.setId(id);
         shoppingGoodsDao.saveAndFlush(shoppingGoods);
         return new BaseResponse<>(HttpStatus.CREATED, "修改商品成功", shoppingGoods);
@@ -53,9 +55,9 @@ public class ShoppingGoodsController {
     @GetMapping("/{id}")
     @ResponseBody
     @ApiOperation(value = "查询商品", notes = "根据id查找商品信息")
-    public BaseResponse<ShoppingGoods> put(
+    public BaseResponse<Goods> put(
             @NotNull(message = "id不能为空") @PositiveOrZero(message = "id不能为负数") @PathVariable Long id) {
-        ShoppingGoods shoppingGoods = shoppingGoodsDao.findById(id)
+        Goods shoppingGoods = shoppingGoodsDao.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("查询结果为空，没有该商品"));
         return new BaseResponse<>(HttpStatus.OK, "查询成功", shoppingGoods);
     }
@@ -82,10 +84,10 @@ class PostShoppingGoodsRequest {
     @PositiveOrZero(message = "商品总数只能是0或正整数")
     private Long goods_total;
 
-    public ShoppingGoods toShoppingGoods() {
-        ShoppingGoods shoppingGoods = new ShoppingGoods();
-        shoppingGoods.setName(goods_name);
-        shoppingGoods.setInfo(goods_info);
+    public Goods toShoppingGoods() {
+        Goods shoppingGoods = new Goods();
+        shoppingGoods.setCreateDate(new Date());
+        shoppingGoods.setOneMaxAmount(1);
         shoppingGoods.setGoodsAmount(goods_total);
         return shoppingGoods;
     }

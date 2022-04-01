@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
-import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
 import lombok.Data;
 import lombok.Getter;

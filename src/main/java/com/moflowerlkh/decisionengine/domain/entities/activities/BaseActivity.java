@@ -1,7 +1,7 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
 import com.moflowerlkh.decisionengine.domain.entities.BasePO;
-import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import lombok.*;
 
 import javax.persistence.CascadeType;
@@ -37,5 +37,5 @@ public class BaseActivity extends BasePO {
      */
     @JoinColumn(nullable = false)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private ShoppingGoods shoppingGoods;
+    private Goods shoppingGoods;
 }

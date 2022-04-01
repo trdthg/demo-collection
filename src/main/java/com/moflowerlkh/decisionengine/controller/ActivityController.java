@@ -1,6 +1,6 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.domain.entities.ShoppingGoods;
+import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import com.moflowerlkh.decisionengine.domain.entities.User;
@@ -459,8 +459,9 @@ class SetLoanActivityRequest {
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
 
-        ShoppingGoods shoppingGoods = new ShoppingGoods();
-        shoppingGoods.setName(loanActivity.getName());
+        Goods shoppingGoods = new Goods();
+        shoppingGoods.setOneMaxAmount(1);
+        shoppingGoods.setStartTime(loanActivity.getBeginTime());
         shoppingGoods.setGoodsAmount(activity_totalQuantity);
 
         loanActivity.setShoppingGoods(shoppingGoods);
