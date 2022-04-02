@@ -5,6 +5,7 @@ import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanAct
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivityResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivitySimpleResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRequest;
+import com.moflowerlkh.decisionengine.util.ValidateCode;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 
@@ -25,6 +26,7 @@ public class ActivityController {
 
     @Autowired
     LoanActivityService loanActivityService;
+
     @PostMapping("/loan/")
     @ApiOperation(value = "新增活动", notes = "")
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
@@ -107,5 +109,12 @@ public class ActivityController {
     @ApiOperation("根据id删除活动")
     public BaseResponse<Boolean> deleteLoanActivityById(@Valid @NotNull @PathVariable Long id) {
         return loanActivityService.deleteActivity(id);
+    }
+
+    @ApiOperation("获取图片验证码")
+    @RequestMapping("/getCaptchaBase64")
+    @ResponseBody
+    public BaseResponse<String> getCaptchaBase64() {
+        return loanActivityService.generateCaptchaBase64();
     }
 }

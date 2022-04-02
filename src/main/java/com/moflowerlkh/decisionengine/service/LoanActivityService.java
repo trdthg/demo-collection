@@ -12,7 +12,9 @@ import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivit
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRequest;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRuleRequest;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponse;
+import com.moflowerlkh.decisionengine.util.CodeResult;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
+import com.moflowerlkh.decisionengine.util.ValidateCode;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
@@ -25,6 +27,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,6 +53,8 @@ public class LoanActivityService {
     UserLoanActivityDao userLoanActivityDao;
     @Autowired
     RedisService redisService;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
         LoanActivity loanActivity = request.toLoanActivity();
@@ -150,22 +157,22 @@ public class LoanActivityService {
     }
 
     public boolean isRequestToFrequest(Long loanActivityId, Long userId) {
-        //用户限制请求频率
+        // 用户限制请求频率
         String key = "" + userId + "_" + loanActivityId + "_request_count";
-        //String key = "tryjoin_" + loanActivityId + "_" +userId;
+        // String key = "tryjoin_" + loanActivityId + "_" +userId;
         Integer increase = (Integer) redisService.get(key);
         if (increase != null) {
             // 5秒只能请求1次
             return true;
 
             // 1分钟只能请求5次
-            //if (increase < 5) {
-            //    redisService.incr(key, 1);
-            //}else {
-            //    return true;
-            //}
+            // if (increase < 5) {
+            // redisService.incr(key, 1);
+            // }else {
+            // return true;
+            // }
         } else {
-            //redisService.set(key, 1, 60 * 1);
+            // redisService.set(key, 1, 60 * 1);
             redisService.set(key, 1, 5);
         }
         return false;
@@ -173,12 +180,18 @@ public class LoanActivityService {
 
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
-    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId) {
+    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, String varifyCode) {
         TryJoinResponse res = new TryJoinResponse();
         res.setResult(false);
-        //用户限制请求频率
+        // 用户限制请求频率
         if (isRequestToFrequest(loanActivityId, userId)) {
             return new BaseResponse<>(HttpStatus.OK, "请求频繁，请稍后再试", res);
+        }
+        // 校验验证吗
+        String cachedCodeKey = "" + userId + "_tryjoin_code";
+        String cachedCode = (String) redisService.get(cachedCodeKey);
+        if (cachedCode != null && varifyCode != null && !cachedCode.equals(varifyCode)) {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "验证码错误", res);
         }
         // 判断用户是否参加过活动
         String key = "" + userId + "_" + loanActivityId + "_joinresult";
@@ -186,7 +199,7 @@ public class LoanActivityService {
         if (checkResult == null) {
             // 校验用户是否能通过初筛
             LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
-                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+                    .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
             User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
             LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
                     .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
@@ -271,4 +284,17 @@ public class LoanActivityService {
         loanActivityDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", true);
     }
+
+    public BaseResponse<String> generateCaptchaBase64() {
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+                .getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
+        Long userid = loginUser.getUser().getId();
+        CodeResult codeResult = ValidateCode.getRandomCodeBase64();
+        String key = "" + userid + "_tryjoin_code";
+        redisService.set(key, codeResult.getRendom_string(), 60);
+        String url = "data:image/png;base64," + codeResult.getBase64String();
+        return new BaseResponse<>(HttpStatus.OK, "验证吗图片获取成功", url);
+    }
+
 }
