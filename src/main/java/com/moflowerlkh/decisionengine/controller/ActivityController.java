@@ -1,10 +1,10 @@
 package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.service.*;
-import com.moflowerlkh.decisionengine.service.dto.JoinLoanActivityUserResponse;
-import com.moflowerlkh.decisionengine.service.dto.LoanActivityResponse;
-import com.moflowerlkh.decisionengine.service.dto.LoanActivitySimpleResponse;
-import com.moflowerlkh.decisionengine.service.dto.SetLoanActivityRequest;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanActivityUserResponse;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivityResponse;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivitySimpleResponse;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRequest;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 

@@ -1,16 +1,12 @@
-package com.moflowerlkh.decisionengine.service.dto;
+package com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO;
 
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Data
 public
-class LoanActivityResponse {
+class LoanActivitySimpleResponse {
     private Long activity_id;
     // activity_id string 活动序号
     private String activity_name;
@@ -38,11 +34,8 @@ class LoanActivityResponse {
     private String activity_endTime;
     // activity_endTime date 产品秒杀结束时间
 
-    private List<JoinLoanActivityUserResponse> passed_users;
-    private List<JoinLoanActivityUserResponse> unPassed_users;
-
-    public static LoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
-        LoanActivityResponse response = new LoanActivityResponse();
+    public static LoanActivitySimpleResponse fromLoanActivity(LoanActivity loanActivity) {
+        LoanActivitySimpleResponse response = new LoanActivitySimpleResponse();
         response.setActivity_id(loanActivity.getId());
         response.setActivity_name(loanActivity.getName());
         response.setActivity_moneyLimit(loanActivity.getMaxMoneyLimit());
@@ -60,20 +53,7 @@ class LoanActivityResponse {
         response.setActivity_endTime(s.substring(0, s.indexOf('.')));
 
         //response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanActivity.getRule()));
-        // return
-        // users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
 
-        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
-            loanActivity.getUserLoanActivities().stream()
-                .filter(x -> x.getIsPassed())
-                .map(x -> x.getUser())
-                .collect(Collectors.toList()))));
-        response.setUnPassed_users(
-            JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
-                loanActivity.getUserLoanActivities().stream()
-                    .filter(x -> !x.getIsPassed())
-                    .map(x -> x.getUser())
-                    .collect(Collectors.toList()))));
         return response;
     }
 }

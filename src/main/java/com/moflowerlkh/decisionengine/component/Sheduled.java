@@ -8,7 +8,7 @@ import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
 import com.moflowerlkh.decisionengine.domain.dao.LoanRuleDao;
 import com.moflowerlkh.decisionengine.domain.dao.GoodsDao;
 import com.moflowerlkh.decisionengine.domain.dao.UserDao;
-import com.moflowerlkh.decisionengine.util.RedisUtil;
+import com.moflowerlkh.decisionengine.service.RedisService;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.enums.Gender;
 
@@ -26,7 +26,7 @@ import java.util.*;
 public class Sheduled {
 
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     @Autowired
     UserDao userDao;
@@ -40,9 +40,9 @@ public class Sheduled {
     // @Scheduled(cron = "0/30 * * * * ?") //每天开始15秒执行一次
     @PostConstruct
     public void testRedis() {
-        String s = String.valueOf(redisUtil.get("a"));
+        String s = String.valueOf(redisService.get("a"));
         System.out.println(s);
-        redisUtil.set("a", String.valueOf(System.currentTimeMillis()));
+        redisService.set("a", String.valueOf(System.currentTimeMillis()));
 
         System.out.println("A22-redis" + System.currentTimeMillis());
     }

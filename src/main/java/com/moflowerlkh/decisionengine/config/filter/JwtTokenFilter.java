@@ -2,7 +2,7 @@ package com.moflowerlkh.decisionengine.config.filter;
 
 import com.moflowerlkh.decisionengine.service.LoginUser;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
-import com.moflowerlkh.decisionengine.util.RedisUtil;
+import com.moflowerlkh.decisionengine.service.RedisService;
 
 import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.io.IOException;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -45,7 +45,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 解析
         try {
             String userID = JwtUtil.getUserIDFromToken(token);
-            Object o = redisUtil.get("pc_token_" + userID);
+            Object o = redisService.get("pc_token_" + userID);
             LoginUser loginUser = (LoginUser) o;
             System.out.println("3: " + loginUser);
             System.out.println("4: " + loginUser.getAuthorities());

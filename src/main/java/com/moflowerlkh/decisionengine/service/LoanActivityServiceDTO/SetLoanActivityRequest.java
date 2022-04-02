@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.service.dto;
+package com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO;
 
 import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;

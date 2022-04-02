@@ -1,4 +1,4 @@
-package com.moflowerlkh.decisionengine.util;
+package com.moflowerlkh.decisionengine.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @author chendy
  */
 @Service
-public class RedisUtil {
+public class RedisService {
 
     // 若要用AutoWired 就不能制订范型
     @Resource
