@@ -1,8 +1,5 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
-import com.moflowerlkh.decisionengine.domain.entities.Goods;
-import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,6 +11,8 @@ import java.sql.Timestamp;
 /**
  * 秒杀规则 1 - 1 秒杀活动 - +
  * |-- 商品
+import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
+import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
  *
  * @Description 秒杀活动 秒杀规则 1 - 1 秒杀活动 - +
  */

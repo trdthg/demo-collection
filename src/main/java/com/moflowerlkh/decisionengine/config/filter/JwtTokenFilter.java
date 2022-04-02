@@ -52,6 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser,
                     null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("5: " + "认证成功");
         } catch (Exception e) {
             throw new BadCredentialsException("token不合法");
         }

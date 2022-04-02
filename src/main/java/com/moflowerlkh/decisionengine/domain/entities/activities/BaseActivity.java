@@ -1,16 +1,10 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
 import com.moflowerlkh.decisionengine.domain.entities.BasePO;
-import com.moflowerlkh.decisionengine.domain.entities.Goods;
 import lombok.*;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 
 import java.sql.Timestamp;
 

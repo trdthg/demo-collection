@@ -2,7 +2,7 @@ package com.moflowerlkh.decisionengine.controller;
 
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.service.LoanActivityService;
-import com.moflowerlkh.decisionengine.service.LoanService;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponse;
 import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
@@ -74,11 +74,10 @@ public class UserController {
     @Counted("参加活动数量")
     @GetMapping("/{user_id}/join/{activity_id}/")
     @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
-    public BaseResponse<Boolean> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id,
+    public BaseResponse<TryJoinResponse> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id,
             @Valid @NotNull @PathVariable Long user_id) throws Exception {
         return loanService.tryJoin(activity_id, user_id);
     }
-
 }
 
 @Data

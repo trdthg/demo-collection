@@ -1,7 +1,6 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
 import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
-import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

@@ -11,6 +11,8 @@ import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivit
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivitySimpleResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRequest;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRuleRequest;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponse;
+import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 import com.moflowerlkh.decisionengine.vo.enums.Employment;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +46,8 @@ public class LoanActivityService {
     UserDao userDao;
     @Autowired
     UserLoanActivityDao userLoanActivityDao;
+    @Autowired
+    RedisService redisService;
 
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
         LoanActivity loanActivity = request.toLoanActivity();
@@ -113,11 +118,9 @@ public class LoanActivityService {
 
     @Timed("检查用户信息访问耗时")
     @Counted("检查用户信息访问频率")
-    public BaseResult<Boolean> checkUserInfo(LoanActivity loanActivity, User user) {
+    public BaseResult<Boolean> checkUserInfo(LoanActivity loanActivity, LoanRule loanRule, User user) {
         BaseResult<Boolean> baseResult = new BaseResult<>();
         baseResult.setResult(false);
-        LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
-                .orElseThrow(() -> new DataRetrievalFailureException("查询活动规则失败"));
         if (loanRule.getMaxAge() != null && user.getAge() >= loanRule.getMaxAge()) {
             baseResult.setMessage("用户年龄不能高于" + loanRule.getMaxAge());
             return baseResult;
@@ -146,25 +149,73 @@ public class LoanActivityService {
         return baseResult;
     }
 
+    public boolean isRequestToFrequest(Long loanActivityId, Long userId) {
+        //用户限制请求频率
+        String key = "" + userId + "_" + loanActivityId + "_request_count";
+        //String key = "tryjoin_" + loanActivityId + "_" +userId;
+        Integer increase = (Integer) redisService.get(key);
+        if (increase != null) {
+            // 5秒只能请求1次
+            return true;
+
+            // 1分钟只能请求5次
+            //if (increase < 5) {
+            //    redisService.incr(key, 1);
+            //}else {
+            //    return true;
+            //}
+        } else {
+            //redisService.set(key, 1, 60 * 1);
+            redisService.set(key, 1, 5);
+        }
+        return false;
+    }
+
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
-    public BaseResponse<Boolean> tryJoin(Long loanActivityId, Long userId) {
-        LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
+    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId) {
+        TryJoinResponse res = new TryJoinResponse();
+        res.setResult(false);
+        //用户限制请求频率
+        if (isRequestToFrequest(loanActivityId, userId)) {
+            return new BaseResponse<>(HttpStatus.OK, "请求频繁，请稍后再试", res);
+        }
+        // 判断用户是否参加过活动
+        String key = "" + userId + "_" + loanActivityId + "_joinresult";
+        Boolean checkResult = (Boolean) redisService.get(key);
+        if (checkResult == null) {
+            // 校验用户是否能通过初筛
+            LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
-        UserLoanActivity userLoanActivity = userLoanActivityDao.findByUserAndLoanActivity(user, loanActivity);
-        if (userLoanActivity == null) {
-            BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, user);
+            User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
+            LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
+                    .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
+            BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
             userLoanActivityDao.saveAndFlush(
                     UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
                             .build());
+
+            // 缓存用户的筛选结果
             if (baseResult.getResult()) {
-                return new BaseResponse<>(HttpStatus.OK, "初筛通过, 参加成功", true);
+                String code = JwtUtil.createToken(userId.toString());
+                res.setResult(true);
+                res.setToken(code);
+                redisService.set(key, true);
+                redisService.set(key + "token", code, 60);
+                return new BaseResponse<>(HttpStatus.OK, "初筛通过, 参加成功", res);
             } else {
-                return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), false);
+                redisService.set(key, false);
+                return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
             }
         } else {
-            return new BaseResponse<>(HttpStatus.OK, "您已经参加过", userLoanActivity.getIsPassed());
+            res.setResult(true);
+            String token = (String) redisService.get(key + "token");
+            if (token == null) {
+                token = JwtUtil.createToken(userId.toString());
+                redisService.set(key + "token", token, 60);
+            }
+            res.setToken(token);
+            return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
         }
     }
 

@@ -17,16 +17,17 @@ public class JwtUtil {
     private static final String tokenSignKey = "123456";
     // private static final String userRoleKey = "userRole";
 
-    public static String createToken(String username) {
+    // 就是id，只是函数签名之前忘了改
+    public static String createToken(String userId) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userId)
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
                 .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
     }
 
-    public static String createRefreshToken(String username) {
+    public static String createRefreshToken(String userId) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userId)
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
                 .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
     }
