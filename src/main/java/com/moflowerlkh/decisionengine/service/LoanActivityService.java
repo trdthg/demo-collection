@@ -228,6 +228,7 @@ public class LoanActivityService {
                 redisService.set(key + "token", token, 60);
             }
             res.setToken(token);
+//            res.setRandomNumber()
             return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
         }
     }

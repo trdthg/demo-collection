@@ -12,6 +12,7 @@ import com.moflowerlkh.decisionengine.vo.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,30 +21,36 @@ import javax.validation.constraints.*;
 import java.util.*;
 
 @RestController
-@Api(tags = { "活动设置相关" })
+@Api(tags = {"活动设置相关"})
 @RequestMapping("/api/activity")
 public class ActivityController {
 
     @Autowired
     LoanActivityService loanActivityService;
 
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    public static final String ScheduleKey = "SCHEDULE_KEY";
+
     @PostMapping("/loan/")
     @ApiOperation(value = "新增活动", notes = "")
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
+        stringRedisTemplate.opsForValue().set(ScheduleKey + "." + "id", String.valueOf(new Date().getTime()));
         return loanActivityService.setLoanActivity(request);
     }
 
     @PutMapping("/loan/{id}")
     @ApiOperation(value = "根据id修改活动信息-全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
     public BaseResponse<LoanActivityResponse> editLoanActivityPut(@Valid @NotNull @PathVariable Long id,
-            @RequestBody @Valid SetLoanActivityRequest request) {
+                                                                  @RequestBody @Valid SetLoanActivityRequest request) {
         return loanActivityService.changeActivityInfo(id, request);
     }
 
     @PatchMapping("/loan/{id}")
     @ApiOperation(value = "根据id修改活动信息-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
     public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id,
-            @RequestBody SetLoanActivityRequest request) {
+                                                                      @RequestBody SetLoanActivityRequest request) {
         // LoanActivity loanActivity = request.toLoanActivity();
         // loanActivity.setId(id);
         // loanActivityDao.saveAndFlush(loanActivity);
@@ -60,7 +67,7 @@ public class ActivityController {
     @GetMapping("/loan/full")
     @ApiOperation(value = "查询活动列表-带有初筛信息", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
     public BaseResponse<PageResult<List<LoanActivityResponse>>> getLoanActivityByIdFull(@RequestParam Integer page_num,
-            @RequestParam Integer page_limit) {
+                                                                                        @RequestParam Integer page_limit) {
         return loanActivityService.findAllActivity(page_num, page_limit);
     }
 
@@ -94,14 +101,14 @@ public class ActivityController {
     @GetMapping("/{activity_id}/passed")
     @ApiOperation("查看通过某活动筛选的某用户信息")
     public BaseResponse<JoinLoanActivityUserResponse> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id,
-            @NotNull @RequestParam String name) throws Exception {
+                                                                   @NotNull @RequestParam String name) throws Exception {
         return loanActivityService.getPassedUser(activity_id, name);
     }
 
     @GetMapping("/{activity_id}/unpassed/{user_id}")
     @ApiOperation("查看未通过某活动筛选的某用户信息")
     public BaseResponse<JoinLoanActivityUserResponse> ifUserUnPassed(@Valid @NotNull @PathVariable Long user_id,
-            @Valid @NotNull @PathVariable Long activity_id) throws Exception {
+                                                                     @Valid @NotNull @PathVariable Long activity_id) throws Exception {
         return loanActivityService.getUser(activity_id, user_id);
     }
 
