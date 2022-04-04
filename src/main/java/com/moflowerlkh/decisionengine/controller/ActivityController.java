@@ -28,15 +28,9 @@ public class ActivityController {
     @Autowired
     LoanActivityService loanActivityService;
 
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
-
-    public static final String ScheduleKey = "SCHEDULE_KEY";
-
     @PostMapping("/loan/")
     @ApiOperation(value = "新增活动", notes = "")
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
-        stringRedisTemplate.opsForValue().set(ScheduleKey + "." + "id", String.valueOf(new Date().getTime()));
         return loanActivityService.setLoanActivity(request);
     }
 
@@ -51,9 +45,6 @@ public class ActivityController {
     @ApiOperation(value = "根据id修改活动信息-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
     public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id,
                                                                       @RequestBody SetLoanActivityRequest request) {
-        // LoanActivity loanActivity = request.toLoanActivity();
-        // loanActivity.setId(id);
-        // loanActivityDao.saveAndFlush(loanActivity);
         return new BaseResponse<>(HttpStatus.OK, "修改成功", request);
     }
 
@@ -119,7 +110,7 @@ public class ActivityController {
     }
 
     @ApiOperation("获取图片验证码")
-    @RequestMapping("/getCaptchaBase64")
+    @GetMapping("/getCaptchaBase64")
     @ResponseBody
     public BaseResponse<String> getCaptchaBase64() {
         return loanActivityService.generateCaptchaBase64();

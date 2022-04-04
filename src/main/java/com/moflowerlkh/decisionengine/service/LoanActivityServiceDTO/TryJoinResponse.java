@@ -5,5 +5,7 @@ import lombok.Data;
 @Data
 public class TryJoinResponse {
     Boolean result;
-    String token;
+    String md5;
+    Long goodId;
+    String random;
 }

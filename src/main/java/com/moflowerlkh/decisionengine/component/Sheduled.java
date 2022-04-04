@@ -42,7 +42,6 @@ public class Sheduled {
     public void testRedis() {
         String s = String.valueOf(redisService.get("a"));
         System.out.println(s);
-        redisService.set("a", String.valueOf(System.currentTimeMillis()));
 
         System.out.println("A22-redis" + System.currentTimeMillis());
     }

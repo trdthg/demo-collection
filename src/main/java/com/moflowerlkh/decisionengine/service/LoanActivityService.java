@@ -6,6 +6,7 @@ import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
+import com.moflowerlkh.decisionengine.schedule.ActivityTask;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanActivityUserResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivityResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivitySimpleResponse;
@@ -14,6 +15,7 @@ import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActi
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponse;
 import com.moflowerlkh.decisionengine.util.CodeResult;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
+import com.moflowerlkh.decisionengine.util.MD5;
 import com.moflowerlkh.decisionengine.util.ValidateCode;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
@@ -21,11 +23,13 @@ import com.moflowerlkh.decisionengine.vo.enums.Employment;
 import com.moflowerlkh.decisionengine.vo.po.BaseResult;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,9 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,9 +57,17 @@ public class LoanActivityService {
     RedisService redisService;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
+    public static final String ScheduleKey = "SCHEDULE_KEY";
+    public static final String ACTIVITY_TO_GOODS_KEY = "ACTIVITY_TO_GOODS_KEY";
+    public static final String AUTH_SALT = "bc30a3c8-b96b-49d2-bb9f-1c28f9408eb3";
+    public static final String USER_SEND_REQUEST_TIME_KEY = "USER_SEND_REQUEST_TIME_KEY";
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
+
         LoanActivity loanActivity = request.toLoanActivity();
+
         Goods goods = new Goods();
         goods.setStartTime(loanActivity.getBeginTime());
         goods.setOneMaxAmount(1);
@@ -69,7 +79,13 @@ public class LoanActivityService {
 
         loanActivity.setGoodsId(goods.getId());
         loanActivity.setLoanRuleId(loanRule.getId());
+        // 新建活动
         loanActivityDao.save(loanActivity);
+
+        // 保存开始时间
+        stringRedisTemplate.opsForValue().set(ScheduleKey + "." + loanActivity.getId(),
+                String.valueOf(new Date().getTime()));
+
         LoanActivityResponse res = LoanActivityResponse.fromLoanActivity(loanActivity);
         res.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanRule));
         return new BaseResponse<>(HttpStatus.CREATED, "新增成功", res);
@@ -180,26 +196,38 @@ public class LoanActivityService {
 
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
-    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, String varifyCode) {
+    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId) {
         TryJoinResponse res = new TryJoinResponse();
         res.setResult(false);
         // 用户限制请求频率
         if (isRequestToFrequest(loanActivityId, userId)) {
             return new BaseResponse<>(HttpStatus.OK, "请求频繁，请稍后再试", res);
         }
+
         // 校验验证吗
-        String cachedCodeKey = "" + userId + "_tryjoin_code";
-        String cachedCode = (String) redisService.get(cachedCodeKey);
-        if (cachedCode != null && varifyCode != null && !cachedCode.equals(varifyCode)) {
-            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "验证码错误", res);
-        }
+        //String cachedCodeKey = "" + userId + "_tryjoin_code";
+        //String cachedCode = (String) redisService.get(cachedCodeKey);
+        //if (cachedCode != null && varifyCode != null && !cachedCode.equals(varifyCode)) {
+        //    return new BaseResponse<>(HttpStatus.BAD_REQUEST, "验证码错误", res);
+        //}
+
         // 判断用户是否参加过活动
-        String key = "" + userId + "_" + loanActivityId + "_joinresult";
-        Boolean checkResult = (Boolean) redisService.get(key);
-        if (checkResult == null) {
+        String key = "MD5." + userId + "." + loanActivityId + ".JOIN_RESULT";
+        String checkResultStr = stringRedisTemplate.opsForValue().get(key);
+        // 获取商品ID
+
+        LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
+            .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        Long goodId = loanActivity.getGoodsId();
+        res.setGoodId(goodId);
+
+        // 获取随机字符串
+        String random = stringRedisTemplate.opsForValue().get(ActivityTask.ACTIVITY_RANDOM_KEY + "." + goodId);
+        res.setRandom(random);
+
+        // 如果没有参加过,就走流程
+        if (checkResultStr == null) {
             // 校验用户是否能通过初筛
-            LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
-                    .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
             User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
             LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
                     .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
@@ -207,28 +235,47 @@ public class LoanActivityService {
             userLoanActivityDao.saveAndFlush(
                     UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
                             .build());
-
-            // 缓存用户的筛选结果
-            if (baseResult.getResult()) {
-                String code = JwtUtil.createToken(userId.toString());
-                res.setResult(true);
-                res.setToken(code);
-                redisService.set(key, true);
-                redisService.set(key + "token", code, 60);
-                return new BaseResponse<>(HttpStatus.OK, "初筛通过, 参加成功", res);
-            } else {
-                redisService.set(key, false);
+            if (!baseResult.getResult()) {
+                stringRedisTemplate.opsForValue().set(key, "0");
                 return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
             }
-        } else {
+            // 缓存用户的筛选结果
+            ArrayList<String> arrayList = new ArrayList<>();
+            String time = String.valueOf(new Date().getTime());
+            arrayList.add(AUTH_SALT);
+            arrayList.add(String.valueOf(userId));
+            arrayList.add(goodId.toString());
+            arrayList.add(time);
+            String md5 = MD5.md5(arrayList);
             res.setResult(true);
-            String token = (String) redisService.get(key + "token");
-            if (token == null) {
-                token = JwtUtil.createToken(userId.toString());
-                redisService.set(key + "token", token, 60);
+            res.setMd5(md5);
+            stringRedisTemplate.opsForValue().set(key, "1");
+            // MD5
+            redisService.set(key + ".MD5", md5, 5);
+            // TIMESTAMP
+            stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
+            return new BaseResponse<>(HttpStatus.OK, "初筛通过, 参加成功", res);
+        } else {
+            res.setResult(checkResultStr.equals("1"));
+            String md5 = (String) redisService.get(key + ".MD5");
+            // 如果没拿到md5记录就重新生成
+            if (md5 == null) {
+                ArrayList<String> arrayList = new ArrayList<>();
+                String time = String.valueOf(new Date().getTime());
+                arrayList.add(AUTH_SALT);
+                arrayList.add(String.valueOf(userId));
+                arrayList.add(goodId.toString());
+                arrayList.add(time);
+                md5 = MD5.md5(arrayList);
+                redisService.set(key, md5, 60 * 10);
+                stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
+                res.setResult(true);
+                res.setMd5(md5);
+                stringRedisTemplate.opsForValue().set(key, "1");
+                // MD5
+                redisService.set(key + ".MD5", md5, 5);
+                return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
             }
-            res.setToken(token);
-//            res.setRandomNumber()
             return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
         }
     }

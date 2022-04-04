@@ -75,9 +75,9 @@ public class UserController {
     @GetMapping("/{user_id}/join/{activity_id}/{varify_code}")
     @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
     public BaseResponse<TryJoinResponse> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id,
-            @Valid @NotNull @PathVariable Long user_id, @Valid @NotNull @PathVariable String varify_code)
+            @Valid @NotNull @PathVariable Long user_id)
             throws Exception {
-        return loanService.tryJoin(activity_id, user_id, varify_code);
+        return loanService.tryJoin(activity_id, user_id);
     }
 }
 
