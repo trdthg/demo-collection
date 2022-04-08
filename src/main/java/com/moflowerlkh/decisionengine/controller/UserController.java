@@ -72,12 +72,20 @@ public class UserController {
 
     @Timed("参加活动耗时")
     @Counted("参加活动数量")
-    @GetMapping("/{user_id}/join/{activity_id}/{varify_code}")
+    @GetMapping("/join/{user_id}/{activity_id}")
     @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
     public BaseResponse<TryJoinResponse> joinLoanActivity(@Valid @NotNull @PathVariable Long activity_id,
             @Valid @NotNull @PathVariable Long user_id)
             throws Exception {
         return loanService.tryJoin(activity_id, user_id);
+    }
+
+    @GetMapping("/check/{user_id}/{activity_id}")
+    @ApiOperation(value = "初筛", notes = "参加活动前需要初筛")
+    public BaseResponse<Boolean> check(@Valid @NotNull @PathVariable Long activity_id,
+                                                          @Valid @NotNull @PathVariable Long user_id)
+        throws Exception {
+        return loanService.check(activity_id, user_id);
     }
 }
 

@@ -10,9 +10,7 @@ public
 class JwtResponse {
     private String token;
     private String refreshToken;
-    private Long id;
+    private Long user_id;
     private String username;
     private Gender gender;
-
-
 }

@@ -54,6 +54,13 @@ class SetLoanActivityRequest {
     @PositiveOrZero(message = "起贷金额必须为>=0")
     private double activity_initMoney;
 
+    @NotNull(message = "步长不能为空")
+    @PositiveOrZero(message = "步长必须为0或正整数")
+    private Integer activity_perPrice;
+    @NotNull(message = "限购份数不能为空")
+    @PositiveOrZero(message = "限购份数必须为0或正整数")
+    private Integer activity_oneMaxAmount;
+
     // 活动规则
     @Valid
     @NotNull(message = "活动规则不能为空")
@@ -73,9 +80,10 @@ class SetLoanActivityRequest {
         loanActivity.setEndTime(Timestamp.valueOf(activity_endTime));
         loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
         loanActivity.setApr(activity_apr);
+        loanActivity.setPerPrice(activity_perPrice);
 
         Goods shoppingGoods = new Goods();
-        shoppingGoods.setOneMaxAmount(1);
+        shoppingGoods.setOneMaxAmount(activity_oneMaxAmount);
         shoppingGoods.setStartTime(loanActivity.getBeginTime());
         shoppingGoods.setGoodsAmount(activity_totalQuantity);
 

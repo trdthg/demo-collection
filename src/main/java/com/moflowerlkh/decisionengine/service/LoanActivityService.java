@@ -7,12 +7,7 @@ import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import com.moflowerlkh.decisionengine.schedule.ActivityTask;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanActivityUserResponse;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivityResponse;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.LoanActivitySimpleResponse;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRequest;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.SetLoanActivityRuleRequest;
-import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponse;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.*;
 import com.moflowerlkh.decisionengine.util.CodeResult;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.util.MD5;
@@ -64,6 +59,8 @@ public class LoanActivityService {
     public static final String ACTIVITY_TO_GOODS_KEY = "ACTIVITY_TO_GOODS_KEY";
     public static final String AUTH_SALT = "bc30a3c8-b96b-49d2-bb9f-1c28f9408eb3";
     public static final String USER_SEND_REQUEST_TIME_KEY = "USER_SEND_REQUEST_TIME_KEY";
+    public static final String USER_CHECK_CACHE = "USER_CHECK_CACHE";
+    public static final String USER_MD5_CACHE = "USER_MD5_CACHE";
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
 
         LoanActivity loanActivity = request.toLoanActivity();
@@ -136,7 +133,24 @@ public class LoanActivityService {
     public BaseResponse<LoanActivitySimpleResponse> findByIdPartial(Long id) {
         LoanActivity loanActivity = loanActivityDao.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", LoanActivitySimpleResponse.fromLoanActivity(loanActivity));
+        LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
+        LoanActivitySimpleResponse loanActivitySimpleResponse = LoanActivitySimpleResponse.fromLoanActivity(loanActivity);
+        loanActivitySimpleResponse.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanRule));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", loanActivitySimpleResponse);
+    }
+
+    public BaseResponse<LoanActivityResponse> findByIdFull(Long id) {
+        LoanActivity loanActivity = loanActivityDao.findById(id)
+            .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+
+        LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
+        LoanActivityResponse response = LoanActivityResponse.fromLoanActivity(loanActivity);
+        response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanRule));
+
+        Set<UserLoanActivity> userLoanActivities = loanActivity.getUserLoanActivities();
+        response.setPassed_users(userLoanActivities.stream().filter(UserLoanActivity::getIsPassed).map(x -> JoinLoanActivityUserResponse.fromUser(x.getUser())).collect(Collectors.toList()));
+        response.setUnPassed_users(userLoanActivities.stream().filter(x -> !x.getIsPassed()).map(x -> JoinLoanActivityUserResponse.fromUser(x.getUser())).collect(Collectors.toList()));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", response);
     }
 
     @Timed("检查用户信息访问耗时")
@@ -194,6 +208,25 @@ public class LoanActivityService {
         return false;
     }
 
+    public BaseResponse<Boolean> check(Long loanActivityId, Long userId) {
+        LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
+            .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        Long goodId = loanActivity.getGoodsId();
+
+        User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
+        LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
+            .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
+        BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
+        userLoanActivityDao.saveAndFlush(
+            UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
+                .build());
+        stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "1");
+        if (!baseResult.getResult()) {
+            return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), false);
+        }
+        return new BaseResponse<>(HttpStatus.OK, "初筛通过", true);
+    }
+
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
     public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId) {
@@ -212,10 +245,31 @@ public class LoanActivityService {
         //}
 
         // 判断用户是否参加过活动
-        String key = "MD5." + userId + "." + loanActivityId + ".JOIN_RESULT";
-        String checkResultStr = stringRedisTemplate.opsForValue().get(key);
-        // 获取商品ID
+        String checkResultStr = stringRedisTemplate.opsForValue().get(USER_CHECK_CACHE + "." + userId + "." + loanActivityId);
+        System.out.println(checkResultStr);
+        // 如果没有初筛过,就先筛
+        if (checkResultStr == null) {
 
+            LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
+                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+            Long goodId = loanActivity.getGoodsId();
+
+            User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
+            LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
+                .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
+            BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
+            userLoanActivityDao.saveAndFlush(
+                UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
+                    .build());
+            stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "1");
+            if (!baseResult.getResult()) {
+                return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
+            } else {
+                stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "0");
+            }
+            checkResultStr = "0";
+        }
+        // 获取商品ID
         LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
             .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         Long goodId = loanActivity.getGoodsId();
@@ -225,65 +279,26 @@ public class LoanActivityService {
         String random = stringRedisTemplate.opsForValue().get(ActivityTask.ACTIVITY_RANDOM_KEY + "." + goodId);
         res.setRandom(random);
 
-        // 如果没有参加过,就走流程
-        if (checkResultStr == null) {
-            // 校验用户是否能通过初筛
-            User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
-            LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
-                    .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
-            BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
-            userLoanActivityDao.saveAndFlush(
-                    UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
-                            .build());
-            if (!baseResult.getResult()) {
-                stringRedisTemplate.opsForValue().set(key, "0");
-                return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
-            }
-            // 缓存用户的筛选结果
+        res.setResult(checkResultStr.equals("1"));
+        String md5 = (String) redisService.get(USER_MD5_CACHE + "." + userId + "." + loanActivityId);
+        // 如果没拿到md5记录就重新生成
+        if (md5 == null) {
             ArrayList<String> arrayList = new ArrayList<>();
             String time = String.valueOf(new Date().getTime());
             arrayList.add(AUTH_SALT);
             arrayList.add(String.valueOf(userId));
             arrayList.add(goodId.toString());
             arrayList.add(time);
-            String md5 = MD5.md5(arrayList);
+            md5 = MD5.md5(arrayList);
             res.setResult(true);
             res.setMd5(md5);
-            stringRedisTemplate.opsForValue().set(key, "1");
-            // MD5
-            redisService.set(key + ".MD5", md5, 5);
-            // TIMESTAMP
+            // 缓存 MD5 生成时间
             stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
-            return new BaseResponse<>(HttpStatus.OK, "初筛通过, 参加成功", res);
-        } else {
-            res.setResult(checkResultStr.equals("1"));
-            String md5 = (String) redisService.get(key + ".MD5");
-            // 如果没拿到md5记录就重新生成
-            if (md5 == null) {
-                ArrayList<String> arrayList = new ArrayList<>();
-                String time = String.valueOf(new Date().getTime());
-                arrayList.add(AUTH_SALT);
-                arrayList.add(String.valueOf(userId));
-                arrayList.add(goodId.toString());
-                arrayList.add(time);
-                md5 = MD5.md5(arrayList);
-                redisService.set(key, md5, 60 * 10);
-                stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
-                res.setResult(true);
-                res.setMd5(md5);
-                stringRedisTemplate.opsForValue().set(key, "1");
-                // MD5
-                redisService.set(key + ".MD5", md5, 5);
-                return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
-            }
-            return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
+            // 缓存 MD5
+            redisService.set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5);
+            return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
         }
-    }
-
-    public BaseResponse<LoanActivityResponse> findByIdFull(Long id) {
-        LoanActivity loanActivity = loanActivityDao.findById(id)
-                .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", LoanActivityResponse.fromLoanActivity(loanActivity));
+        return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
     }
 
     public BaseResponse<List<JoinLoanActivityUserResponse>> getPassedUsers(Long id) {

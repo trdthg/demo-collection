@@ -19,12 +19,16 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class LoanActivity extends BaseActivity {
 
-    // 贷款额度上限
+     //贷款额度上限
     @Column
     private double maxMoneyLimit;
     // 贷款额度下限
     @Column
     private double minMoneyLimit;
+
+    // 步长
+    @Column
+    private Integer perPrice;
 
     // 分几期
     @Column(nullable = false)

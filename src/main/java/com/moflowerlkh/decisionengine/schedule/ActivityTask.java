@@ -30,7 +30,7 @@ public class ActivityTask {
     public void task() {
         // activityID -> startTime
         Set<String> activityKeys = stringRedisTemplate.keys(LoanActivityService.ScheduleKey + ".*");
-        System.out.println("定时任务   " + activityKeys);
+        // System.out.println("定时任务 " + activityKeys);
         if (activityKeys == null) {
             return;
         }
@@ -44,8 +44,10 @@ public class ActivityTask {
             if (date.getTime() < new Date().getTime()) {
                 String activityId = key.replace(LoanActivityService.ScheduleKey + ".", "");
                 System.out.println(activityId);
-                LoanActivity loanActivity = loanActivityDao.findById(Long.valueOf(activityId)).orElseThrow(() -> new RuntimeException("fuck you"));
-                stringRedisTemplate.opsForValue().set(ACTIVITY_RANDOM_KEY + "." + loanActivity.getGoodsId(), UUID.randomUUID().toString());
+                LoanActivity loanActivity = loanActivityDao.findById(Long.valueOf(activityId))
+                        .orElseThrow(() -> new RuntimeException("fuck you"));
+                stringRedisTemplate.opsForValue().set(ACTIVITY_RANDOM_KEY + "." + loanActivity.getGoodsId(),
+                        UUID.randomUUID().toString());
                 stringRedisTemplate.delete(key);
             }
             // delete redis key
