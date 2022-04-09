@@ -6,46 +6,33 @@ import org.hibernate.Hibernate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import java.sql.Timestamp;
 import java.util.Objects;
 
-/**
- * 秒杀商品
- */
 @Entity
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@Table(name = "goods")
-public class Goods extends BasePO {
-    @Column(nullable = false)
-    private Timestamp startTime;
+@Table(name = "bank_account")
+public class BankAccount extends BasePO {
 
     /**
-     * 商品单价
+     * 银行账号标识，要求全球唯一。
      */
-    @Column(name = "goods_price", nullable = false)
-    private long price;
-
-    /**
-     * 银行收款账号
-     */
-    @Column(name = "goods_bank_account", nullable = false)
+    @Column(name = "bank_account_sn", unique = true, nullable = false)
     private long bankAccountSN;
 
     /**
-     * 每人限购额度
+     * 用户
+     * user_id is relative to user_tb
      */
-    @Column(name = "one_max_amount", nullable = false)
-    private long oneMaxAmount;
+    @Column(name = "user_id", nullable = false)
+    private long userID;
 
     /**
-     * 商品库存
+     * 银行余额
      */
-    @Column(name = "goods_amount", nullable = false)
-    private long goodsAmount;
+    @Column(name = "balance", nullable = false)
+    private long balance;
 
     @Override
     public boolean equals(Object o) {
@@ -53,7 +40,7 @@ public class Goods extends BasePO {
             return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
-        Goods that = (Goods) o;
+        BankAccount that = (BankAccount) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

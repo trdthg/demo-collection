@@ -1,5 +1,6 @@
 package com.moflowerlkh.decisionengine.service;
 
+import com.moflowerlkh.decisionengine.domain.dao.BankAccountDao;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.service.AuthServiceDTO.JwtResponse;
 import com.moflowerlkh.decisionengine.service.AuthServiceDTO.LoginRequest;
@@ -18,6 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AuthService {
 
@@ -25,6 +29,8 @@ public class AuthService {
     AuthenticationManager authenticationManager;
     @Autowired
     RedisService redisService;
+    @Autowired
+    BankAccountDao bankAccountDao;
 
     public BaseResponse<JwtResponse> signin(LoginRequest loginRequest) {
         Authentication authentication;
@@ -46,7 +52,8 @@ public class AuthService {
         User user = loginUser.getUser();
         String token = JwtUtil.createToken(user.getId().toString());
         String refreshToken = JwtUtil.createRefreshToken(user.getId().toString());
-        val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), user.getUsername(), user.getGender());
+        List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> x.getId().toString()).collect(Collectors.toList());
+        val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), accounts, user.getUsername(), user.getGender());
         // 把token存入redis
         redisService.set("pc_token_" + user.getId(), loginUser);
         return new BaseResponse<>(jwtResponse);

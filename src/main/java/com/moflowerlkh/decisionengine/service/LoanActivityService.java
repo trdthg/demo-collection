@@ -1,9 +1,7 @@
 package com.moflowerlkh.decisionengine.service;
 
 import com.moflowerlkh.decisionengine.domain.dao.*;
-import com.moflowerlkh.decisionengine.domain.entities.Goods;
-import com.moflowerlkh.decisionengine.domain.entities.User;
-import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
+import com.moflowerlkh.decisionengine.domain.entities.*;
 import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import com.moflowerlkh.decisionengine.schedule.ActivityTask;
@@ -28,6 +26,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +53,8 @@ public class LoanActivityService {
     AuthenticationManager authenticationManager;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    BankAccountDao bankAccountDao;
 
     public static final String ScheduleKey = "SCHEDULE_KEY";
     public static final String ACTIVITY_TO_GOODS_KEY = "ACTIVITY_TO_GOODS_KEY";
@@ -63,10 +64,20 @@ public class LoanActivityService {
     public static final String USER_MD5_CACHE = "USER_MD5_CACHE";
     public BaseResponse<LoanActivityResponse> setLoanActivity(@RequestBody @Valid SetLoanActivityRequest request) {
 
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+            .getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
+        User user = loginUser.getUser();
+        List<BankAccount> accounts = bankAccountDao.findByUserID(user.getId());
+        if (accounts.isEmpty()) {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "您需要有至少一张银行卡", null);
+        }
         LoanActivity loanActivity = request.toLoanActivity();
 
         Goods goods = new Goods();
         goods.setStartTime(loanActivity.getBeginTime());
+        goods.setBankAccountSN(accounts.get(0).getBankAccountSN());
+        goods.setPrice(request.getActivity_perPrice());
         goods.setOneMaxAmount(1);
         goods.setGoodsAmount(request.getActivity_totalQuantity());
         goodsDao.save(goods);
@@ -229,7 +240,8 @@ public class LoanActivityService {
 
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
-    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId) {
+    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, Long account_id) {
+
         TryJoinResponse res = new TryJoinResponse();
         res.setResult(false);
         // 用户限制请求频率
@@ -258,9 +270,12 @@ public class LoanActivityService {
             LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
                 .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
             BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
-            userLoanActivityDao.saveAndFlush(
-                UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
-                    .build());
+            UserLoanActivity userLoanActivity = userLoanActivityDao.findByUserAndLoanActivity(user, loanActivity);
+            if (userLoanActivity == null) {
+                userLoanActivityDao.saveAndFlush(
+                    UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
+                        .build());
+            }
             stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "1");
             if (!baseResult.getResult()) {
                 return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
@@ -277,6 +292,10 @@ public class LoanActivityService {
 
         // 获取随机字符串
         String random = stringRedisTemplate.opsForValue().get(ActivityTask.ACTIVITY_RANDOM_KEY + "." + goodId);
+        if (random != null && random.isEmpty()) {
+            return new BaseResponse<>(HttpStatus.OK, "活动没有开始", res);
+        }
+        System.out.println(random);
         res.setRandom(random);
 
         res.setResult(checkResultStr.equals("1"));
@@ -286,8 +305,9 @@ public class LoanActivityService {
             ArrayList<String> arrayList = new ArrayList<>();
             String time = String.valueOf(new Date().getTime());
             arrayList.add(AUTH_SALT);
-            arrayList.add(String.valueOf(userId));
+            arrayList.add(userId.toString());
             arrayList.add(goodId.toString());
+            arrayList.add(account_id.toString());
             arrayList.add(time);
             md5 = MD5.md5(arrayList);
             res.setResult(true);
@@ -295,7 +315,7 @@ public class LoanActivityService {
             // 缓存 MD5 生成时间
             stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
             // 缓存 MD5
-            redisService.set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5);
+            stringRedisTemplate.opsForValue().set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5);
             return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
         }
         return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
