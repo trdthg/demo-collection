@@ -26,7 +26,7 @@ public class DecisionEngineApplicationTest {
 
     @Test
     public void faker() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 3; i < 100; i++) {
             Faker faker = new Faker();
             User user = new User();
             user.setName(faker.name().name());
@@ -57,13 +57,13 @@ public class DecisionEngineApplicationTest {
             bankAccount.setUserID(user.getId());
             bankAccountDao.save(bankAccount);
 
-            Faker faker3 = new Faker();
-            BankAccount bankAccount2 = new BankAccount();
-            bankAccount.setId(faker3.random().nextLong());
-            bankAccount.setBankAccountSN(faker3.random().nextLong());
-            bankAccount.setBalance(faker3.random().nextInt(1, 180000));
-            bankAccount.setUserID(user.getId());
-            bankAccountDao.save(bankAccount2);
+            //Faker faker3 = new Faker();
+            //BankAccount bankAccount2 = new BankAccount();
+            //bankAccount.setId(faker3.random().nextLong());
+            //bankAccount.setBankAccountSN(faker3.random().nextLong());
+            //bankAccount.setBalance(faker3.random().nextInt(1, 180000));
+            //bankAccount.setUserID(user.getId());
+            //bankAccountDao.save(bankAccount2);
         }
 
         List<User> users = userDao.findAll();

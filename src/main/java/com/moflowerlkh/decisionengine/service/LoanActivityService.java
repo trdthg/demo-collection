@@ -190,7 +190,7 @@ public class LoanActivityService {
             return baseResult;
         }
         if (loanRule.getCheckOverDual() && user.getOverDual() != null && user.getOverDual() > 0) {
-            baseResult.setMessage("用户的逾期记录不能超过0次");
+            baseResult.setMessage("用户的逾期记录不能超过 0 次");
             return baseResult;
         }
         baseResult.setResult(true);
@@ -203,10 +203,10 @@ public class LoanActivityService {
         // String key = "tryjoin_" + loanActivityId + "_" +userId;
         Integer increase = (Integer) redisService.get(key);
         if (increase != null) {
-            // 5秒只能请求1次
+            // 5 秒只能请求 1 次
             return true;
 
-            // 1分钟只能请求5次
+            // 1 分钟只能请求 5 次
             // if (increase < 5) {
             // redisService.incr(key, 1);
             // }else {
@@ -241,11 +241,11 @@ public class LoanActivityService {
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
     public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, Long account_id) {
-
         TryJoinResponse res = new TryJoinResponse();
-        res.setResult(false);
+        res.setResult(4);
         // 用户限制请求频率
         if (isRequestToFrequest(loanActivityId, userId)) {
+            res.setResult(3);
             return new BaseResponse<>(HttpStatus.OK, "请求频繁，请稍后再试", res);
         }
 
@@ -259,7 +259,7 @@ public class LoanActivityService {
         // 判断用户是否参加过活动
         String checkResultStr = stringRedisTemplate.opsForValue().get(USER_CHECK_CACHE + "." + userId + "." + loanActivityId);
         System.out.println(checkResultStr);
-        // 如果没有初筛过,就先筛
+        // 如果没有初筛过，就先筛
         if (checkResultStr == null) {
 
             LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
@@ -270,21 +270,25 @@ public class LoanActivityService {
             LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId())
                 .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
             BaseResult<Boolean> baseResult = new LoanActivityService().checkUserInfo(loanActivity, loanRule, user);
-            UserLoanActivity userLoanActivity = userLoanActivityDao.findByUserAndLoanActivity(user, loanActivity);
-            if (userLoanActivity == null) {
+            List<UserLoanActivity> userLoanActivitys = userLoanActivityDao.findByUserAndLoanActivity(user, loanActivity);
+            if (userLoanActivitys.isEmpty()) {
                 userLoanActivityDao.saveAndFlush(
                     UserLoanActivity.builder().user(user).loanActivity(loanActivity).isPassed(baseResult.getResult())
                         .build());
+            } else {
+                userLoanActivitys.get(0).setIsPassed(baseResult.getResult());
+                userLoanActivityDao.saveAndFlush(userLoanActivitys.get(0));
             }
             stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "1");
             if (!baseResult.getResult()) {
+                res.setResult(4);
                 return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + baseResult.getMessage(), res);
             } else {
                 stringRedisTemplate.opsForValue().set(USER_CHECK_CACHE + "." + userId + "." + loanActivityId, "0");
             }
             checkResultStr = "0";
         }
-        // 获取商品ID
+        // 获取商品 ID
         LoanActivity loanActivity = loanActivityDao.findById(loanActivityId)
             .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
         Long goodId = loanActivity.getGoodsId();
@@ -298,9 +302,8 @@ public class LoanActivityService {
         System.out.println(random);
         res.setRandom(random);
 
-        res.setResult(checkResultStr.equals("1"));
-        String md5 = (String) redisService.get(USER_MD5_CACHE + "." + userId + "." + loanActivityId);
-        // 如果没拿到md5记录就重新生成
+        String md5 = stringRedisTemplate.opsForValue().get(USER_MD5_CACHE + "." + userId + "." + loanActivityId);
+        // 如果没拿到 md5 记录就重新生成
         if (md5 == null) {
             ArrayList<String> arrayList = new ArrayList<>();
             String time = String.valueOf(new Date().getTime());
@@ -310,14 +313,18 @@ public class LoanActivityService {
             arrayList.add(account_id.toString());
             arrayList.add(time);
             md5 = MD5.md5(arrayList);
-            res.setResult(true);
+            res.setResult(0);
             res.setMd5(md5);
             // 缓存 MD5 生成时间
             stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
             // 缓存 MD5
             stringRedisTemplate.opsForValue().set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5);
+            res.setResult(1);
             return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
         }
+        res.setResult(2);
+        res.setMd5(md5);
+        System.out.println("之前的 md5：" + md5);
         return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
     }
 
