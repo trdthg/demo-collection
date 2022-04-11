@@ -71,7 +71,7 @@ public class ActivityController {
     @GetMapping("/loan/{id}/full")
     @ApiOperation(value = "根据id查询活动信息-完整", notes = "带有活动的参加信息")
     public BaseResponse<LoanActivityResponse> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
-        return loanActivityService.findByIdFull(id);
+        return loanActivityService.findById(id);
     }
 
     @GetMapping("/loan/{id}/passed")

@@ -34,6 +34,9 @@ class LoanActivitySimpleResponse {
     private String activity_endTime;
     // activity_endTime date 产品秒杀结束时间
 
+    private long oneMaxAmount;
+    private long perPrice;
+
     public static LoanActivitySimpleResponse fromLoanActivity(LoanActivity loanActivity) {
         LoanActivitySimpleResponse response = new LoanActivitySimpleResponse();
         response.setActivity_id(loanActivity.getId());

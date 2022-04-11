@@ -4,6 +4,7 @@ import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +42,9 @@ class LoanActivityResponse {
     private List<JoinLoanActivityUserResponse> passed_users;
     private List<JoinLoanActivityUserResponse> unPassed_users;
 
+    private long oneMaxAmount;
+    private long perPrice;
+
     public static LoanActivityResponse fromLoanActivity(LoanActivity loanActivity) {
         LoanActivityResponse response = new LoanActivityResponse();
         response.setActivity_id(loanActivity.getId());
@@ -63,17 +67,17 @@ class LoanActivityResponse {
         // return
         // users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
 
-        response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
-            loanActivity.getUserLoanActivities().stream()
-                .filter(x -> x.getIsPassed())
-                .map(x -> x.getUser())
-                .collect(Collectors.toList()))));
-        response.setUnPassed_users(
-            JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
-                loanActivity.getUserLoanActivities().stream()
-                    .filter(x -> !x.getIsPassed())
-                    .map(x -> x.getUser())
-                    .collect(Collectors.toList()))));
+        //response.setPassed_users(JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
+        //    loanActivity.getUserLoanActivities().stream()
+        //        .filter(x -> x.getIsPassed())
+        //        .map(x -> x.getUser())
+        //        .collect(Collectors.toList()))));
+        //response.setUnPassed_users(
+        //    JoinLoanActivityUserResponse.fromUser(new ArrayList<>(
+        //        loanActivity.getUserLoanActivities().stream()
+        //            .filter(x -> !x.getIsPassed())
+        //            .map(x -> x.getUser())
+        //            .collect(Collectors.toList()))));
         return response;
     }
 }
