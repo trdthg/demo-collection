@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping("/join")
     @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
     public BaseResponse<TryJoinResponse> joinLoanActivity(@Valid @NotNull Long activity_id,
-            @Valid @NotNull Long user_id, @Valid @NotNull Long account_id)
+            @Valid @NotNull Long user_id, @Valid @NotNull String  account_id)
             throws Exception {
         return loanService.tryJoin(activity_id, user_id, account_id);
     }

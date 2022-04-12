@@ -36,8 +36,11 @@ spring:
           # auto: create
   redis:
     # host: redis
-    host: localhost
+#    host: localhost
+    host: tguio.club
     port: 6379
+#    username: default
+    password: Aa1@0000
     pool:
       max-active: 8
       max-wait: -1

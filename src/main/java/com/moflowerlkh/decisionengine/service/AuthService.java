@@ -1,6 +1,7 @@
 package com.moflowerlkh.decisionengine.service;
 
 import com.moflowerlkh.decisionengine.domain.dao.BankAccountDao;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.service.AuthServiceDTO.JwtResponse;
 import com.moflowerlkh.decisionengine.service.AuthServiceDTO.LoginRequest;
@@ -10,6 +11,7 @@ import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +33,12 @@ public class AuthService {
     RedisService redisService;
     @Autowired
     BankAccountDao bankAccountDao;
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    UserDao userDao;
+
+    public static String PC_TOKEN = "PC_TOKEN";
 
     public BaseResponse<JwtResponse> signin(LoginRequest loginRequest) {
         Authentication authentication;
@@ -49,13 +57,13 @@ public class AuthService {
         }
         // 获取用户认证信息
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        User user = loginUser.getUser();
+        User user = userDao.getById(loginUser.getId());
         String token = JwtUtil.createToken(user.getId().toString());
         String refreshToken = JwtUtil.createRefreshToken(user.getId().toString());
-        List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> x.getId().toString()).collect(Collectors.toList());
+        List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> {return String.valueOf(x.getBankAccountSN());}).collect(Collectors.toList());
         val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), accounts, user.getUsername(), user.getGender());
         // 把token存入redis
-        redisService.set("pc_token_" + user.getId(), loginUser);
+        redisService.set(PC_TOKEN + "." + user.getId(), loginUser);
         return new BaseResponse<>(jwtResponse);
     }
 
@@ -63,7 +71,7 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
             .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
-        Long userid = loginUser.getUser().getId();
+        Long userid = loginUser.getId();
         redisService.del("pc_token_" + userid);
         return new BaseResponse<>("登出成功");
     }

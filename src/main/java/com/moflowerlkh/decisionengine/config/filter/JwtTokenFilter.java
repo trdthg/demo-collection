@@ -1,5 +1,6 @@
 package com.moflowerlkh.decisionengine.config.filter;
 
+import com.moflowerlkh.decisionengine.service.AuthService;
 import com.moflowerlkh.decisionengine.service.LoginUser;
 import com.moflowerlkh.decisionengine.util.JwtUtil;
 import com.moflowerlkh.decisionengine.service.RedisService;
@@ -45,7 +46,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 解析
         try {
             String userID = JwtUtil.getUserIDFromToken(token);
-            Object o = redisService.get("pc_token_" + userID);
+            System.out.println("2: " + userID);
+            Object o = redisService.get(AuthService.PC_TOKEN + "." + userID);
             LoginUser loginUser = (LoginUser) o;
             System.out.println("3: " + loginUser);
             System.out.println("4: " + loginUser.getAuthorities());

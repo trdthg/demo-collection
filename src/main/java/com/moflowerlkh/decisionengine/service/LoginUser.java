@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
 
-    private User user;
+    private Long id;
+    private String username;
+    private String password;
+    private Set<String> roles;
 
     // 不序列化到redis里
     @JSONField(serialize = false)
@@ -25,13 +29,18 @@ public class LoginUser implements UserDetails {
 
     public LoginUser(User user) {
         System.out.println("新建用户holder: " + user);
-        this.user = user;
+        id = user.getId();
+        username = user.getUsername();
+        password = user.getPassword();
+        roles = user.getRoles();
+        cachedRoles = user.getRoles().stream().map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.cachedRoles == null) {
-            this.cachedRoles = this.user.getRoles().stream().map(SimpleGrantedAuthority::new)
+            this.cachedRoles = roles.stream().map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toSet());
         }
         return this.cachedRoles;
@@ -39,12 +48,12 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 
     @Override

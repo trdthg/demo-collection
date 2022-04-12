@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +68,7 @@ public class LoanActivityService {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
             .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
-        User user = loginUser.getUser();
+        User user = userDao.getById(loginUser.getId());
         List<BankAccount> accounts = bankAccountDao.findByUserID(user.getId());
         if (accounts.isEmpty()) {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST, "您需要有至少一张银行卡", null);
@@ -128,10 +129,16 @@ public class LoanActivityService {
                 .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
         Integer pages = loanActivities.getTotalPages();
         List<LoanActivitySimpleResponse> res = loanActivities.stream().map(loanActivity -> {
+
                 LoanActivitySimpleResponse response = LoanActivitySimpleResponse.fromLoanActivity(loanActivity);
+
+                LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
+                response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanRule));
+
                 Goods goods = goodsDao.findById(loanActivity.getGoodsId()).orElseThrow(() -> new DataRetrievalFailureException("活动没有对应的商品"));
                 response.setPerPrice(goods.getPrice());
                 response.setOneMaxAmount(goods.getOneMaxAmount());
+
                 return response;
             })
                 .collect(Collectors.toList());
@@ -158,6 +165,10 @@ public class LoanActivityService {
         Integer pages = loanActivities.getTotalPages();
         List<LoanActivityResponse> res = loanActivities.stream().map(loanActivity -> {
                 LoanActivityResponse response = LoanActivityResponse.fromLoanActivity(loanActivity);
+
+                LoanRule loanRule = loanRuleDao.findById(loanActivity.getLoanRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
+                response.setRule(SetLoanActivityRuleRequest.fromLoanRule(loanRule));
+
                 Set<UserLoanActivity> userLoanActivities = loanActivity.getUserLoanActivities();
                 response.setPassed_users(userLoanActivities.stream().filter(UserLoanActivity::getIsPassed).map(x -> JoinLoanActivityUserResponse.fromUser(x.getUser())).collect(Collectors.toList()));
                 response.setUnPassed_users(userLoanActivities.stream().filter(x -> !x.getIsPassed()).map(x -> JoinLoanActivityUserResponse.fromUser(x.getUser())).collect(Collectors.toList()));
@@ -211,7 +222,7 @@ public class LoanActivityService {
             return baseResult;
         }
         if (loanRule.getCheckEmployment() && user.getEmployment() != Employment.Employed) {
-            baseResult.setMessage("用户必须在值");
+            baseResult.setMessage("用户必须在职");
             return baseResult;
         }
         if (loanRule.getCheckOverDual() && user.getOverDual() != null && user.getOverDual() > 0) {
@@ -265,7 +276,7 @@ public class LoanActivityService {
 
     @Timed("写入数据库耗时")
     @Counted("写入数据库频率")
-    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, Long account_id) {
+    public BaseResponse<TryJoinResponse> tryJoin(Long loanActivityId, Long userId, String account_sn) {
         TryJoinResponse res = new TryJoinResponse();
         res.setResult(4);
         // 用户限制请求频率
@@ -328,27 +339,35 @@ public class LoanActivityService {
         System.out.println(random);
         res.setRandom(random);
 
+        String last_req = stringRedisTemplate.opsForValue().get(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId);
         String md5 = stringRedisTemplate.opsForValue().get(USER_MD5_CACHE + "." + userId + "." + loanActivityId);
+
         // 如果没拿到 md5 记录就重新生成
-        if (md5 == null) {
+        if (last_req == null || md5 == null) {
             ArrayList<String> arrayList = new ArrayList<>();
             String time = String.valueOf(new Date().getTime());
             arrayList.add(AUTH_SALT);
             arrayList.add(userId.toString());
             arrayList.add(goodId.toString());
-            arrayList.add(account_id.toString());
+            arrayList.add(account_sn);
             arrayList.add(time);
+            System.out.println(AUTH_SALT);
+            System.out.println(userId.toString());
+            System.out.println(goodId.toString());
+            System.out.println(account_sn);
+            System.out.println(time);
             md5 = MD5.md5(arrayList);
             res.setResult(0);
             res.setMd5(md5);
             // 缓存 MD5 生成时间
             stringRedisTemplate.opsForValue().set(USER_SEND_REQUEST_TIME_KEY + "." + + userId + "." + goodId, time);
             // 缓存 MD5
-            stringRedisTemplate.opsForValue().set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5);
+            stringRedisTemplate.opsForValue().set(USER_MD5_CACHE + "." + userId + "." + loanActivityId, md5, 5, TimeUnit.SECONDS);
             res.setResult(1);
             return new BaseResponse<>(HttpStatus.OK, "参加链接成功", res);
         }
-        res.setResult(2);
+        res.setResult(1);
+        //res.setResult(2);
         res.setMd5(md5);
         System.out.println("之前的 md5：" + md5);
         return new BaseResponse<>(HttpStatus.OK, "您已经参加过", res);
@@ -405,7 +424,7 @@ public class LoanActivityService {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
                 .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
-        Long userid = loginUser.getUser().getId();
+        Long userid = loginUser.getId();
         CodeResult codeResult = ValidateCode.getRandomCodeBase64();
         String key = "" + userid + "_tryjoin_code";
         redisService.set(key, codeResult.getRendom_string(), 60);

@@ -50,42 +50,44 @@ public class Sheduled {
     // @Scheduled(cron = "0/30 * * * * ?") //每天开始 15 秒执行一次
     @PostConstruct
     public void testMysql() {
-        List<User> users = userDao.findAll();
-        System.out.println(users);
-        User newUser = new User();
-        newUser.setUsername("admin");
-
-        String encodedPassword = new BCryptPasswordEncoder().encode("000000");
-        newUser.setPassword(encodedPassword);
-
-        newUser.setYearIncome(10L);
-        newUser.setGender(Gender.Male);
-        newUser.setEmployment(Employment.Employed);
-        newUser.setAge(18);
-        newUser.setName("小明");
-        newUser.setDishonest(false);
-        newUser.setIDNumber("dfsdasfgdfsfgfd");
-        newUser.setCountry("中国");
-        Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
-        newUser.setRoles(roles);
-        Hibernate.initialize(newUser.getUserLoanActivities());
-        System.out.println("准备 save User");
-        if (users.isEmpty()) {
-            userDao.save(newUser);
-        } else {
-            newUser.setId(users.get(0).getId());
-        }
-
-        BankAccount bankAccount = new BankAccount();
-        Faker faker = new Faker();
-        bankAccount.setBankAccountSN(faker.random().nextLong());
-        bankAccount.setBalance(1000L);
-        bankAccount.setUserID(newUser.getId());
-        List<BankAccount> accounts = bankAccountDao.findAll();
-        System.out.println("准备 save BankAccount");
-        bankAccountDao.save(bankAccount);
-        bankAccount.setBankAccountSN(faker.random().nextLong());
-        bankAccountDao.save(bankAccount);
+        //List<User> users = userDao.findAll();
+        //System.out.println(users);
+        //User newUser = new User();
+        //newUser.setId(1L);
+        //newUser.setUsername("admin");
+        //
+        //String encodedPassword = new BCryptPasswordEncoder().encode("000000");
+        //newUser.setPassword(encodedPassword);
+        //
+        //newUser.setYearIncome(10L);
+        //newUser.setGender(Gender.Male);
+        //newUser.setEmployment(Employment.Employed);
+        //newUser.setAge(18);
+        //newUser.setName("小明");
+        //newUser.setDishonest(false);
+        //newUser.setIDNumber("dfsdasfgdfsfgfd");
+        //newUser.setCountry("中国");
+        //Set<String> roles = new HashSet<>(Arrays.asList("test", "admin"));
+        //newUser.setRoles(roles);
+        //Hibernate.initialize(newUser.getUserLoanActivities());
+        //System.out.println("准备 save User");
+        //if (users.isEmpty()) {
+        //    userDao.save(newUser);
+        //} else {
+        //    newUser.setId(users.get(0).getId());
+        //}
+        //
+        //BankAccount bankAccount = new BankAccount();
+        //Faker faker = new Faker();
+        //bankAccount.setId(1L);
+        //bankAccount.setBankAccountSN(faker.random().nextLong());
+        //bankAccount.setBalance(1000L);
+        //bankAccount.setUserID(newUser.getId());
+        //List<BankAccount> accounts = bankAccountDao.findAll();
+        //System.out.println("准备 save BankAccount");
+        //bankAccountDao.save(bankAccount);
+        //bankAccount.setBankAccountSN(faker.random().nextLong());
+        //bankAccountDao.save(bankAccount);
 
         //LoanRule loanRule = new LoanRule();
         //loanRule.setId(1L);
