@@ -26,14 +26,14 @@ public class DecisionEngineApplicationTest {
 
     @Test
     public void faker() {
-        for (int i = 3; i < 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             Faker faker = new Faker();
             User user = new User();
             user.setName(faker.name().name());
             user.setRoles(new HashSet<>(Collections.singletonList("test")));
             user.setUserLoanActivities(new HashSet<>());
             user.setAge(faker.random().nextInt(20, 50));
-            user.setCity("中国");
+            user.setCountry("中国");
             user.setProvince("a");
             user.setDishonest(false);
             user.setEmployment(Employment.Employed);
@@ -53,7 +53,7 @@ public class DecisionEngineApplicationTest {
             BankAccount bankAccount = new BankAccount();
             bankAccount.setId(faker2.random().nextLong());
             bankAccount.setBankAccountSN(faker2.random().nextLong());
-            bankAccount.setBalance(faker2.random().nextInt(1, 180000));
+            bankAccount.setBalance(1000000L);
             bankAccount.setUserID(user.getId());
             bankAccountDao.save(bankAccount);
 

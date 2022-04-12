@@ -49,8 +49,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             System.out.println("2: " + userID);
             Object o = redisService.get(AuthService.PC_TOKEN + "." + userID);
             LoginUser loginUser = (LoginUser) o;
-            System.out.println("3: " + loginUser);
-            System.out.println("4: " + loginUser.getAuthorities());
+            //System.out.println("3: " + loginUser);
+            //System.out.println("4: " + loginUser.getAuthorities());
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser,
                     null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
