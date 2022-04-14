@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,27 +24,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class DepositRule extends BaseRule {
 
-    // 存/贷款 额度
-    @Column(nullable = false)
-    private boolean checkMaxMoney;
-    @Column()
-    private long MaxMoney;
+    // 检查就业状况
+    @Column(nullable = true)
+    private Boolean checkEmployment;
 
-    @Column(nullable = false)
-    private boolean checkMinMoney;
-    @Column()
-    private long MinMoney;
+    // 检查是否是失信人员
+    @Column(nullable = true)
+    private Boolean checkDishonest;
 
-    // 存/贷款 时间
+    // 是否当日起息
     @Column(nullable = false)
-    private boolean checkMaxTime;
-    @Column()
-    private Timestamp MaxTime;
+    private Boolean isOnDay;
 
+    // 是否随存随取
     @Column(nullable = false)
-    private boolean checkMinTime;
-    @Column()
-    private Timestamp MinTime;
+    private Boolean idDawa;
 
     @Override
     public boolean equals(Object o) {

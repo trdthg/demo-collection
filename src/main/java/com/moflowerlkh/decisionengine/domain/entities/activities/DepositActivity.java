@@ -1,12 +1,13 @@
 package com.moflowerlkh.decisionengine.domain.entities.activities;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.moflowerlkh.decisionengine.domain.entities.UserLoanActivity;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 秒杀规则 1 - 1 秒杀活动 - +
@@ -23,33 +24,23 @@ import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
 @ToString
 @Table(name = "deposit_activity_tb")
 public class DepositActivity extends BaseActivity {
-    // 存款额度下限
+
+    //名称
     @Column(nullable = false)
-    private long depositLimit;
+    private String name;
 
     // 存款期限
     @Column(nullable = false)
-    private Timestamp depositTerm;
+    private String timeLimit;
 
     // 年利率
     @Column(nullable = false)
     private double apr;
 
-    // 是否当日起息
     @Column(nullable = false)
-    private boolean onDay;
+    private Long depositRuleId;
 
-    // 是否随存随取
-    @Column(nullable = false)
-    private boolean dawa;
+    @ElementCollection
+    private Set<Long> userIds = new HashSet<>();
 
-    // 活动销售总数，不能超卖
-    @Column(nullable = false)
-    private long shoppingTotal;
-
-    // 对应的规则
-    // @JoinColumn(nullable = false)
-    // @OneToOne
-    // private DepositRule rule;
-    private Long depositRultId;
 }
