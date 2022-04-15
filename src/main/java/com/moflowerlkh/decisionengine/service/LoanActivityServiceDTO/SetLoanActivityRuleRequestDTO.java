@@ -36,18 +36,6 @@ public class SetLoanActivityRuleRequestDTO {
     @NotNull(message = "是否限制国内")
     private Boolean activity_checkNation;
 
-
-    @NotNull(message = "年利率不能为空")
-    @PositiveOrZero(message = "年利率不能为负数")
-    private double activity_apr;
-    // 分几期
-    @NotEmpty(message = "借款期限不能为空")
-    private String activity_timeLimit;
-    // 还几年
-    @NotNull(message = "还款期限不能为空")
-    @PositiveOrZero(message = "还款期限不能为负")
-    private Integer activity_replayTime;
-
     public LoanRule toLoanRule(Long activity_initMoney, Long activity_moneyLimit, Double activity_apr, String activity_timeLimit, Integer activity_replayTime, Long activity_totalQuantity) {
         LoanRule loanRule = new LoanRule();
         loanRule.setMinMoneyLimit(activity_initMoney);

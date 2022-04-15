@@ -31,7 +31,6 @@ public class DecisionEngineApplicationTest {
             User user = new User();
             user.setName(faker.name().name());
             user.setRoles(new HashSet<>(Collections.singletonList("test")));
-            user.setUserLoanActivities(new HashSet<>());
             user.setAge(faker.random().nextInt(20, 50));
             user.setCountry("中国");
             user.setProvince("a");

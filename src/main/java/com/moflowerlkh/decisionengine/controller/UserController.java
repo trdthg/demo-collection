@@ -70,23 +70,6 @@ public class UserController {
         return new BaseResponse<>(HttpStatus.OK, "删除成功", null);
     }
 
-    @Timed("参加活动耗时")
-    @Counted("参加活动数量")
-    @GetMapping("/join")
-    @ApiOperation(value = "用户参加活动", notes = "某用户参加某活动")
-    public BaseResponse<TryJoinResponseDTO> joinLoanActivity(@Valid @NotNull Long activity_id,
-                                                             @Valid @NotNull Long user_id, @Valid @NotNull String account_id)
-            throws Exception {
-        return loanService.tryJoin(activity_id, user_id, account_id);
-    }
-
-    @GetMapping("/check/{user_id}/{activity_id}")
-    @ApiOperation(value = "初筛", notes = "参加活动前需要初筛")
-    public BaseResponse<Boolean> check(@Valid @NotNull @PathVariable Long activity_id,
-                                                          @Valid @NotNull @PathVariable Long user_id)
-        throws Exception {
-        return loanService.check(activity_id, user_id);
-    }
 }
 
 @Data

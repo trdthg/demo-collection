@@ -351,61 +351,9 @@ public class LoanActivityService {
         }
     }
 
-    public BaseResponse<List<JoinLoanActivityUserResponseDTO>> getPassedUsers(Long activity_id) {
-        List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
-        List<JoinLoanActivityUserResponseDTO> res = userActivities.stream().filter(UserActivity::getIsPassed).map(x -> {
-            User user = userDao.getById(x.getUserId());
-            return JoinLoanActivityUserResponseDTO.fromUser(user);
-        }).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
-    }
-
-    public BaseResponse<List<JoinLoanActivityUserResponseDTO>> getUnPassedUsers(Long activity_id) {
-        List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
-        List<JoinLoanActivityUserResponseDTO> res = userActivities.stream().filter(x -> !x.getIsPassed()).map(x -> {
-            User user = userDao.getById(x.getUserId());
-            return JoinLoanActivityUserResponseDTO.fromUser(user);
-        }).collect(Collectors.toList());
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
-    }
-
-    public BaseResponse<JoinLoanActivityUserResponseDTO> getPassedUser(Long activity_id, String name) {
-        User user = userDao.findByUsername(name);
-        List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
-        for (UserActivity x : userActivities) {
-            if (Objects.equals(x.getUserId(), user.getId()) && x.getIsPassed()) {
-                return new BaseResponse<>(HttpStatus.OK, "查询成功", JoinLoanActivityUserResponseDTO.fromUser(user));
-            }
-        }
-        return new BaseResponse<>(HttpStatus.OK, "查询失败", null);
-    }
-
-    public BaseResponse<JoinLoanActivityUserResponseDTO> getUnpassedUser(Long activity_id, String name) {
-        User user = userDao.findByUsername(name);
-        List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
-        for (UserActivity x : userActivities) {
-            if (Objects.equals(x.getUserId(), user.getId()) && !x.getIsPassed()) {
-                return new BaseResponse<>(HttpStatus.OK, "查询成功", JoinLoanActivityUserResponseDTO.fromUser(user));
-            }
-        }
-        return new BaseResponse<>(HttpStatus.OK, "查询失败", null);
-    }
-
     public BaseResponse<Boolean> deleteActivity(Long id) {
         activityDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", true);
-    }
-
-    public BaseResponse<String> generateCaptchaBase64() {
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-                .getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
-        Long userid = loginUser.getId();
-        CodeResult codeResult = ValidateCode.getRandomCodeBase64();
-        String key = "" + userid + "_tryjoin_code";
-        redisService.set(key, codeResult.getRendom_string(), 60);
-        String url = "data:image/png;base64," + codeResult.getBase64String();
-        return new BaseResponse<>(HttpStatus.OK, "验证吗图片获取成功", url);
     }
 
 }

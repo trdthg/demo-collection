@@ -76,10 +76,6 @@ public class User extends BasePO {
     @Column(nullable = true)
     private Boolean dishonest;
 
-    // 和活动的关系
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserActivity> userLoanActivities = new HashSet<>();
-
     // 用户拥有的角色
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = true)

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"Deposit 存款活动"})
-@RequestMapping("/deposit")
+@RequestMapping("/api/deposit")
 public class DepositActivityController {
     @Autowired
     DepositeActivityService depositeActivityService;
@@ -56,7 +56,7 @@ public class DepositActivityController {
         return depositeActivityService.deleteById(id);
     }
 
-    @DeleteMapping("/join")
+    @GetMapping("/check")
     @ApiOperation("初筛")
     public BaseResponse<Boolean> check(@Valid @NotNull Long user_id, @Valid @NotNull Long activity_id) {
         return depositeActivityService.check(user_id, activity_id);
@@ -65,7 +65,8 @@ public class DepositActivityController {
     @GetMapping("/join")
     @ApiOperation(value = "参加活动", notes = "")
     public BaseResponse<TryJoinResponseDTO> joinLoanActivity(@Valid @NotNull Long activity_id,
-                                                             @Valid @NotNull Long user_id, @Valid @NotNull String account_id)
+                                                             @Valid @NotNull Long user_id,
+                                                             @Valid @NotNull String account_id)
         throws Exception {
         return depositeActivityService.tryJoin(activity_id, user_id, account_id);
     }

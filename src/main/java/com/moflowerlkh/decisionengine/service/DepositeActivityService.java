@@ -287,7 +287,7 @@ public class DepositeActivityService {
             if (last_req == null || md5 == null) {
 
                 String time = String.valueOf(new Date().getTime());
-                ArrayList<String> arrayList = (ArrayList<String>) Arrays.asList(AUTH_SALT, userId.toString(), goodId.toString(),account_sn, time);
+                List<String> arrayList = Arrays.asList(AUTH_SALT, userId.toString(), goodId.toString(),account_sn, time);
                 md5 = MD5.md5(arrayList);
                 res.setResult(0);
                 res.setMd5(md5);

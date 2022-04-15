@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 @Data
 public
 class JoinLoanActivityUserResponseDTO {
+    private String username;
     private Long user_id;
     private String user_name;
     private String user_gender;
@@ -21,6 +22,7 @@ class JoinLoanActivityUserResponseDTO {
 
     public static JoinLoanActivityUserResponseDTO fromUser(User user) {
         JoinLoanActivityUserResponseDTO response = new JoinLoanActivityUserResponseDTO();
+        response.setUsername(user.getUsername());
         response.setUser_id(user.getId());
         response.setUser_name(user.getName());
         response.setUser_gender(user.getGender().name());
