@@ -78,7 +78,7 @@ public class User extends BasePO {
 
     // 和活动的关系
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserLoanActivity> userLoanActivities = new HashSet<>();
+    private Set<UserActivity> userLoanActivities = new HashSet<>();
 
     // 用户拥有的角色
     @ElementCollection(fetch = FetchType.EAGER)

@@ -3,11 +3,12 @@ package com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO;
 import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
-public class SetLoanActivityRuleRequest {
+public class SetLoanActivityRuleRequestDTO {
     // activity_guarantee string 是否需要担保
     @NotNull(message = "是否需要担保不能为空")
     private Boolean activity_guarantee;
@@ -35,8 +36,22 @@ public class SetLoanActivityRuleRequest {
     @NotNull(message = "是否限制国内")
     private Boolean activity_checkNation;
 
-    public LoanRule toLoanRule() {
+
+    @NotNull(message = "年利率不能为空")
+    @PositiveOrZero(message = "年利率不能为负数")
+    private double activity_apr;
+    // 分几期
+    @NotEmpty(message = "借款期限不能为空")
+    private String activity_timeLimit;
+    // 还几年
+    @NotNull(message = "还款期限不能为空")
+    @PositiveOrZero(message = "还款期限不能为负")
+    private Integer activity_replayTime;
+
+    public LoanRule toLoanRule(Long activity_initMoney, Long activity_moneyLimit, Double activity_apr, String activity_timeLimit, Integer activity_replayTime, Long activity_totalQuantity) {
         LoanRule loanRule = new LoanRule();
+        loanRule.setMinMoneyLimit(activity_initMoney);
+        loanRule.setMaxMoneyLimit(activity_moneyLimit);
         loanRule.setCheckGuarantee(activity_guarantee);
         loanRule.setCheckPledge(activity_pledge);
         loanRule.setMaxAge(activity_ageUp);
@@ -45,11 +60,16 @@ public class SetLoanActivityRuleRequest {
         loanRule.setCheckDishonest(activity_checkDishonest);
         loanRule.setCheckOverDual(activity_checkOverdual);
         loanRule.setCheckCountry(activity_checkNation);
+
+        loanRule.setPurchasersNumberLimit(activity_totalQuantity);
+        loanRule.setApr(activity_apr);
+        loanRule.setTimeLimit(activity_timeLimit);
+        loanRule.setReplayLimit(activity_replayTime);
         return loanRule;
     }
 
-    public static SetLoanActivityRuleRequest fromLoanRule(LoanRule loanRule) {
-        SetLoanActivityRuleRequest res = new SetLoanActivityRuleRequest();
+    public static SetLoanActivityRuleRequestDTO fromLoanRule(LoanRule loanRule) {
+        SetLoanActivityRuleRequestDTO res = new SetLoanActivityRuleRequestDTO();
         res.setActivity_guarantee(loanRule.getCheckGuarantee());
         res.setActivity_pledge(loanRule.getCheckPledge());
         res.setActivity_ageUp(loanRule.getMaxAge());

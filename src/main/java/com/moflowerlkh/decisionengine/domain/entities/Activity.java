@@ -1,19 +1,23 @@
-package com.moflowerlkh.decisionengine.domain.entities.activities;
+package com.moflowerlkh.decisionengine.domain.entities;
 
-import com.moflowerlkh.decisionengine.domain.entities.BasePO;
+import com.moflowerlkh.decisionengine.domain.dao.UserDao;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanActivityUserResponseDTO;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@MappedSuperclass
-public class BaseActivity extends BasePO {
+@Table(name = "loan_activity_tb")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Activity extends BasePO {
     // 活动名称
     @Column(nullable = false)
     private String name;
@@ -32,4 +36,6 @@ public class BaseActivity extends BasePO {
     // @JoinColumn(nullable = false)
     // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Long goodsId;
+
+    private Long ruleId;
 }

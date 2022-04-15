@@ -22,12 +22,29 @@ import java.util.Objects;
 @Table(name = "loan_rule_tb")
 @EntityListeners(AuditingEntityListener.class)
 public class LoanRule extends BaseRule {
-    // 贷款额度
-    @Column(nullable = true)
-    private Long checkMaxMoney;
 
-    @Column(nullable = true)
-    private Long checkMinMoney;
+    //购买人数限制
+    @Column
+    private Long purchasersNumberLimit;
+
+    // 分几期
+    @Column(nullable = false)
+    private String timeLimit;
+
+    // 还几年
+    @Column
+    private Integer replayLimit;
+
+    // 年利率
+    @Column(nullable = false)
+    private double apr;
+
+    //贷款额度上限
+    @Column
+    private Long maxMoneyLimit;
+    // 贷款额度下限
+    @Column
+    private Long minMoneyLimit;
 
     // 贷款时间
     @Column(nullable = true)

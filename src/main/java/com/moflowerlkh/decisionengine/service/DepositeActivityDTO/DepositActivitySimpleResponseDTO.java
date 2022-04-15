@@ -1,5 +1,14 @@
 package com.moflowerlkh.decisionengine.service.DepositeActivityDTO;
 
-public class DepositActivitySimpleResponseDTO {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class DepositActivitySimpleResponseDTO {
+    String id;
 }

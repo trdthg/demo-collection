@@ -1,6 +1,5 @@
 package com.moflowerlkh.decisionengine.domain.entities;
 
-import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,17 +16,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_loan_activity_tb")
 @EntityListeners(AuditingEntityListener.class)
-public class UserLoanActivity extends BasePO {
+public class UserActivity extends BasePO {
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    private User user;
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "loanActivity_id")
-    @ToString.Exclude
-    private LoanActivity loanActivity;
+    private Long activityId;
 
     private Boolean isPassed;
 
@@ -37,7 +30,7 @@ public class UserLoanActivity extends BasePO {
             return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
-        UserLoanActivity that = (UserLoanActivity) o;
+        UserActivity that = (UserActivity) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

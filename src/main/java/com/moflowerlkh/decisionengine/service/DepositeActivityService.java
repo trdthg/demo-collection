@@ -2,14 +2,10 @@ package com.moflowerlkh.decisionengine.service;
 
 import com.moflowerlkh.decisionengine.domain.dao.*;
 import com.moflowerlkh.decisionengine.domain.entities.*;
-import com.moflowerlkh.decisionengine.domain.entities.activities.DepositActivity;
-import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
 import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
-import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
 import com.moflowerlkh.decisionengine.schedule.ActivityTask;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityResponseDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityRequestDTO;
-import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.DepositActivitySimpleResponseDTO;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.*;
 import com.moflowerlkh.decisionengine.util.MD5;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -37,7 +33,7 @@ public class DepositeActivityService {
     @Autowired
     DepositRuleDao depositRuleDao;
     @Autowired
-    DepositActivityDao depositActivityDao;
+    ActivityDao activityDao;
     @Autowired
     GoodsDao goodsDao;
     @Autowired
@@ -45,7 +41,7 @@ public class DepositeActivityService {
     @Autowired
     BankAccountDao bankAccountDao;
     @Autowired
-    UserDepositActivityDao userDepositActivityDao;
+    UserActivityDao userActivityDao;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -64,6 +60,8 @@ public class DepositeActivityService {
 
         // 规则
         DepositRule rule = new DepositRule();
+        rule.setApr(request.getActivity_apr());
+        rule.setTimeLimit(request.getActivity_timeLimit());
         rule.setMaxAge(request.getRule().getActivity_ageUp());
         rule.setMinAge(request.getRule().getActivity_ageFloor());
         rule.setIdDawa(request.getRule().getActivity_dawa());
@@ -72,31 +70,30 @@ public class DepositeActivityService {
 
         // 商品
         Goods goods = new Goods();
-        goods.setPrice(request.getPerPrice());
+        goods.setPrice(request.getActivity_perPrice());
         goods.setGoodsAmount(request.getActivity_totalQuantity());
-        goods.setStartTime((Timestamp) request.getActivity_startTime());
+        goods.setStartTime(Timestamp.valueOf(request.getActivity_startTime()));
         goods.setOneMaxAmount(request.getActivity_oneMaxAmount());
         goods.setBankAccountSN(accounts.get(0).getBankAccountSN());
         goodsDao.save(goods);
 
         // 活动
-        DepositActivity depositActivity = new DepositActivity();
-        depositActivity.setName(request.getActivity_name());
-        depositActivity.setApr(request.getActivity_apr());
-        depositActivity.setTimeLimit(request.getActivity_timeLimit());
-        depositActivity.setBeginTime((Timestamp) request.getActivity_startTime());
-        depositActivity.setEndTime((Timestamp) request.getActivity_endTime());
+        Activity activity = new Activity();
+        activity.setName(request.getActivity_name());
+        activity.setBeginTime(Timestamp.valueOf(request.getActivity_startTime()));
+        activity.setEndTime(Timestamp.valueOf(request.getActivity_endTime()));
 
-        depositActivity.setDepositRuleId(rule.getId());
-        depositActivity.setGoodsId(goods.getId());
-        depositActivityDao.save(depositActivity);
+        activity.setRuleId(rule.getId());
+        activity.setGoodsId(goods.getId());
+        activityDao.save(activity);
 
-        stringRedisTemplate.opsForValue().set(ScheduleKey + "." + depositActivity.getId(),
+        stringRedisTemplate.opsForValue().set(ScheduleKey + "." + activity.getId(),
             String.valueOf(new Date().getTime()));
+        System.out.println(stringRedisTemplate.opsForValue().get(ScheduleKey + "." + activity.getId()));
 
         CreateDepositActivityResponseDTO response = new CreateDepositActivityResponseDTO();
-        response.setId(depositActivity.getId().toString());
-        response.setGood_id(depositActivity.getGoodsId().toString());
+        response.setId(activity.getId().toString());
+        response.setGood_id(activity.getGoodsId().toString());
         return new BaseResponse<>(HttpStatus.OK, "创建成功", response);
     }
 
@@ -111,17 +108,17 @@ public class DepositeActivityService {
         }
 
         // 活动
-        DepositActivity depositActivity = depositActivityDao.findById(id).orElseThrow(()-> new DataRetrievalFailureException("没有该活动"));
-        depositActivity.setName(request.getActivity_name());
-        depositActivity.setApr(request.getActivity_apr());
-        depositActivity.setTimeLimit(request.getActivity_timeLimit());
-        depositActivity.setBeginTime((Timestamp) request.getActivity_startTime());
-        depositActivity.setEndTime((Timestamp) request.getActivity_endTime());
+        Activity activity = activityDao.findById(id).orElseThrow(()-> new DataRetrievalFailureException("没有该活动"));
+        activity.setName(request.getActivity_name());
+        activity.setBeginTime(Timestamp.valueOf(request.getActivity_startTime()));
+        activity.setEndTime(Timestamp.valueOf(request.getActivity_endTime()));
 
-        depositActivityDao.saveAndFlush(depositActivity);
+        activityDao.saveAndFlush(activity);
 
         // 规则
-        DepositRule rule = depositRuleDao.findById(depositActivity.getDepositRuleId()).orElseThrow(()->new RuntimeException("没有对应的规则"));
+        DepositRule rule = depositRuleDao.findById(activity.getRuleId()).orElseThrow(()->new RuntimeException("没有对应的规则"));
+        rule.setApr(request.getActivity_apr());
+        rule.setTimeLimit(request.getActivity_timeLimit());
         rule.setMaxAge(request.getRule().getActivity_ageUp());
         rule.setMinAge(request.getRule().getActivity_ageFloor());
         rule.setIdDawa(request.getRule().getActivity_dawa());
@@ -129,42 +126,42 @@ public class DepositeActivityService {
         depositRuleDao.saveAndFlush(rule);
 
         // 商品
-        Goods goods = goodsDao.findById(depositActivity.getDepositRuleId()).orElseThrow(()->new RuntimeException("没有对应商品"));
-        goods.setPrice(request.getPerPrice());
+        Goods goods = goodsDao.findById(activity.getGoodsId()).orElseThrow(()->new RuntimeException("没有对应商品"));
+        goods.setPrice(request.getActivity_perPrice());
         goods.setGoodsAmount(request.getActivity_totalQuantity());
-        goods.setStartTime((Timestamp) request.getActivity_startTime());
+        goods.setStartTime(Timestamp.valueOf(request.getActivity_startTime()));
         goods.setOneMaxAmount(request.getActivity_oneMaxAmount());
         goods.setBankAccountSN(accounts.get(0).getBankAccountSN());
         goodsDao.saveAndFlush(goods);
 
         CreateDepositActivityResponseDTO response = new CreateDepositActivityResponseDTO();
-        response.setId(depositActivity.getId().toString());
-        response.setGood_id(depositActivity.getGoodsId().toString());
+        response.setId(activity.getId().toString());
+        response.setGood_id(activity.getGoodsId().toString());
         return new BaseResponse<>(HttpStatus.OK, "创建成功", response);
     }
 
-    public BaseResponse<PageResult<List<DepositActivity>>> findByPage(Integer page_num, Integer page_limit) {
-        Page<DepositActivity> depositActivities = depositActivityDao
+    public BaseResponse<PageResult<List<Activity>>> findByPage(Integer page_num, Integer page_limit) {
+        Page<Activity> activities = activityDao
             .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
-        Integer pages = depositActivities.getTotalPages();
-        List<DepositActivity> res = depositActivities.toList();
+        Integer pages = activities.getTotalPages();
+        List<Activity> res = activities.toList();
         return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
-    public BaseResponse<DepositActivity> findById(Long id) {
-        DepositActivity depositActivity = depositActivityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", depositActivity);
+    public BaseResponse<Activity> findById(Long id) {
+        Activity activity = activityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", activity);
     }
 
 
     public BaseResponse<Boolean> deleteById(Long id) {
-        depositActivityDao.deleteById(id);
+        activityDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", true);
     }
 
     public BaseResponse<Boolean> check(Long user_id, Long activity_id) {
         User user = userDao.findById(user_id).orElseThrow(()-> new DataRetrievalFailureException("没有该用户"));
-        DepositActivity activity = depositActivityDao.findById(activity_id).orElseThrow(()-> new DataRetrievalFailureException("没有该活动"));
+        Activity activity = activityDao.findById(activity_id).orElseThrow(()-> new DataRetrievalFailureException("没有该活动"));
         CheckResult checkResult = checkUserInfo(user, activity);
         saveCheckReslult(user,activity,checkResult.getResult());
         stringRedisTemplate.opsForValue().set(USER_CHECK_DEPOSIT_CACHE + "." + user.getId() + "." + activity.getId(), checkResult.getResult() ? "1" : "0");
@@ -174,19 +171,18 @@ public class DepositeActivityService {
         return new BaseResponse<>(HttpStatus.OK, "初筛通过", true);
     }
 
-    public void saveCheckReslult(User user, DepositActivity depositActivity, Boolean result) {
-        Set<Long> userIds = depositActivity.getUserIds();
-        if (!userIds.contains(user.getId())) {
-            userIds.add(user.getId());
-            depositActivityDao.saveAndFlush(depositActivity);
-            userDepositActivityDao.saveAndFlush(
-                UserDepositActivity.builder().userId(user.getId()).activityId(depositActivity.getId()).isPassed(result)
+    public void saveCheckReslult(User user, Activity activity, Boolean result) {
+        List<UserActivity> userActivities = userActivityDao.findByUserIdAndActivityId(user.getId(), activity.getId());
+        if (userActivities.isEmpty()) {
+            activityDao.saveAndFlush(activity);
+            userActivityDao.saveAndFlush(
+                UserActivity.builder().userId(user.getId()).activityId(activity.getId()).isPassed(result)
                     .build());
         }
     }
 
-    public CheckResult checkUserInfo(User user, DepositActivity activity) {
-        DepositRule rule = depositRuleDao.findById(activity.getDepositRuleId()).orElseThrow(()->new DataRetrievalFailureException("查询活动规则失败"));
+    public CheckResult checkUserInfo(User user, Activity activity) {
+        DepositRule rule = depositRuleDao.findById(activity.getRuleId()).orElseThrow(()->new DataRetrievalFailureException("查询活动规则失败"));
         CheckResult result = new CheckResult();
         result.setResult(false);
         if (rule.getMaxAge() != null && user.getAge() >= rule.getMaxAge()) {
@@ -222,8 +218,8 @@ public class DepositeActivityService {
         }
         return false;
     }
-    public BaseResponse<TryJoinResponse> tryJoin(Long depositActivityId, Long userId, String account_sn) {
-        TryJoinResponse res = new TryJoinResponse();
+    public BaseResponse<TryJoinResponseDTO> tryJoin(Long depositActivityId, Long userId, String account_sn) {
+        TryJoinResponseDTO res = new TryJoinResponseDTO();
         res.setResult(4);
         try {
             // 用户限制请求频率
@@ -240,18 +236,18 @@ public class DepositeActivityService {
             }
 
             // 获取商品 ID
-            DepositActivity depositActivity = depositActivityDao.findById(depositActivityId)
+            Activity activity = activityDao.findById(depositActivityId)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-            Long goodId = depositActivity.getGoodsId();
+            Long goodId = activity.getGoodsId();
             res.setGoodId(goodId);
 
             // 如果没有初筛过，就先筛
             if (checkResultStr == null) {
                 User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
-                DepositRule depositRule = depositRuleDao.findById(depositActivity.getDepositRuleId())
+                DepositRule depositRule = depositRuleDao.findById(activity.getRuleId())
                     .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
-                CheckResult checkResult = checkUserInfo(user, depositActivity);
-                saveCheckReslult(user, depositActivity, checkResult.getResult());
+                CheckResult checkResult = checkUserInfo(user, activity);
+                saveCheckReslult(user, activity, checkResult.getResult());
                 if (!checkResult.getResult()) {
                     res.setResult(4);
                     return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + checkResult.getMessage(), res);

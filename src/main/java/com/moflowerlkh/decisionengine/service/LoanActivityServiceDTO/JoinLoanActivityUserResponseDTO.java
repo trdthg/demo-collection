@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Data
 public
-class JoinLoanActivityUserResponse {
+class JoinLoanActivityUserResponseDTO {
     private Long user_id;
     private String user_name;
     private String user_gender;
@@ -19,8 +19,8 @@ class JoinLoanActivityUserResponse {
     private String user_employment;
     private Boolean user_dishonest;
 
-    public static JoinLoanActivityUserResponse fromUser(User user) {
-        JoinLoanActivityUserResponse response = new JoinLoanActivityUserResponse();
+    public static JoinLoanActivityUserResponseDTO fromUser(User user) {
+        JoinLoanActivityUserResponseDTO response = new JoinLoanActivityUserResponseDTO();
         response.setUser_id(user.getId());
         response.setUser_name(user.getName());
         response.setUser_gender(user.getGender().name());
@@ -33,7 +33,7 @@ class JoinLoanActivityUserResponse {
         return response;
     }
 
-    public static List<JoinLoanActivityUserResponse> fromUser(List<User> users) {
-        return users.stream().map(JoinLoanActivityUserResponse::fromUser).collect(Collectors.toList());
+    public static List<JoinLoanActivityUserResponseDTO> fromUser(List<User> users) {
+        return users.stream().map(JoinLoanActivityUserResponseDTO::fromUser).collect(Collectors.toList());
     }
 }

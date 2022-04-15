@@ -1,7 +1,7 @@
 package com.moflowerlkh.decisionengine.schedule;
 
-import com.moflowerlkh.decisionengine.domain.dao.LoanActivityDao;
-import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
+import com.moflowerlkh.decisionengine.domain.dao.ActivityDao;
+import com.moflowerlkh.decisionengine.domain.entities.Activity;
 import com.moflowerlkh.decisionengine.service.LoanActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,7 +18,7 @@ public class ActivityTask {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
     @Autowired
-    LoanActivityDao loanActivityDao;
+    ActivityDao activityDao;
 
     public static final String ACTIVITY_RANDOM_KEY = "MS_GOODS_RANDOM_KEY";
 
@@ -41,13 +41,16 @@ public class ActivityTask {
             if (date.getTime() < new Date().getTime()) {
                 String activityId = key.replace(LoanActivityService.ScheduleKey + ".", "");
                 System.out.println(activityId);
-                LoanActivity loanActivity = loanActivityDao.findById(Long.valueOf(activityId))
-                        .orElseThrow(() -> new RuntimeException("fuck you"));
-                stringRedisTemplate.opsForValue().set(ACTIVITY_RANDOM_KEY + "." + loanActivity.getGoodsId(),
+
+                System.out.println("查询活动对应的 goodid");
+                Long goodId;
+                Activity activity = activityDao.findById(Long.valueOf(activityId)).orElseThrow(() -> new RuntimeException("没有查询待准备开始的活动"));
+                goodId = activity.getGoodsId();
+                System.out.println("存储了RANDOM_KEY");
+                stringRedisTemplate.opsForValue().set(ACTIVITY_RANDOM_KEY + "." + goodId,
                         UUID.randomUUID().toString());
                 stringRedisTemplate.delete(key);
             }
-            // delete redis key
         });
     }
 }

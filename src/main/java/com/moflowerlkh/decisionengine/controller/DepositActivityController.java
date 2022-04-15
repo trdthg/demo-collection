@@ -1,9 +1,10 @@
 package com.moflowerlkh.decisionengine.controller;
 
-import com.moflowerlkh.decisionengine.domain.entities.activities.DepositActivity;
+import com.moflowerlkh.decisionengine.domain.entities.Activity;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityRequestDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityResponseDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityService;
+import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponseDTO;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
 import com.moflowerlkh.decisionengine.vo.PageResult;
 import io.swagger.annotations.Api;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = {"Deposit 存款活动"})
-@RequestMapping("/deposite")
+@RequestMapping("/deposit")
 public class DepositActivityController {
     @Autowired
     DepositeActivityService depositeActivityService;
@@ -37,14 +38,14 @@ public class DepositActivityController {
 
     @GetMapping("/")
     @ApiOperation(value = "分页查询", notes = "只有一些活动的基本信息")
-    public BaseResponse<PageResult<List<DepositActivity>>> getLoanActivityByIdSimple(
+    public BaseResponse<PageResult<List<Activity>>> getLoanActivityByIdSimple(
         @RequestParam Integer page_num, @RequestParam Integer page_limit) {
         return depositeActivityService.findByPage(page_num, page_limit);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "查询", notes = "不带有活动的参加信息")
-    public BaseResponse<DepositActivity> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
+    public BaseResponse<Activity> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
         return depositeActivityService.findById(id);
     }
 
@@ -58,6 +59,14 @@ public class DepositActivityController {
     @ApiOperation("初筛")
     public BaseResponse<Boolean> check(@Valid @NotNull Long user_id, @Valid @NotNull Long activity_id) {
         return depositeActivityService.check(user_id, activity_id);
+    }
+
+    @GetMapping("/join")
+    @ApiOperation(value = "参加活动", notes = "")
+    public BaseResponse<TryJoinResponseDTO> joinLoanActivity(@Valid @NotNull Long activity_id,
+                                                             @Valid @NotNull Long user_id, @Valid @NotNull String account_id)
+        throws Exception {
+        return depositeActivityService.tryJoin(activity_id, user_id, account_id);
     }
 
     //@GetMapping("/loan/{id}/passed")

@@ -24,6 +24,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class DepositRule extends BaseRule {
 
+    // 存款期限
+    @Column(nullable = false)
+    private String timeLimit;
+
+    // 年利率
+    @Column(nullable = false)
+    private double apr;
+
     // 检查就业状况
     @Column(nullable = true)
     private Boolean checkEmployment;

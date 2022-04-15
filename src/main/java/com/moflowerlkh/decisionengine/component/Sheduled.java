@@ -1,25 +1,13 @@
 package com.moflowerlkh.decisionengine.component;
 
-import com.github.javafaker.Faker;
 import com.moflowerlkh.decisionengine.domain.dao.*;
-import com.moflowerlkh.decisionengine.domain.entities.BankAccount;
-import com.moflowerlkh.decisionengine.domain.entities.activities.LoanActivity;
-import com.moflowerlkh.decisionengine.domain.entities.rules.LoanRule;
-import com.moflowerlkh.decisionengine.domain.entities.Goods;
-import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.service.RedisService;
-import com.moflowerlkh.decisionengine.vo.enums.Employment;
-import com.moflowerlkh.decisionengine.vo.enums.Gender;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.sql.Timestamp;
-import java.util.*;
 
 @Component
 public class Sheduled {
@@ -32,7 +20,7 @@ public class Sheduled {
     @Autowired
     GoodsDao shoppingGoodsDao;
     @Autowired
-    LoanActivityDao loanActivityDao;
+    ActivityDao loanActivityDao;
     @Autowired
     LoanRuleDao loanRuleDao;
     @Autowired
