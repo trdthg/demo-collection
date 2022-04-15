@@ -24,6 +24,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class DepositRule extends BaseRule {
 
+    //购买人数限制
+    @Column
+    private Long purchasersNumberLimit;
+
     // 存款期限
     @Column(nullable = false)
     private String timeLimit;

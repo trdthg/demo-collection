@@ -37,13 +37,21 @@ public class CreateDepositActivityRequestDTO {
     @PositiveOrZero(message = "步长必须为0或正整数")
     Long activity_perPrice;
 
-    @NotNull(message = "产品总数不能为空")
-    @PositiveOrZero(message = "产品总数必须为0或正整数")
+    @NotNull(message = "限制购买总人的数不能为空")
+    @PositiveOrZero(message = "限制购买的总人数必须为0或正整数")
     Long activity_totalQuantity;
 
     @NotNull(message = "最高份数不能为空")
     @PositiveOrZero(message = "最低份数必须为0或正整数")
     Long activity_oneMaxAmount;
+
+    @NotNull(message = "存款总金额不能为空")
+    @PositiveOrZero(message = "存款总金额必须为0或正整数")
+    Long activity_totalAmount;
+
+    @NotNull(message = "存款额度不能为空")
+    @PositiveOrZero(message = "存款额度必须为0或正整数")
+    Long activity_moneyLimit;
 
     @Valid
     @NotNull(message = "活动规则不能为空")

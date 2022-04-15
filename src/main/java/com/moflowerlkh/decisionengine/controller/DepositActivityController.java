@@ -3,6 +3,7 @@ package com.moflowerlkh.decisionengine.controller;
 import com.moflowerlkh.decisionengine.domain.entities.Activity;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityRequestDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityResponseDTO;
+import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.GetActivityResponseDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityService;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponseDTO;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -25,27 +26,27 @@ public class DepositActivityController {
 
     @PostMapping("/")
     @ApiOperation(value = "新增", notes = "创建一个新活动，同时会创建一个新商品，商品购买后的所得金额会进入创建者的账户")
-    public BaseResponse<CreateDepositActivityResponseDTO> create(@RequestBody @Valid CreateDepositActivityRequestDTO request) {
+    public BaseResponse<GetActivityResponseDTO> create(@RequestBody @Valid CreateDepositActivityRequestDTO request) {
         return depositeActivityService.create(request);
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "修改-全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
-    public BaseResponse<CreateDepositActivityResponseDTO> update(@Valid @NotNull @PathVariable Long id,
+    public BaseResponse<GetActivityResponseDTO> update(@Valid @NotNull @PathVariable Long id,
                                                                   @RequestBody @Valid CreateDepositActivityRequestDTO request) {
         return depositeActivityService.update(id, request);
     }
 
     @GetMapping("/")
-    @ApiOperation(value = "分页查询", notes = "只有一些活动的基本信息")
-    public BaseResponse<PageResult<List<Activity>>> getLoanActivityByIdSimple(
+    @ApiOperation(value = "分页查询", notes = "活动的基本信息")
+    public BaseResponse<PageResult<List<GetActivityResponseDTO>>> getLoanActivityByIdSimple(
         @RequestParam Integer page_num, @RequestParam Integer page_limit) {
         return depositeActivityService.findByPage(page_num, page_limit);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "查询", notes = "不带有活动的参加信息")
-    public BaseResponse<Activity> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
+    public BaseResponse<GetActivityResponseDTO> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
         return depositeActivityService.findById(id);
     }
 

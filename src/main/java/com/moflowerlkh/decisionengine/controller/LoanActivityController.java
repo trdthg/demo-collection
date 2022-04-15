@@ -87,14 +87,14 @@ public class LoanActivityController {
     }
 
     @GetMapping("/{activity_id}/passed")
-    @ApiOperation("查询-根据用户名字")
+    @ApiOperation("查询通过-根据用户名字")
     public BaseResponse<JoinLoanActivityUserResponseDTO> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id,
                                                                       @NotNull @RequestParam String name) throws Exception {
         return loanActivityService.getPassedUser(activity_id, name);
     }
 
-    @GetMapping("/{activity_id}/unpassed/{user_id}")
-    @ApiOperation("")
+    @GetMapping("/{activity_id}/unpassed")
+    @ApiOperation("查询未通过-根据用户名字")
     public BaseResponse<JoinLoanActivityUserResponseDTO> ifUserUnPassed(@Valid @NotNull @PathVariable Long activity_id,
                                                                         @NotNull @RequestParam String name) throws Exception {
         return loanActivityService.getUnpassedUser(activity_id, name);

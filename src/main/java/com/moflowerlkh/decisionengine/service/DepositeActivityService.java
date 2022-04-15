@@ -6,6 +6,7 @@ import com.moflowerlkh.decisionengine.domain.entities.rules.DepositRule;
 import com.moflowerlkh.decisionengine.schedule.ActivityTask;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityResponseDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityRequestDTO;
+import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.GetActivityResponseDTO;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.*;
 import com.moflowerlkh.decisionengine.util.MD5;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.moflowerlkh.decisionengine.service.LoanActivityService.*;
 
@@ -48,7 +50,7 @@ public class DepositeActivityService {
     RedisService redisService;
     public static final String USER_CHECK_DEPOSIT_CACHE = "USER_CHECK_DEPOSIT_CACHE";
 
-    public BaseResponse<CreateDepositActivityResponseDTO> create(CreateDepositActivityRequestDTO request) {
+    public BaseResponse<GetActivityResponseDTO> create(CreateDepositActivityRequestDTO request) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
             .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
@@ -60,8 +62,10 @@ public class DepositeActivityService {
 
         // 规则
         DepositRule rule = new DepositRule();
-        rule.setApr(request.getActivity_apr());
         rule.setTimeLimit(request.getActivity_timeLimit());
+        rule.setApr(request.getActivity_apr());
+        //#3
+        rule.setPurchasersNumberLimit(request.getActivity_totalQuantity());
         rule.setMaxAge(request.getRule().getActivity_ageUp());
         rule.setMinAge(request.getRule().getActivity_ageFloor());
         rule.setIdDawa(request.getRule().getActivity_dawa());
@@ -71,9 +75,11 @@ public class DepositeActivityService {
         // 商品
         Goods goods = new Goods();
         goods.setPrice(request.getActivity_perPrice());
+        //#1
         goods.setGoodsAmount(request.getActivity_totalQuantity());
-        goods.setStartTime(Timestamp.valueOf(request.getActivity_startTime()));
+        //#2
         goods.setOneMaxAmount(request.getActivity_oneMaxAmount());
+        goods.setStartTime(Timestamp.valueOf(request.getActivity_startTime()));
         goods.setBankAccountSN(accounts.get(0).getBankAccountSN());
         goodsDao.save(goods);
 
@@ -94,10 +100,12 @@ public class DepositeActivityService {
         CreateDepositActivityResponseDTO response = new CreateDepositActivityResponseDTO();
         response.setId(activity.getId().toString());
         response.setGood_id(activity.getGoodsId().toString());
-        return new BaseResponse<>(HttpStatus.OK, "创建成功", response);
+
+        GetActivityResponseDTO res = GetActivityResponseDTO.from(activity, rule, goods);
+        return new BaseResponse<>(HttpStatus.OK, "创建成功", res);
     }
 
-    public BaseResponse<CreateDepositActivityResponseDTO> update(Long id, CreateDepositActivityRequestDTO request) {
+    public BaseResponse<GetActivityResponseDTO> update(Long id, CreateDepositActivityRequestDTO request) {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
             .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
@@ -117,6 +125,7 @@ public class DepositeActivityService {
 
         // 规则
         DepositRule rule = depositRuleDao.findById(activity.getRuleId()).orElseThrow(()->new RuntimeException("没有对应的规则"));
+        rule.setPurchasersNumberLimit(request.getActivity_totalQuantity());
         rule.setApr(request.getActivity_apr());
         rule.setTimeLimit(request.getActivity_timeLimit());
         rule.setMaxAge(request.getRule().getActivity_ageUp());
@@ -137,20 +146,30 @@ public class DepositeActivityService {
         CreateDepositActivityResponseDTO response = new CreateDepositActivityResponseDTO();
         response.setId(activity.getId().toString());
         response.setGood_id(activity.getGoodsId().toString());
-        return new BaseResponse<>(HttpStatus.OK, "创建成功", response);
+
+        GetActivityResponseDTO res = GetActivityResponseDTO.from(activity, rule, goods);
+
+        return new BaseResponse<>(HttpStatus.OK, "创建成功", res);
     }
 
-    public BaseResponse<PageResult<List<Activity>>> findByPage(Integer page_num, Integer page_limit) {
+    public BaseResponse<PageResult<List<GetActivityResponseDTO>>> findByPage(Integer page_num, Integer page_limit) {
         Page<Activity> activities = activityDao
             .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
         Integer pages = activities.getTotalPages();
-        List<Activity> res = activities.toList();
+        List<GetActivityResponseDTO> res = activities.toList().stream().map(x -> {
+            DepositRule rule = depositRuleDao.getById(x.getRuleId());
+            Goods goods = goodsDao.getById(x.getGoodsId());
+            return GetActivityResponseDTO.from(x, rule, goods);
+        }).collect(Collectors.toList());
         return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
     }
 
-    public BaseResponse<Activity> findById(Long id) {
+    public BaseResponse<GetActivityResponseDTO> findById(Long id) {
         Activity activity = activityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", activity);
+        DepositRule rule = depositRuleDao.getById(activity.getRuleId());
+        Goods goods = goodsDao.getById(activity.getGoodsId());
+        GetActivityResponseDTO res = GetActivityResponseDTO.from(activity, rule, goods);
+        return new BaseResponse<>(HttpStatus.OK, "查询成功", res);
     }
 
 
@@ -205,7 +224,6 @@ public class DepositeActivityService {
         result.setResult(true);
         return result;
     }
-
 
     public boolean isRequestToFrequest(Long loanActivityId, Long userId) {
         // 用户限制请求频率

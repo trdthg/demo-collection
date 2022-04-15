@@ -23,8 +23,8 @@ public class CreateRuleDTO {
     private Integer activity_ageFloor;
 
     @NotNull(message = "是否当日起息不能为空")
-    Boolean activity_dateRate;
+    private Boolean activity_dateRate;
 
     @NotNull(message = "是否随存随取不能为空")
-    Boolean activity_dawa;
+    private Boolean activity_dawa;
 }
