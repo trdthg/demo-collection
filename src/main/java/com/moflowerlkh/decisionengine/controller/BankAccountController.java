@@ -8,15 +8,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class BankAccountController {
 
     @Autowired
     private BankAccountDao bankAccountDao;
 
-    @PostMapping("/bank-account/{sn}")
-    public BaseResponse<BankAccount> bankAccountBaseResponse(@PathVariable Long sn) {
-        return new BaseResponse<BankAccount>(bankAccountDao.findByBankAccountSN(sn));
+    @PostMapping("/bank-account/{userId}")
+    public BaseResponse<List<BankAccount>> bankAccountBaseResponse(@PathVariable Long userId) {
+        return new BaseResponse<>(bankAccountDao.findByUserID(userId));
     }
 
 }
