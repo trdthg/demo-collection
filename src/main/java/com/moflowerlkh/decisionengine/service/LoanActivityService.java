@@ -32,6 +32,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.moflowerlkh.decisionengine.service.ActivityService.LOAN_ACTIVITY_TYPE;
+
 @Service
 public class LoanActivityService {
     @Autowired
@@ -59,7 +61,7 @@ public class LoanActivityService {
     public static final String USER_SEND_REQUEST_TIME_KEY = "USER_SEND_REQUEST_TIME_KEY";
     public static final String USER_CHECK_LOAN_CACHE = "USER_CHECK_LOAN_CACHE";
     public static final String USER_MD5_CACHE = "USER_MD5_CACHE";
-    public BaseResponse<LoanActivityResponseDTO> setLoanActivity(@RequestBody @Valid SetLoanActivityRequestDTO request) {
+    public BaseResponse<LoanActivitySimpleResponseDTO> setLoanActivity(@RequestBody @Valid SetLoanActivityRequestDTO request) {
 
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
             .getContext().getAuthentication();
@@ -76,7 +78,7 @@ public class LoanActivityService {
         goods.setBankAccountSN(accounts.get(0).getBankAccountSN());
         goods.setPrice(request.getActivity_perPrice() * -1L);
         goods.setOneMaxAmount(request.getActivity_oneMaxAmount());
-        goods.setGoodsAmount(request.getActivity_totalQuantity());
+        goods.setGoodsAmount(request.getActivity_totalQuantity() * request.getActivity_oneMaxAmount());
         goodsDao.save(goods);
 
         LoanRule loanRule = request.getRule().toLoanRule(request.getActivity_initMoney(), request.getActivity_moneyLimit(), request.getActivity_apr(), request.getActivity_timeLimit(), request.getActivity_replayTime(), request.getActivity_totalQuantity());
@@ -85,21 +87,25 @@ public class LoanActivityService {
         activity.setGoodsId(goods.getId());
         activity.setRuleId(loanRule.getId());
         // 新建活动
+        activity.setType(LOAN_ACTIVITY_TYPE);
         activityDao.save(activity);
 
         // 保存开始时间
         stringRedisTemplate.opsForValue().set(ScheduleKey + "." + activity.getId(),
                 String.valueOf(new Date().getTime()));
 
-        LoanActivityResponseDTO res = LoanActivityResponseDTO.fromLoanActivity(activity, loanRule, goods);
+        LoanActivitySimpleResponseDTO res = LoanActivitySimpleResponseDTO.fromLoanActivity(activity, loanRule, goods);
         res.setRule(SetLoanActivityRuleRequestDTO.fromLoanRule(loanRule));
-        return new BaseResponse<>(HttpStatus.CREATED, "新增成功", res);
+        return new BaseResponse<>(HttpStatus.OK, "新增成功", res);
     }
 
-    public BaseResponse<LoanActivityResponseDTO> changeActivityInfo(Long id, SetLoanActivityRequestDTO request) {
+    public BaseResponse<LoanActivitySimpleResponseDTO> changeActivityInfo(Long id, SetLoanActivityRequestDTO request) {
         Activity newActivity = request.toActivity();
         Activity activity = activityDao.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("查询活动失败"));
+        if (!activity.getType().equals(LOAN_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("查询活动失败");
+        }
         LoanRule loanRule = loanRuleDao.findById(activity.getRuleId())
                 .orElseThrow(() -> new DataRetrievalFailureException("查询活动规则失败"));
         Goods goods = goodsDao.findById(activity.getGoodsId())
@@ -116,21 +122,19 @@ public class LoanActivityService {
         LoanRule loanRule1 = request.getRule().toLoanRule(request.getActivity_initMoney(), request.getActivity_moneyLimit(),request.getActivity_apr(),request.getActivity_timeLimit(),request.getActivity_replayTime(), request.getActivity_totalQuantity());
         loanRule1.setId(loanRule.getId());
         loanRuleDao.saveAndFlush(loanRule1);
-        return new BaseResponse<>(HttpStatus.OK, "修改成功", LoanActivityResponseDTO.fromLoanActivity(activity, loanRule, goods));
+        return new BaseResponse<>(HttpStatus.OK, "修改成功", LoanActivitySimpleResponseDTO.fromLoanActivity(activity, loanRule, goods));
     }
 
     public BaseResponse<PageResult<List<LoanActivitySimpleResponseDTO>>> findAllActivityPartial(Integer page_num,
                                                                                                 Integer page_limit) {
         Page<Activity> loanActivities = activityDao
-                .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+                .findAllByType(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")), LOAN_ACTIVITY_TYPE);
         Integer pages = loanActivities.getTotalPages();
         List<LoanActivitySimpleResponseDTO> res = loanActivities.stream().map(loanActivity -> {
                 LoanRule rule = loanRuleDao.findById(loanActivity.getRuleId()).orElseThrow(()->new DataRetrievalFailureException("没有查询到活动规则"));
                 Goods goods = goodsDao.findById(loanActivity.getGoodsId()).orElseThrow(()-> new DataRetrievalFailureException("没有查询到活动商品"));
                 LoanActivitySimpleResponseDTO response = LoanActivitySimpleResponseDTO.fromLoanActivity(loanActivity, rule, goods);
                 response.setRule(SetLoanActivityRuleRequestDTO.fromLoanRule(rule));
-                response.setPerPrice(goods.getPrice());
-                response.setOneMaxAmount(goods.getOneMaxAmount());
                 return response;
             })
                 .collect(Collectors.toList());
@@ -140,56 +144,59 @@ public class LoanActivityService {
     public BaseResponse<LoanActivitySimpleResponseDTO> findByIdPartial(Long id) {
         Activity loanActivity = activityDao.findById(id)
             .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        if (!loanActivity.getType().equals(LOAN_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("查询活动失败");
+        }
         LoanRule rule = loanRuleDao.findById(loanActivity.getRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
         Goods goods = goodsDao.findById(loanActivity.getGoodsId()).orElseThrow(() -> new DataRetrievalFailureException("活动没有对应的商品"));
         LoanActivitySimpleResponseDTO response = LoanActivitySimpleResponseDTO.fromLoanActivity(loanActivity, rule, goods);
         response.setRule(SetLoanActivityRuleRequestDTO.fromLoanRule(rule));
 
-        response.setPerPrice(goods.getPrice());
-        response.setOneMaxAmount(goods.getOneMaxAmount());
-
         return new BaseResponse<>(HttpStatus.OK, "查询成功", response);
     }
 
-    public BaseResponse<PageResult<List<LoanActivityResponseDTO>>> findAllActivity(Integer page_num, Integer page_limit) {
-        Page<Activity> loanActivities = activityDao
-                .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
-        Integer pages = loanActivities.getTotalPages();
-        List<LoanActivityResponseDTO> res = fetchLoanActivityResponses(loanActivities.toList());
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
-    }
+    //public BaseResponse<PageResult<List<LoanActivityResponseDTO>>> findAllActivity(Integer page_num, Integer page_limit) {
+    //    Page<Activity> loanActivities = activityDao
+    //            .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+    //    Integer pages = loanActivities.getTotalPages();
+    //    List<LoanActivityResponseDTO> res = fetchLoanActivityResponses(loanActivities.toList());
+    //    return new BaseResponse<>(HttpStatus.OK, "查询成功", new PageResult<>(res, pages));
+    //}
 
-    public List<LoanActivityResponseDTO> fetchLoanActivityResponses(List<Activity> loanActivities) {
-        List<LoanActivityResponseDTO> res = loanActivities.stream().map(loanActivity -> {
-            LoanRule rule = loanRuleDao.findById(loanActivity.getRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
-            Goods goods = goodsDao.findById(loanActivity.getGoodsId()).orElseThrow(() -> new DataRetrievalFailureException("活动没有对应的商品"));
-            LoanActivityResponseDTO response = LoanActivityResponseDTO.fromLoanActivity(loanActivity, rule, goods);
+    //public List<LoanActivityResponseDTO> fetchLoanActivityResponses(List<Activity> loanActivities) {
+    //    List<LoanActivityResponseDTO> res = loanActivities.stream().filter(x -> x.getType().equals(1)).map(loanActivity -> {
+    //        LoanRule rule = loanRuleDao.findById(loanActivity.getRuleId()).orElseThrow(() -> new DataRetrievalFailureException("查询该活动规则失败"));
+    //        Goods goods = goodsDao.findById(loanActivity.getGoodsId()).orElseThrow(() -> new DataRetrievalFailureException("活动没有对应的商品"));
+    //        LoanActivityResponseDTO response = LoanActivityResponseDTO.fromLoanActivity(loanActivity, rule, goods);
+    //
+    //        response.setRule(SetLoanActivityRuleRequestDTO.fromLoanRule(rule));
+    //
+    //        List<UserActivity> userLoanActivities = userActivityDao.findByActivityId(loanActivity.getId());
+    //        response.setPassed_users(userLoanActivities.stream().filter(UserActivity::getIsPassed).map(x -> {
+    //            User user = userDao.getById(x.getUserId());
+    //            return JoinLoanActivityUserResponseDTO.fromUser(user);
+    //        }).collect(Collectors.toList()));
+    //        response.setUnPassed_users(userLoanActivities.stream().filter(x -> !x.getIsPassed()).map(x -> {
+    //            User user = userDao.getById(x.getUserId());
+    //            return JoinLoanActivityUserResponseDTO.fromUser(user);
+    //        }).collect(Collectors.toList()));
+    //
+    //        response.setPerPrice(goods.getPrice());
+    //        response.setOneMaxAmount(goods.getOneMaxAmount());
+    //        return response;
+    //    }).collect(Collectors.toList());
+    //    return res;
+    //}
 
-            response.setRule(SetLoanActivityRuleRequestDTO.fromLoanRule(rule));
-
-            List<UserActivity> userLoanActivities = userActivityDao.findByActivityId(loanActivity.getId());
-            response.setPassed_users(userLoanActivities.stream().filter(UserActivity::getIsPassed).map(x -> {
-                User user = userDao.getById(x.getUserId());
-                return JoinLoanActivityUserResponseDTO.fromUser(user);
-            }).collect(Collectors.toList()));
-            response.setUnPassed_users(userLoanActivities.stream().filter(x -> !x.getIsPassed()).map(x -> {
-                User user = userDao.getById(x.getUserId());
-                return JoinLoanActivityUserResponseDTO.fromUser(user);
-            }).collect(Collectors.toList()));
-
-            response.setPerPrice(goods.getPrice());
-            response.setOneMaxAmount(goods.getOneMaxAmount());
-            return response;
-        }).collect(Collectors.toList());
-        return res;
-    }
-
-    public BaseResponse<LoanActivityResponseDTO> findById(Long id) {
-        Activity loanActivity = activityDao.findById(id)
-            .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
-        List<LoanActivityResponseDTO> response = fetchLoanActivityResponses(Collections.singletonList(loanActivity));
-        return new BaseResponse<>(HttpStatus.OK, "查询成功", response.get(0));
-    }
+    //public BaseResponse<LoanActivityResponseDTO> findById(Long id) {
+    //    Activity loanActivity = activityDao.findById(id)
+    //        .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+    //    if (!loanActivity.getType().equals(LOAN_ACTIVITY_TYPE)) {
+    //        throw new DataRetrievalFailureException("没有该活动");
+    //    }
+    //    List<LoanActivityResponseDTO> response = fetchLoanActivityResponses(Collections.singletonList(loanActivity));
+    //    return new BaseResponse<>(HttpStatus.OK, "查询成功", response.get(0));
+    //}
 
     @Timed("检查用户信息访问耗时")
     @Counted("检查用户信息访问频率")
@@ -208,15 +215,15 @@ public class LoanActivityService {
             baseResult.setMessage("用户必须来自中国");
             return baseResult;
         }
-        if (loanRule.getCheckDishonest() != null && user.getDishonest()) {
+        if (loanRule.getCheckDishonest() != null && loanRule.getCheckDishonest() && user.getDishonest()) {
             baseResult.setMessage("用户不能是失信人员");
             return baseResult;
         }
-        if (loanRule.getCheckEmployment() != null && user.getEmployment() != Employment.Employed) {
+        if (loanRule.getCheckEmployment() != null && loanRule.getCheckEmployment() && user.getEmployment() != Employment.Employed) {
             baseResult.setMessage("用户必须在职");
             return baseResult;
         }
-        if (loanRule.getCheckOverDual() != null && user.getOverDual() != null && user.getOverDual() > 0) {
+        if (loanRule.getCheckOverDual() != null && loanRule.getCheckOverDual() && user.getOverDual() != null && user.getOverDual() > 0) {
             baseResult.setMessage("用户的逾期记录不能超过 0 次");
             return baseResult;
         }
@@ -241,7 +248,7 @@ public class LoanActivityService {
 
     public boolean isRequestToFrequest(Long loanActivityId, Long userId) {
         // 用户限制请求频率
-        String key = "ReQUEST_LIMIT_COUNTER" + "." + userId + "." + loanActivityId;
+        String key = "REQUEST_LIMIT_COUNTER" + "." + userId + "." + loanActivityId;
         // String key = "tryjoin_" + loanActivityId + "_" +userId;
         Integer increase = (Integer) redisService.get(key);
         if (increase != null) {
@@ -264,6 +271,9 @@ public class LoanActivityService {
     public BaseResponse<Boolean> check(Long loanActivityId, Long userId) {
         Activity loanActivity = activityDao.findById(loanActivityId)
             .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        if (!loanActivity.getType().equals(LOAN_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("没有该活动");
+        }
         User user = userDao.findById(userId).orElseThrow(() -> new DataRetrievalFailureException("没有该用户"));
         LoanRule loanRule = loanRuleDao.findById(loanActivity.getRuleId())
             .orElseThrow(() -> new DataRetrievalFailureException("该活动没有对应规则"));
@@ -298,6 +308,9 @@ public class LoanActivityService {
             // 获取商品 ID
             Activity loanActivity = activityDao.findById(loanActivityId)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+            if (!loanActivity.getType().equals(LOAN_ACTIVITY_TYPE)) {
+                throw new DataRetrievalFailureException("没有该活动");
+            }
             Long goodId = loanActivity.getGoodsId();
             res.setGoodId(goodId);
 
@@ -329,7 +342,7 @@ public class LoanActivityService {
             if (last_req == null || md5 == null) {
 
                 String time = String.valueOf(new Date().getTime());
-                ArrayList<String> arrayList = (ArrayList<String>) Arrays.asList(AUTH_SALT, userId.toString(), goodId.toString(),account_sn, time);
+                List<String> arrayList = Arrays.asList(AUTH_SALT, userId.toString(), goodId.toString(),account_sn, time);
                 md5 = MD5.md5(arrayList);
                 res.setResult(0);
                 res.setMd5(md5);

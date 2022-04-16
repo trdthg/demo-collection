@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@Table(name = "loan_activity_tb")
+@Table(name = "activity")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Activity extends BasePO {
@@ -38,4 +38,6 @@ public class Activity extends BasePO {
     private Long goodsId;
 
     private Long ruleId;
+
+    private Integer type;
 }

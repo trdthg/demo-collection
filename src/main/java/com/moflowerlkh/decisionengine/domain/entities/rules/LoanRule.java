@@ -19,7 +19,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "loan_rule_tb")
+@Table(name = "loan_rule")
 @EntityListeners(AuditingEntityListener.class)
 public class LoanRule extends BaseRule {
 

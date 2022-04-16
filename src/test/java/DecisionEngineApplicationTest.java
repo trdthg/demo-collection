@@ -26,7 +26,7 @@ public class DecisionEngineApplicationTest {
 
     @Test
     public void faker() {
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 1000; i++) {
             Faker faker = new Faker();
             User user = new User();
             user.setName(faker.name().name());

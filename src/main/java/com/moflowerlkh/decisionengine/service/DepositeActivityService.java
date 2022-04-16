@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.moflowerlkh.decisionengine.service.ActivityService.DEPOSIT_ACTIVITY_TYPE;
 import static com.moflowerlkh.decisionengine.service.LoanActivityService.*;
 
 @Service
@@ -76,7 +77,7 @@ public class DepositeActivityService {
         Goods goods = new Goods();
         goods.setPrice(request.getActivity_perPrice());
         //#1
-        goods.setGoodsAmount(request.getActivity_totalQuantity());
+        goods.setGoodsAmount(request.getActivity_totalQuantity() * request.getActivity_oneMaxAmount());
         //#2
         goods.setOneMaxAmount(request.getActivity_oneMaxAmount());
         goods.setStartTime(Timestamp.valueOf(request.getActivity_startTime()));
@@ -91,6 +92,8 @@ public class DepositeActivityService {
 
         activity.setRuleId(rule.getId());
         activity.setGoodsId(goods.getId());
+
+        activity.setType(2);
         activityDao.save(activity);
 
         stringRedisTemplate.opsForValue().set(ScheduleKey + "." + activity.getId(),
@@ -154,9 +157,9 @@ public class DepositeActivityService {
 
     public BaseResponse<PageResult<List<GetActivityResponseDTO>>> findByPage(Integer page_num, Integer page_limit) {
         Page<Activity> activities = activityDao
-            .findAll(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")));
+            .findAllByType(PageRequest.of(page_num - 1, page_limit, Sort.by(Sort.Direction.ASC, "id")), DEPOSIT_ACTIVITY_TYPE);
         Integer pages = activities.getTotalPages();
-        List<GetActivityResponseDTO> res = activities.toList().stream().map(x -> {
+        List<GetActivityResponseDTO> res = activities.toList().stream().filter(x -> x.getType().equals(2)).map(x -> {
             DepositRule rule = depositRuleDao.getById(x.getRuleId());
             Goods goods = goodsDao.getById(x.getGoodsId());
             return GetActivityResponseDTO.from(x, rule, goods);
@@ -166,6 +169,9 @@ public class DepositeActivityService {
 
     public BaseResponse<GetActivityResponseDTO> findById(Long id) {
         Activity activity = activityDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+        if (!activity.getType().equals(DEPOSIT_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("没有该活动");
+        }
         DepositRule rule = depositRuleDao.getById(activity.getRuleId());
         Goods goods = goodsDao.getById(activity.getGoodsId());
         GetActivityResponseDTO res = GetActivityResponseDTO.from(activity, rule, goods);
@@ -181,6 +187,9 @@ public class DepositeActivityService {
     public BaseResponse<Boolean> check(Long user_id, Long activity_id) {
         User user = userDao.findById(user_id).orElseThrow(()-> new DataRetrievalFailureException("没有该用户"));
         Activity activity = activityDao.findById(activity_id).orElseThrow(()-> new DataRetrievalFailureException("没有该活动"));
+        if (!activity.getType().equals(DEPOSIT_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("没有该活动");
+        }
         CheckResult checkResult = checkUserInfo(user, activity);
         saveCheckReslult(user,activity,checkResult.getResult());
         stringRedisTemplate.opsForValue().set(USER_CHECK_DEPOSIT_CACHE + "." + user.getId() + "." + activity.getId(), checkResult.getResult() ? "1" : "0");
@@ -201,6 +210,9 @@ public class DepositeActivityService {
     }
 
     public CheckResult checkUserInfo(User user, Activity activity) {
+        if (!activity.getType().equals(DEPOSIT_ACTIVITY_TYPE)) {
+            throw new DataRetrievalFailureException("没有该活动");
+        }
         DepositRule rule = depositRuleDao.findById(activity.getRuleId()).orElseThrow(()->new DataRetrievalFailureException("查询活动规则失败"));
         CheckResult result = new CheckResult();
         result.setResult(false);
@@ -212,12 +224,12 @@ public class DepositeActivityService {
             result.setMessage("年龄不能低于" + rule.getMaxAge());
             return result;
         }
-        if (rule.getCheckDishonest() != null && !user.getDishonest()) {
+        if (rule.getCheckDishonest() != null && rule.getCheckDishonest() && !user.getDishonest()) {
             result.setMessage("失信人员禁止参加");
             return result;
         }
 
-        if (rule.getCheckEmployment() != null && user.getEmployment() != Employment.Employed) {
+        if (rule.getCheckEmployment() != null && rule.getCheckEmployment() && user.getEmployment() != Employment.Employed) {
             result.setMessage("用户必须在职");
             return result;
         }
@@ -256,6 +268,9 @@ public class DepositeActivityService {
             // 获取商品 ID
             Activity activity = activityDao.findById(depositActivityId)
                 .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
+            if (!activity.getType().equals(DEPOSIT_ACTIVITY_TYPE)) {
+                throw new DataRetrievalFailureException("没有该活动");
+            }
             Long goodId = activity.getGoodsId();
             res.setGoodId(goodId);
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@Table(name = "user_loan_activity_tb")
+@Table(name = "user_activity")
 @EntityListeners(AuditingEntityListener.class)
 public class UserActivity extends BasePO {
 

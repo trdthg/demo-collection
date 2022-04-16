@@ -1,8 +1,11 @@
 package com.moflowerlkh.decisionengine.service;
 
+import com.moflowerlkh.decisionengine.domain.GoodsOrder;
 import com.moflowerlkh.decisionengine.domain.dao.*;
+import com.moflowerlkh.decisionengine.domain.entities.Activity;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.domain.entities.UserActivity;
+import com.moflowerlkh.decisionengine.service.ActivityServiceDTO.GetOrdersResponse;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.JoinLoanActivityUserResponseDTO;
 import com.moflowerlkh.decisionengine.util.CodeResult;
 import com.moflowerlkh.decisionengine.util.ValidateCode;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,6 +28,8 @@ public class ActivityService {
     @Autowired
     GoodsDao goodsDao;
     @Autowired
+    GoodsOrderDao goodsOrderDao;
+    @Autowired
     LoanRuleDao loanRuleDao;
     @Autowired
     UserDao userDao;
@@ -32,11 +38,16 @@ public class ActivityService {
     @Autowired
     RedisService redisService;
     @Autowired
+    ActivityDao activityDao;
+    @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
     @Autowired
     BankAccountDao bankAccountDao;
+
+    public static Integer LOAN_ACTIVITY_TYPE = 1;
+    public static Integer DEPOSIT_ACTIVITY_TYPE = 2;
 
     public BaseResponse<List<JoinLoanActivityUserResponseDTO>> getPassedUsers(Long activity_id) {
         List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
@@ -57,10 +68,11 @@ public class ActivityService {
     }
 
     public BaseResponse<JoinLoanActivityUserResponseDTO> getPassedUser(Long activity_id, String name) {
-        User user = userDao.findByUsername(name);
-        if (user == null) {
+        List<User> users = userDao.findByName(name);
+        if (users.isEmpty()) {
             return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败: 没有该用户", null);
         }
+        User user = users.get(0);
         List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
         for (UserActivity x : userActivities) {
             if (Objects.equals(x.getUserId(), user.getId()) && x.getIsPassed()) {
@@ -71,7 +83,11 @@ public class ActivityService {
     }
 
     public BaseResponse<JoinLoanActivityUserResponseDTO> getUnpassedUser(Long activity_id, String name) {
-        User user = userDao.findByUsername(name);
+        List<User> users = userDao.findByName(name);
+        if (users.isEmpty()) {
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败: 没有该用户", null);
+        }
+        User user = users.get(0);
         List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
         for (UserActivity x : userActivities) {
             if (Objects.equals(x.getUserId(), user.getId()) && !x.getIsPassed()) {
@@ -80,6 +96,7 @@ public class ActivityService {
         }
         return new BaseResponse<>(HttpStatus.OK, "查询失败", null);
     }
+
 
     public BaseResponse<String> generateCaptchaBase64() {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
@@ -93,4 +110,37 @@ public class ActivityService {
         return new BaseResponse<>(HttpStatus.OK, "验证吗图片获取成功", url);
     }
 
+    public List<GetOrdersResponse> findOrders(User user) {
+        List<UserActivity> userActivities = userActivityDao.findByUserId(user.getId());
+        List<GetOrdersResponse> res = new ArrayList<>();
+        for (UserActivity userActivity : userActivities) {
+            Activity activity = activityDao.findById(userActivity.getActivityId()).orElse(null);
+            if (activity == null) {
+                continue;
+            }
+            List<GoodsOrder> orders = goodsOrderDao.findByGoodsID(activity.getGoodsId());
+            Integer type = activity.getType();
+
+            for (GoodsOrder order : orders) {
+                long price = order.getGoodsPrice();
+                if (Objects.equals(type, LOAN_ACTIVITY_TYPE)) {
+                    price *= -1;
+                }
+                String time = order.getCreateDate().toString();
+                res.add(GetOrdersResponse.builder()
+                    .user_id(user.getId())
+                    .activity_id(activity.getId())
+                    .goods_id(order.getGoodsID())
+                    .activity_name(activity.getName())
+                    .order_result(order.getOrderResultEnum())
+                    .bank_account(order.getBankAccountSN())
+                    .goods_price(price)
+                        .order_id(order.getId())
+                    .create_time(time.substring(0, time.indexOf('.')))
+                    .build()
+                );
+            }
+        }
+        return res;
+    }
 }

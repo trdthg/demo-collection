@@ -39,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
         // 校验
-        System.out.println(token);
+        System.out.println("token: " + token);
         if (!JwtUtil.validate(token)) {
             throw new CredentialsExpiredException("token已经过期");
         }

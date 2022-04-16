@@ -38,11 +38,11 @@ class LoanActivityResponseDTO {
     private String activity_endTime;
     // activity_endTime date 产品秒杀结束时间
 
-    private List<JoinLoanActivityUserResponseDTO> passed_users;
-    private List<JoinLoanActivityUserResponseDTO> unPassed_users;
+    //private List<JoinLoanActivityUserResponseDTO> passed_users;
+    //private List<JoinLoanActivityUserResponseDTO> unPassed_users;
 
-    private Long oneMaxAmount;
-    private Long perPrice;
+    private Long activity_oneMaxAmount;
+    private Long activity_perPrice;
 
     public static LoanActivityResponseDTO fromLoanActivity(Activity loanActivity, LoanRule rule, Goods goods) {
         LoanActivityResponseDTO response = new LoanActivityResponseDTO();
@@ -55,6 +55,8 @@ class LoanActivityResponseDTO {
 
         response.setActivity_totalQuantity(rule.getPurchasersNumberLimit());
         response.setActivity_totalAmount(goods.getGoodsAmount());
+        response.setActivity_oneMaxAmount(goods.getOneMaxAmount());
+        response.setActivity_perPrice(goods.getPrice());
 
         response.setActivity_initMoney(rule.getMinMoneyLimit());
         response.setActivity_moneyLimit(rule.getMaxMoneyLimit());

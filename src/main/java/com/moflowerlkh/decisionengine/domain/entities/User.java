@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "user_tb")
+@Table(name = "user")
 public class User extends BasePO {
 
     // 姓名

@@ -24,13 +24,13 @@ public class LoanActivityController {
 
     @PostMapping("/")
     @ApiOperation(value = "新增", notes = "创建一个新活动，同时会创建一个新商品，商品购买后的所得金额会进入创建者的账户")
-    public BaseResponse<LoanActivityResponseDTO> setLoanActivity(@RequestBody @Valid SetLoanActivityRequestDTO request) {
+    public BaseResponse<LoanActivitySimpleResponseDTO> setLoanActivity(@RequestBody @Valid SetLoanActivityRequestDTO request) {
         return loanActivityService.setLoanActivity(request);
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "修改", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
-    public BaseResponse<LoanActivityResponseDTO> editLoanActivityPut(@Valid @NotNull @PathVariable Long id,
+    public BaseResponse<LoanActivitySimpleResponseDTO> editLoanActivityPut(@Valid @NotNull @PathVariable Long id,
                                                                      @RequestBody @Valid SetLoanActivityRequestDTO request) {
         return loanActivityService.changeActivityInfo(id, request);
     }
@@ -49,12 +49,12 @@ public class LoanActivityController {
         return loanActivityService.findAllActivityPartial(page_num, page_limit);
     }
 
-    @GetMapping("/full")
-    @ApiOperation(value = "分页查询-有初筛结果", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
-    public BaseResponse<PageResult<List<LoanActivityResponseDTO>>> getLoanActivityByIdFull(@RequestParam Integer page_num,
-                                                                                           @RequestParam Integer page_limit) {
-        return loanActivityService.findAllActivity(page_num, page_limit);
-    }
+    //@GetMapping("/full")
+    //@ApiOperation(value = "分页查询-有初筛结果", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
+    //public BaseResponse<PageResult<List<LoanActivityResponseDTO>>> getLoanActivityByIdFull(@RequestParam Integer page_num,
+    //                                                                                       @RequestParam Integer page_limit) {
+    //    return loanActivityService.findAllActivity(page_num, page_limit);
+    //}
 
     @GetMapping("/{id}")
     @ApiOperation(value = "查询-无初筛结果", notes = "不带有活动的参加信息")
@@ -62,11 +62,11 @@ public class LoanActivityController {
         return loanActivityService.findByIdPartial(id);
     }
 
-    @GetMapping("/{id}/full")
-    @ApiOperation(value = "查询-有初筛结果", notes = "带有活动的参加信息")
-    public BaseResponse<LoanActivityResponseDTO> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
-        return loanActivityService.findById(id);
-    }
+    //@GetMapping("/{id}/full")
+    //@ApiOperation(value = "查询-有初筛结果", notes = "带有活动的参加信息")
+    //public BaseResponse<LoanActivityResponseDTO> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
+    //    return loanActivityService.findById(id);
+    //}
 
     @GetMapping("/join")
     @ApiOperation(value = "参加活动", notes = "某用户参加某活动")

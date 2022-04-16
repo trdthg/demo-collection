@@ -16,6 +16,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Builder
 public class GetActivityResponseDTO {
 
+    Long activity_id;
+
     @NotEmpty(message = "活动名称不能为空")
     String activity_name;
 
@@ -42,6 +44,10 @@ public class GetActivityResponseDTO {
     @PositiveOrZero(message = "产品总数必须为0或正整数")
     Long activity_totalQuantity;
 
+    @NotNull(message = "产品总数不能为空")
+    @PositiveOrZero(message = "产品总数必须为0或正整数")
+    Long activity_totalAmount;
+
     @NotNull(message = "最高份数不能为空")
     @PositiveOrZero(message = "最低份数必须为0或正整数")
     Long activity_oneMaxAmount;
@@ -54,19 +60,24 @@ public class GetActivityResponseDTO {
 
     public static GetActivityResponseDTO from(Activity activity, DepositRule rule, Goods goods) {
         GetRuleResponseDTO ruleResponseDTO = GetRuleResponseDTO.builder().activity_ageUp(rule.getMaxAge()).activity_ageFloor(rule.getMinAge()).activity_dawa(rule.getIdDawa()).activity_dateRate(rule.getIsOnDay()).build();
+
+        String startTime = activity.getBeginTime().toString();
+        String endTime = activity.getEndTime().toString();
         GetActivityResponseDTO res = GetActivityResponseDTO.builder()
             .rule(ruleResponseDTO)
 
+            .activity_id(activity.getId())
             .activity_apr(rule.getApr())
             .activity_name(activity.getName())
             .activity_timeLimit(rule.getTimeLimit())
-            .activity_startTime(activity.getBeginTime().toString())
-            .activity_endTime(activity.getEndTime().toString())
+            .activity_startTime(startTime.substring(0, startTime.indexOf('.')))
+            .activity_endTime(endTime.substring(0, endTime.indexOf(".")))
 
             .activity_perPrice(goods.getPrice())
             .activity_totalQuantity(rule.getPurchasersNumberLimit())
             .activity_moneyLimit(goods.getGoodsAmount())
             .activity_oneMaxAmount(goods.getOneMaxAmount())
+            .activity_totalAmount(rule.getPurchasersNumberLimit() * goods.getPrice() * goods.getOneMaxAmount())
             .build();
         return res;
     }

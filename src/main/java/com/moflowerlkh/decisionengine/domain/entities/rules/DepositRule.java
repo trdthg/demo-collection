@@ -20,7 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "deposit_rule_tb")
+@Table(name = "deposit_rule")
 @EntityListeners(AuditingEntityListener.class)
 public class DepositRule extends BaseRule {
 
