@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BankAccountDao extends JpaRepository<BankAccount, Long> {
-    public List<BankAccount> findByUserID(Long userId);
+    List<BankAccount> findByUserID(Long userId);
+
+    BankAccount findByBankAccountSN(long sn);
+
 }
