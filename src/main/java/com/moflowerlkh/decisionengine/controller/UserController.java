@@ -1,5 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
+import com.moflowerlkh.decisionengine.domain.dao.BankAccountDao;
+import com.moflowerlkh.decisionengine.domain.entities.BankAccount;
 import com.moflowerlkh.decisionengine.domain.entities.User;
 import com.moflowerlkh.decisionengine.service.LoanActivityService;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.TryJoinResponseDTO;
@@ -35,6 +37,8 @@ public class UserController {
     LoanActivityService loanService;
     @Autowired
     UserDao userDao;
+    @Autowired
+    BankAccountDao bankAccountDao;
 
     @PostMapping("/")
     @ApiOperation("注册")
@@ -43,7 +47,13 @@ public class UserController {
         User user = userRequest.toUser();
         System.out.println(user);
         userDao.save(user);
-        return new BaseResponse<>(HttpStatus.CREATED, "注册成功", UserResponse.fromUser(user));
+
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setBankAccountSN(System.currentTimeMillis());
+        bankAccount.setBalance(1000000L);
+        bankAccount.setUserID(user.getId());
+        bankAccountDao.save(bankAccount);
+        return new BaseResponse<>(HttpStatus.OK, "注册成功", UserResponse.fromUser(user));
     }
 
     @GetMapping("/{id}")
@@ -60,7 +70,7 @@ public class UserController {
         User user = userRequest.toUser();
         user.setId(id);
         userDao.saveAndFlush(user);
-        return new BaseResponse<>(HttpStatus.CREATED, "编辑成功", UserResponse.fromUser(user));
+        return new BaseResponse<>(HttpStatus.OK, "编辑成功", UserResponse.fromUser(user));
     }
 
     @PostMapping("/{id}")

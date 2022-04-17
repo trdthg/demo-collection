@@ -268,6 +268,7 @@ public class LoanActivityService {
         return false;
     }
 
+    @Timed
     public BaseResponse<Boolean> check(Long loanActivityId, Long userId) {
         Activity loanActivity = activityDao.findById(loanActivityId)
             .orElseThrow(() -> new DataRetrievalFailureException("没有该活动"));
@@ -288,6 +289,7 @@ public class LoanActivityService {
         return new BaseResponse<>(HttpStatus.OK, "初筛通过", true);
     }
 
+    @Timed
     public BaseResponse<TryJoinResponseDTO> tryJoin(Long loanActivityId, Long userId, String account_sn) {
             TryJoinResponseDTO res = new TryJoinResponseDTO();
             res.setResult(4);

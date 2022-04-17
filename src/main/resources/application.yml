@@ -12,6 +12,7 @@ management:
   metrics:
     export:
       influx:
+        enabled: false
         # uri: http://influxdb:8086
         uri: http://localhost:11004
         bucket: decision-engine
@@ -22,7 +23,7 @@ management:
 spring:
   datasource:
     # url: jdbc:mysql://mysql:3306/ms
-    url: jdbc:mysql://localhost:3306/ms
+    url: jdbc:mysql://tguio.club:3306/ms
     username: root
     password: ms
     # driver-class-name: com.mysql.jdbc.Driver
