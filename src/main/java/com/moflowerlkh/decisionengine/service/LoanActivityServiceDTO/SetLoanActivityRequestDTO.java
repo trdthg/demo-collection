@@ -71,27 +71,4 @@ class SetLoanActivityRequestDTO {
     // 活动对应的商品
     // @NotNull(message = "活动对应的商品id不能为空")
     // private Long shoppinggoods_id;
-
-    public Activity toActivity() {
-        Activity loanActivity = new Activity();
-        // 设置基本信息
-        loanActivity.setName(activity_name);
-        loanActivity.setEndTime(Timestamp.valueOf(activity_endTime));
-        loanActivity.setBeginTime(Timestamp.valueOf(activity_startTime));
-
-        Goods goods = new Goods();
-        goods.setPrice(activity_perPrice);
-        goods.setOneMaxAmount(activity_oneMaxAmount);
-        goods.setStartTime(loanActivity.getBeginTime());
-        goods.setGoodsAmount(activity_totalQuantity);
-
-        //loanActivity.setShoppingGoods(shoppingGoods);
-
-        // 添加规则
-
-        LoanRule loanRule = rule.toLoanRule(activity_initMoney, activity_moneyLimit, activity_apr, activity_timeLimit, activity_replayTime,activity_totalQuantity);
-        //loanActivity.setRule(loanRule);
-
-        return loanActivity;
-    }
 }

@@ -1,5 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
+import com.moflowerlkh.decisionengine.component.AccessLimiter;
+import com.moflowerlkh.decisionengine.component.RequestLimiter;
 import com.moflowerlkh.decisionengine.domain.entities.Activity;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityRequestDTO;
 import com.moflowerlkh.decisionengine.service.DepositeActivityDTO.CreateDepositActivityResponseDTO;
@@ -62,6 +64,8 @@ public class DepositActivityController {
         return depositeActivityService.check(user_id, activity_id);
     }
 
+    @AccessLimiter(key = "deposit_join", limit = 10, timeout = 2)
+    @RequestLimiter(QPS = 300, timeout = 1)
     @GetMapping("/join")
     @ApiOperation(value = "参加活动", notes = "")
     public BaseResponse<TryJoinResponseDTO> joinLoanActivity(@Valid @NotNull Long activity_id,

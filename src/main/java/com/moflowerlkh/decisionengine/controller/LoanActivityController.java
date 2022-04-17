@@ -1,5 +1,7 @@
 package com.moflowerlkh.decisionengine.controller;
 
+import com.moflowerlkh.decisionengine.component.AccessLimiter;
+import com.moflowerlkh.decisionengine.component.RequestLimiter;
 import com.moflowerlkh.decisionengine.service.*;
 import com.moflowerlkh.decisionengine.service.LoanActivityServiceDTO.*;
 import com.moflowerlkh.decisionengine.vo.BaseResponse;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Api(tags = {"Loan 贷款活动"})
@@ -68,6 +71,8 @@ public class LoanActivityController {
     //    return loanActivityService.findById(id);
     //}
 
+    @AccessLimiter(key = "loan_join", limit = 10, timeout = 2)
+    @RequestLimiter(QPS = 300, timeout = 1)
     @GetMapping("/join")
     @ApiOperation(value = "参加活动", notes = "某用户参加某活动")
     public BaseResponse<TryJoinResponseDTO> joinLoanActivity(@Valid @NotNull Long activity_id,

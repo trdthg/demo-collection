@@ -4,25 +4,27 @@ server:
 # true 表示生产环境，会关闭 swagger
 active: false
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  metrics:
-    export:
-      influx:
-        enabled: false
-        # uri: http://influxdb:8086
-        uri: http://localhost:11004
-        bucket: decision-engine
-        token: IzKmlQva1QsAxhK5UmlTa7jIP3YpFtMEN37qDJrY-FFMs9Sdob-A2PDXqzhXtmsmeEaaeXEt20XCLO4y8stiUw==
-        org: ms
-        step: 10s
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  metrics:
+#    export:
+#      influx:
+#        enabled: false
+#        # uri: http://influxdb:8086
+#        uri: http://localhost:11004
+#        bucket: decision-engine
+#        token: IzKmlQva1QsAxhK5UmlTa7jIP3YpFtMEN37qDJrY-FFMs9Sdob-A2PDXqzhXtmsmeEaaeXEt20XCLO4y8stiUw==
+#        org: ms
+#        step: 10s
 
 spring:
   datasource:
-    # url: jdbc:mysql://mysql:3306/ms
+    #  url: jdbc:mysql://172.32.32.230:3306/sxfcds2104486
+    # username: sxfcds2104486
+    # password: SX_fcds2104486
     url: jdbc:mysql://tguio.club:3306/ms
     username: root
     password: ms
@@ -37,7 +39,7 @@ spring:
           # auto: create
   redis:
     # host: redis
-#    host: localhost
+    # host: localhost
     host: tguio.club
     port: 6379
 #    username: default

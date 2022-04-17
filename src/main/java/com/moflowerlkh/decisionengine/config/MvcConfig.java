@@ -1,9 +1,13 @@
 package com.moflowerlkh.decisionengine.config;
 
+import com.moflowerlkh.decisionengine.component.IpInterceptor;
+import com.moflowerlkh.decisionengine.component.RequestLimiterInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +16,11 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 class MvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    RequestLimiterInterceptor requestLimiterInterceptor;
+    @Autowired
+    IpInterceptor ipInterceptor;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -37,4 +46,10 @@ class MvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
     }
+
+    public void addInterceptors(InterceptorRegistry registry) {
+        //registry.addInterceptor(ipInterceptor);
+        //registry.addInterceptor(requestLimiterInterceptor);
+    }
+
 }

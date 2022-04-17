@@ -13,7 +13,7 @@ class JwtResponse {
     private String token;
     private String refreshToken;
     private Long user_id;
-    private List<String> account_id;
+    private List<String> account_sn;
     private String username;
     private Gender gender;
 }
