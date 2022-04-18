@@ -1,9 +1,8 @@
-from datetime import datetime
 import csv
-
-from random import randbytes, randint
+from datetime import datetime
 
 # import faker
+
 import pymysql
 
 _default_host = "127.0.0.1"
@@ -11,7 +10,6 @@ _default_port = 3306
 
 
 def generate_random():
-
     f = open("data/users.csv", "w")
     userwriter = csv.writer(f, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -26,8 +24,8 @@ def generate_random():
 
     n = 10000
 
-    for i in range(0, n+1):
-        id = 10000+i
+    for i in range(0, n + 1):
+        id = 10000 + i
         create_time = "2022-04-16 00:00:00.000000"
         modify_time = "2022-04-16 00:00:00.000000"
         balance = 1000000
@@ -42,7 +40,7 @@ def generate_random():
 
     #     create table user_roles
     for i in range(0, n + 1):
-        user_id = 10000+i
+        user_id = 10000 + i
         roles = "test"
         rolewriter.writerow([user_id, roles])
 
@@ -52,27 +50,27 @@ def generate_random():
         create_time = "2022-04-16 00:00:00.000000"
         modify_time = "2022-04-16 00:00:00.000000"
         idnumber = str(id) + "idnumber"
-        age = randint(20, 50)
+        age = 30
         country = "中国"
         dishonest = False
         employment = "Employed"
         gender = "Male"
-        name = str(randbytes(10))
+        name = "test-name"
         over_dual = 0
         password = "$2a$10$A77LByAaUQrDUHjz61.eKO3baRgsCByiaH0aKAYSgYJ5RvNoIoxkm"
         username = "user" + str(id)
         year_income = 100000
         userwriter.writerow([id, create_time, modify_time, idnumber,
-                            age,
-                            country,
-                            dishonest,
-                            employment,
-                            gender,
-                            name,
-                            over_dual,
-                            password,
-                            username,
-                            year_income
+                             age,
+                             country,
+                             dishonest,
+                             employment,
+                             gender,
+                             name,
+                             over_dual,
+                             password,
+                             username,
+                             year_income
                              ])
 
 
@@ -183,8 +181,8 @@ class MYSQL:
             `username` varchar(255) NOT NULL,
             `year_income` bigint(20) DEFAULT NULL,
             PRIMARY KEY (`id`),
-            UNIQUE KEY `UK_tgkwrgg3qouq6087dy4schx61` (`idnumber`),
-            UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
+            UNIQUE KEY `UK_tgkwrgg3qouq6087dy4schx61` (`idnumber`(10)),
+            UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`(10))
         ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4;
         """
         self.execute_sql(sql)

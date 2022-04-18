@@ -60,7 +60,7 @@ def create_new_activity(token):
 
                             "activity_totalAmount": 10 * 10000 * 1,
 
-                            "activity_totalQuantity": 1800,
+                            "activity_totalQuantity": 10000,
                             "activity_perPrice": 100,
                             "activity_oneMaxAmount": 1,
 
@@ -94,6 +94,6 @@ if __name__ == "__main__":
 
     print("start...")
     # clear_redis()
-    login_users(10)
+    # login_users(10)
     newid = create_new_activity(admin_login("user10005"))
     print(newid)
