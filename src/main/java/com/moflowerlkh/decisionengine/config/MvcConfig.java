@@ -32,12 +32,12 @@ class MvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 
-        /** 配置knife4j 显示文档 */
+        /** 配置 knife4j 显示文档 */
         registry.addResourceHandler("doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
         /**
-         * 配置swagger-ui显示文档
+         * 配置 swagger-ui 显示文档
          */
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");

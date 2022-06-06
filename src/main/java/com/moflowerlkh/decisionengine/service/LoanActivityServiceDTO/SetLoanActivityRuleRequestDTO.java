@@ -17,10 +17,10 @@ public class SetLoanActivityRuleRequestDTO {
     private Boolean activity_pledge;
     // activity_ageUp number 年龄上限
     @NotNull(message = "年龄上限不能为空")
-    @PositiveOrZero(message = "年龄上限必须为0或正整数")
+    @PositiveOrZero(message = "年龄上限必须为 0 或正整数")
     private Integer activity_ageUp;
     // activity_ageFloor number 年龄下限
-    @PositiveOrZero(message = "年龄下限必须为0或正整数")
+    @PositiveOrZero(message = "年龄下限必须为 0 或正整数")
     @NotNull(message = "年龄下限不能为空")
     private Integer activity_ageFloor;
     // activity_checkwork string 是否检查在职

@@ -14,7 +14,7 @@ def login_users(n):
         spamwriter.writerow(["user_id", "token", "account_id"])
         for i in range(1, n + 1):
             print(i, end=" ")
-            res = requests.post("http://tguio.club:8848/api/auth/signin", json={
+            res = requests.post("http://xxx.com:8848/api/auth/signin", json={
                 "username": "user"+str(i + 10010),
                 "password": "000000"
             })
@@ -28,13 +28,13 @@ def login_users(n):
 
 def clear_redis():
 
-    r = redis.StrictRedis(host='tguio.club', port=6379,
+    r = redis.StrictRedis(host='xxx.com', port=6379,
                           db=0, password="Aa1@0000")
     r.flushall()
 
 
 def admin_login(username):
-    res = requests.post("http://tguio.club:8848/api/auth/signin", json={
+    res = requests.post("http://xxx.com:8848/api/auth/signin", json={
         "username": username,
         "password": "000000"
     })
@@ -44,7 +44,7 @@ def admin_login(username):
 
 
 def create_new_activity(token):
-    res = requests.post("http://tguio.club:8848/api/loan/",
+    res = requests.post("http://xxx.com:8848/api/loan/",
                         headers={
                             "Authorization": token
                         },

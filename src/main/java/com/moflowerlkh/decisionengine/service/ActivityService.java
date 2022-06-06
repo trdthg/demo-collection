@@ -70,7 +70,7 @@ public class ActivityService {
     public BaseResponse<JoinLoanActivityUserResponseDTO> getPassedUser(Long activity_id, String name) {
         List<User> users = userDao.findByName(name);
         if (users.isEmpty()) {
-            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败: 没有该用户", null);
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败：没有该用户", null);
         }
         User user = users.get(0);
         List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);
@@ -85,7 +85,7 @@ public class ActivityService {
     public BaseResponse<JoinLoanActivityUserResponseDTO> getUnpassedUser(Long activity_id, String name) {
         List<User> users = userDao.findByName(name);
         if (users.isEmpty()) {
-            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败: 没有该用户", null);
+            return new BaseResponse<>(HttpStatus.BAD_REQUEST, "查询失败：没有该用户", null);
         }
         User user = users.get(0);
         List<UserActivity> userActivities = userActivityDao.findByActivityId(activity_id);

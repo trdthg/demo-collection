@@ -23,12 +23,12 @@ public class LoginUser implements UserDetails {
     private String password;
     private Set<String> roles;
 
-    // 不序列化到redis里
+    // 不序列化到 redis 里
     @JSONField(serialize = false)
     private Set<SimpleGrantedAuthority> cachedRoles;
 
     public LoginUser(User user) {
-        System.out.println("新建用户holder: " + user);
+        System.out.println("新建用户 holder: " + user);
         id = user.getId();
         username = user.getUsername();
         password = user.getPassword();

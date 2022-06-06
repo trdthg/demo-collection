@@ -33,7 +33,7 @@ public class DepositActivityController {
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "修改-全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
+    @ApiOperation(value = "修改 - 全部", notes = "需要传完整，传来的信息会直接全部覆盖掉原来的")
     public BaseResponse<GetActivityResponseDTO> update(@Valid @NotNull @PathVariable Long id,
                                                                   @RequestBody @Valid CreateDepositActivityRequestDTO request) {
         return depositeActivityService.update(id, request);
@@ -76,21 +76,21 @@ public class DepositActivityController {
     }
 
     //@GetMapping("/loan/{id}/passed")
-    //@ApiOperation("查询-初筛通过")
+    //@ApiOperation("查询 - 初筛通过")
     //public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdA(
     //    @Valid @NotNull @PathVariable Long id) {
     //    return depositeActivityService.getPassedUsers(id);
     //}
     //
     //@GetMapping("/loan/{id}/unpassed")
-    //@ApiOperation("查询-初筛不通过")
+    //@ApiOperation("查询 - 初筛不通过")
     //public BaseResponse<List<JoinLoanActivityUserResponse>> getLoanActivityByIdB(
     //    @Valid @NotNull @PathVariable Long id) {
     //    return depositeActivityService.getUnPassedUsers(id);
     //}
 
     //@GetMapping("/{activity_id}/passed")
-    //@ApiOperation("查询-根据用户名字")
+    //@ApiOperation("查询 - 根据用户名字")
     //public BaseResponse<JoinLoanActivityUserResponse> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id,
     //                                                               @NotNull @RequestParam String name) throws Exception {
     //    return depositeActivityService.getPassedUser(activity_id, name);

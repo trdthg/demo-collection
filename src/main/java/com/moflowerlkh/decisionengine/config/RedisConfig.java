@@ -15,11 +15,11 @@ public class RedisConfig {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         // 配置连接工厂
         template.setConnectionFactory(redisConnectionFactory);
-        // 配置key的序列化方式
+        // 配置 key 的序列化方式
         template.setKeySerializer(new StringRedisSerializer());
-        // 使用Jackson2JsonRedisSerializer配置value的序列化方式
+        // 使用 Jackson2JsonRedisSerializer 配置 value 的序列化方式
         //template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
-        // 使用FastJson配置value的序列化方式
+        // 使用 FastJson 配置 value 的序列化方式
         template.setValueSerializer(new GenericFastJsonRedisSerializer());
         return template;
     }

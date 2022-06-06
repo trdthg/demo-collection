@@ -194,7 +194,7 @@ public class DepositeActivityService {
         saveCheckReslult(user,activity,checkResult.getResult());
         stringRedisTemplate.opsForValue().set(USER_CHECK_DEPOSIT_CACHE + "." + user.getId() + "." + activity.getId(), checkResult.getResult() ? "1" : "0");
         if (!checkResult.getResult()) {
-            return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + checkResult.getMessage(), false);
+            return new BaseResponse<>(HttpStatus.OK, "初筛不通过：" + checkResult.getMessage(), false);
         }
         return new BaseResponse<>(HttpStatus.OK, "初筛通过", true);
     }
@@ -283,7 +283,7 @@ public class DepositeActivityService {
                 saveCheckReslult(user, activity, checkResult.getResult());
                 if (!checkResult.getResult()) {
                     res.setResult(4);
-                    return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + checkResult.getMessage(), res);
+                    return new BaseResponse<>(HttpStatus.OK, "初筛不通过：" + checkResult.getMessage(), res);
                 }
             }
 
@@ -316,11 +316,11 @@ public class DepositeActivityService {
             res.setResult(1);
             res.setMd5(md5);
             System.out.println("之前的 md5：" + md5);
-            return new BaseResponse<>(HttpStatus.OK, "您已经参加过, 返回之前的 md5", res);
+            return new BaseResponse<>(HttpStatus.OK, "您已经参加过，返回之前的 md5", res);
         } catch (Exception e){
             System.out.println("发生未知错误");
             e.printStackTrace();
-            return new BaseResponse<>(HttpStatus.OK, "发生未知错误: " + e, res);
+            return new BaseResponse<>(HttpStatus.OK, "发生未知错误：" + e, res);
         }
     }
 

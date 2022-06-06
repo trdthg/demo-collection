@@ -17,7 +17,7 @@ public class JwtUtil {
     private static final String tokenSignKey = "123456";
     // private static final String userRoleKey = "userRole";
 
-    // 就是id，只是函数签名之前忘了改
+    // 就是 id，只是函数签名之前忘了改
     public static String createToken(String userId) {
         return Jwts.builder()
                 .setSubject(userId)

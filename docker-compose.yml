@@ -4,7 +4,7 @@ services:
     # image: "trdthg/decision-engine:latest"
     build:
       context: .
-      # 请根据情况自选dockerfile
+      # 请根据情况自选 dockerfile
       dockerfile: Dockerfile
       # dockerfile: Dockerfile-skywalking
     ports:

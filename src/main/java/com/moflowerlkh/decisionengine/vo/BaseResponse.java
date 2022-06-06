@@ -19,7 +19,7 @@ public class BaseResponse<T> {
         this.code = code;
         this.content = null;
         if (code == 404) {
-            this.message = "反正就是404";
+            this.message = "反正就是 404";
         }
     }
 

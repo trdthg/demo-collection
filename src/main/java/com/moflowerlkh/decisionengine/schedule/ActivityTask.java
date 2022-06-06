@@ -46,7 +46,7 @@ public class ActivityTask {
                 Long goodId;
                 Activity activity = activityDao.findById(Long.valueOf(activityId)).orElseThrow(() -> new RuntimeException("没有查询待准备开始的活动"));
                 goodId = activity.getGoodsId();
-                System.out.println("存储了RANDOM_KEY");
+                System.out.println("存储了 RANDOM_KEY");
                 stringRedisTemplate.opsForValue().set(ACTIVITY_RANDOM_KEY + "." + goodId,
                         UUID.randomUUID().toString());
                 stringRedisTemplate.delete(key);

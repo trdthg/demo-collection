@@ -39,34 +39,34 @@ public class LoanActivityController {
     }
 
     //@PatchMapping("/loan/{id}")
-    //@ApiOperation(value = "修改-部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
+    //@ApiOperation(value = "修改 - 部分 todo!", notes = "需要修改那些字段，就只用传递那些字段")
     //public BaseResponse<SetLoanActivityRequest> editLoanActivityPatch(@Valid @NotNull @PathVariable Long id,
     //                                                                  @RequestBody SetLoanActivityRequest request) {
     //    return new BaseResponse<>(HttpStatus.OK, "修改成功", request);
     //}
 
     @GetMapping("/")
-    @ApiOperation(value = "分页查询-无初筛结果", notes = "只有一些活动的基本信息")
+    @ApiOperation(value = "分页查询 - 无初筛结果", notes = "只有一些活动的基本信息")
     public BaseResponse<PageResult<List<LoanActivitySimpleResponseDTO>>> getLoanActivityByIdSimple(
             @RequestParam Integer page_num, @RequestParam Integer page_limit) {
         return loanActivityService.findAllActivityPartial(page_num, page_limit);
     }
 
     //@GetMapping("/full")
-    //@ApiOperation(value = "分页查询-有初筛结果", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
+    //@ApiOperation(value = "分页查询 - 有初筛结果", notes = "除了活动的基本信息之外，还包含初筛的通过者，未通过者信息")
     //public BaseResponse<PageResult<List<LoanActivityResponseDTO>>> getLoanActivityByIdFull(@RequestParam Integer page_num,
     //                                                                                       @RequestParam Integer page_limit) {
     //    return loanActivityService.findAllActivity(page_num, page_limit);
     //}
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "查询-无初筛结果", notes = "不带有活动的参加信息")
+    @ApiOperation(value = "查询 - 无初筛结果", notes = "不带有活动的参加信息")
     public BaseResponse<LoanActivitySimpleResponseDTO> getLoanActivityByIdSimple(@Valid @NotNull @PathVariable Long id) {
         return loanActivityService.findByIdPartial(id);
     }
 
     //@GetMapping("/{id}/full")
-    //@ApiOperation(value = "查询-有初筛结果", notes = "带有活动的参加信息")
+    //@ApiOperation(value = "查询 - 有初筛结果", notes = "带有活动的参加信息")
     //public BaseResponse<LoanActivityResponseDTO> getLoanActivityByIdFull(@Valid @NotNull @PathVariable Long id) {
     //    return loanActivityService.findById(id);
     //}

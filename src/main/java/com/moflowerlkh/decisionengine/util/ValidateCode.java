@@ -85,7 +85,7 @@ public class ValidateCode {
     }
 
     public static CodeResult getRandomCodeBase64() {
-        // BufferedImage类是具有缓冲区的Image类,Image类是用于描述图像信息的类
+        // BufferedImage 类是具有缓冲区的 Image 类，Image 类是用于描述图像信息的类
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR);
         Graphics g = image.getGraphics();
         g.fillRect(0, 0, width, height);

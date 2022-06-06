@@ -62,7 +62,7 @@ public class AuthService {
         String refreshToken = JwtUtil.createRefreshToken(user.getId().toString());
         List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> {return String.valueOf(x.getBankAccountSN());}).collect(Collectors.toList());
         val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), accounts, user.getUsername(), user.getGender());
-        // 把token存入redis
+        // 把 token 存入 redis
         redisService.set(PC_TOKEN + "." + user.getId(), loginUser);
         return new BaseResponse<>(jwtResponse);
     }

@@ -57,14 +57,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("根据id获取用户信息")
+    @ApiOperation("根据 id 获取用户信息")
     public BaseResponse<UserResponse> get(@Valid @NotNull @PathVariable Long id) throws Exception {
-        User user = userDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户: id = " + id));
+        User user = userDao.findById(id).orElseThrow(() -> new DataRetrievalFailureException("没有该用户：id = " + id));
         return new BaseResponse<>(HttpStatus.OK, "查询成功", UserResponse.fromUser(user));
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("根据id编辑用户信息")
+    @ApiOperation("根据 id 编辑用户信息")
     public BaseResponse<UserResponse> put(@Valid @PathVariable Long id,
             @RequestBody @Valid @NotNull UserRequest userRequest) throws Exception {
         User user = userRequest.toUser();
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    @ApiOperation("根据id删除用户")
+    @ApiOperation("根据 id 删除用户")
     public BaseResponse<Void> felete(@Valid @PathVariable Long id) throws Exception {
         userDao.deleteById(id);
         return new BaseResponse<>(HttpStatus.OK, "删除成功", null);
@@ -85,17 +85,17 @@ public class UserController {
 @Data
 class UserRequest {
     @NotBlank(message = "用户账号不能为空")
-    @Size(min = 6, max = 11, message = "账号长度必须是6-11个字符")
+    @Size(min = 6, max = 11, message = "账号长度必须是 6-11 个字符")
     private String username;
     @NotBlank(message = "用户密码不能为空")
     private String password;
     // user_name string 姓名
     @NotBlank(message = "姓名不能为空")
-    @Size(min = 1, max = 50, message = "姓名长度必须是1-50个字符")
+    @Size(min = 1, max = 50, message = "姓名长度必须是 1-50 个字符")
     private String user_name;
     // user_gender string 性别
     @NotBlank
-    @EnumValue(enumClass = Gender.class, message = "性别类型只能是[Male, Female]")
+    @EnumValue(enumClass = Gender.class, message = "性别类型只能是 [Male, Female]")
     private String user_gender;
     // user_IDnumber string 身份证号
     @NotBlank(message = "身份证号不能为空")
@@ -105,15 +105,15 @@ class UserRequest {
     private String user_nation;
     // user_age number 年龄
     @NotNull(message = "年龄不能为空")
-    @PositiveOrZero(message = "年龄必须为0或正整数")
+    @PositiveOrZero(message = "年龄必须为 0 或正整数")
     private Integer user_age;
     // user_overdual number 近三年逾期还款次数
     @NotNull(message = "近三年逾期还款次数不能为空")
-    @PositiveOrZero(message = "近三年逾期还款次数必须为0或正整数")
+    @PositiveOrZero(message = "近三年逾期还款次数必须为 0 或正整数")
     private Long user_overdual;
     // user_employment string 就业状态
     @NotBlank(message = "就业状态不能为空")
-    @EnumValue(enumClass = Employment.class, message = "就业类型不合法: [Employed, Unemployed, Retired, Other, ..]")
+    @EnumValue(enumClass = Employment.class, message = "就业类型不合法：[Employed, Unemployed, Retired, Other, ..]")
     private String user_employment;
     // user_dishonest string 被列入失信人名单
     @NotNull(message = "是否被列入失信人名单不能为空")

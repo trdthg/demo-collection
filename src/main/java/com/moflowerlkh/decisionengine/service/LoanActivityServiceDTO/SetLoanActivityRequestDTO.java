@@ -26,17 +26,17 @@ class SetLoanActivityRequestDTO {
 
 
     // 活动开始时间
-    @DateValue(message = "活动开始时间格式必须为: `yyyy-mm-dd hh:mm:ss[.fffffffff]`")
+    @DateValue(message = "活动开始时间格式必须为：`yyyy-mm-dd hh:mm:ss[.fffffffff]`")
     private String activity_startTime;
     // 活动结束时间
-    @DateValue(message = "活动结束时间格式必须为: `yyyy-mm-dd hh:mm:ss[.fffffffff]`")
+    @DateValue(message = "活动结束时间格式必须为：`yyyy-mm-dd hh:mm:ss[.fffffffff]`")
     private String activity_endTime;
 
     @NotNull(message = "产品总数量不能为空")
-    @PositiveOrZero(message = "产品总数量必须为0或正整数")
+    @PositiveOrZero(message = "产品总数量必须为 0 或正整数")
     private Long activity_totalQuantity;
     @NotNull(message = "产品总金额不能为空")
-    @PositiveOrZero(message = "产品总金额必须为0或正整数")
+    @PositiveOrZero(message = "产品总金额必须为 0 或正整数")
     private Long activity_totalAmount;
     @NotNull(message = "起贷金额不能为空")
     @PositiveOrZero(message = "起贷金额必须为>=0")
@@ -45,11 +45,11 @@ class SetLoanActivityRequestDTO {
 
 
     @NotNull(message = "步长不能为空")
-    @PositiveOrZero(message = "步长必须为0或正整数")
+    @PositiveOrZero(message = "步长必须为 0 或正整数")
     private Integer activity_perPrice;
 
     @NotNull(message = "限购份数不能为空")
-    @PositiveOrZero(message = "限购份数必须为0或正整数")
+    @PositiveOrZero(message = "限购份数必须为 0 或正整数")
     private Integer activity_oneMaxAmount;
 
     @NotNull(message = "年利率不能为空")
@@ -69,6 +69,6 @@ class SetLoanActivityRequestDTO {
     private SetLoanActivityRuleRequestDTO rule;
 
     // 活动对应的商品
-    // @NotNull(message = "活动对应的商品id不能为空")
+    // @NotNull(message = "活动对应的商品 id 不能为空")
     // private Long shoppinggoods_id;
 }

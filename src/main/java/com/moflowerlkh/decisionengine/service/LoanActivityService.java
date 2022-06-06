@@ -324,7 +324,7 @@ public class LoanActivityService {
         stringRedisTemplate.opsForValue().set(USER_CHECK_LOAN_CACHE + "." + userId + "." + loanActivityId,
                 checkResult.getResult() ? "1" : "0");
         if (!checkResult.getResult()) {
-            return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + checkResult.getMessage(), false);
+            return new BaseResponse<>(HttpStatus.OK, "初筛不通过：" + checkResult.getMessage(), false);
         }
         return new BaseResponse<>(HttpStatus.OK, "初筛通过", true);
     }
@@ -366,7 +366,7 @@ public class LoanActivityService {
                 saveCheckReslult(user, loanActivity, checkResult.getResult());
                 if (!checkResult.getResult()) {
                     res.setResult(4);
-                    return new BaseResponse<>(HttpStatus.OK, "初筛不通过: " + checkResult.getMessage(), res);
+                    return new BaseResponse<>(HttpStatus.OK, "初筛不通过：" + checkResult.getMessage(), res);
                 }
             }
 
@@ -406,7 +406,7 @@ public class LoanActivityService {
         } catch (Exception e) {
             System.out.println("发生未知错误");
             e.printStackTrace();
-            return new BaseResponse<>(HttpStatus.OK, "发生未知错误: " + e, res);
+            return new BaseResponse<>(HttpStatus.OK, "发生未知错误：" + e, res);
         }
     }
 

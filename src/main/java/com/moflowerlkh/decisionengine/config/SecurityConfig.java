@@ -100,7 +100,7 @@ class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper objectMapper = new ObjectMapper();
         String resBody = objectMapper
-                .writeValueAsString(new BaseResponse<>(HttpStatus.UNAUTHORIZED, "认证失败: " + authException.getMessage()));
+                .writeValueAsString(new BaseResponse<>(HttpStatus.UNAUTHORIZED, "认证失败：" + authException.getMessage()));
         PrintWriter printWriter = response.getWriter();
         printWriter.print(resBody);
         printWriter.flush();

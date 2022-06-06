@@ -30,7 +30,7 @@ public class ActivityController {
     UserDao userDao;
 
     @GetMapping("/{activity_id}/passed")
-    @ApiOperation("查询-初筛通过")
+    @ApiOperation("查询 - 初筛通过")
     public BaseResponse getLoanActivityByIdA(
         @Valid @NotNull @PathVariable Long activity_id,
         String name
@@ -42,7 +42,7 @@ public class ActivityController {
     }
 
     @GetMapping("/{activity_id}/unpassed")
-    @ApiOperation("查询-初筛不通过")
+    @ApiOperation("查询 - 初筛不通过")
     public BaseResponse getLoanActivityByIdB(
         @Valid @NotNull @PathVariable Long activity_id,
         String name
@@ -68,14 +68,14 @@ public class ActivityController {
     }
 
     //@GetMapping("/{activity_id}/passed")
-    //@ApiOperation("查询通过-根据用户名字")
+    //@ApiOperation("查询通过 - 根据用户名字")
     //public BaseResponse<JoinLoanActivityUserResponseDTO> ifUserPassed(@Valid @NotNull @PathVariable Long activity_id,
     //                                                                  @RequestParam String name) throws Exception {
     //    return activityService.getPassedUser(activity_id, name);
     //}
     //
     //@GetMapping("/{activity_id}/unpassed")
-    //@ApiOperation("查询未通过-根据用户名字")
+    //@ApiOperation("查询未通过 - 根据用户名字")
     //public BaseResponse<JoinLoanActivityUserResponseDTO> ifUserUnPassed(@Valid @NotNull @PathVariable Long activity_id,
     //                                                                    @RequestParam String name) throws Exception {
     //}

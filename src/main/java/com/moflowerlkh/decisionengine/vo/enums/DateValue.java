@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Documented
 public @interface DateValue {
 
-    String message() default "格式只能是: `yyyy-mm-dd hh:mm:ss[.fffffffff]`";
+    String message() default "格式只能是：`yyyy-mm-dd hh:mm:ss[.fffffffff]`";
 
     Class<?>[] groups() default {};
 

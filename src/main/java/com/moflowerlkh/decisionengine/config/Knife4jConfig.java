@@ -1,4 +1,4 @@
-//改配置文件和Swagger配置文件一致，只是添加了两个注解
+//改配置文件和 Swagger 配置文件一致，只是添加了两个注解
 package com.moflowerlkh.decisionengine.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
@@ -32,16 +32,16 @@ public class Knife4jConfig {
         List<Parameter> pars = new ArrayList<>();
         ticketPar.name("Authorization").description("token")
             .modelRef(new ModelRef("string")).parameterType("header")
-            .required(false).build(); //header中的ticket参数非必填，传空也可以
+            .required(false).build(); //header 中的 ticket 参数非必填，传空也可以
         pars.add(ticketPar.build());    //根据每个方法名也知道当前方法在设置什么参数
 
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfoBuilder()
                 .title("decision-engine RESTful APIs")
-                .description("决策引擎Restful API")
+                .description("决策引擎 Restful API")
                 .version("1.0")
                 .build())
-            .groupName("2.X版本")
+            .groupName("2.X 版本")
             .select()
             //.apis(RequestHandlerSelectors.basePackage("com.moflowerlkh.decisionengine.controller"))
             .paths(PathSelectors.any())
