@@ -4,7 +4,7 @@ HELP.md
 /**/agent
 target
 !**/./**/agent/
-
+logs/
 log.a
 
 target/

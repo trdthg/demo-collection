@@ -100,7 +100,7 @@ class MYSQL:
         # self.__create_tables()
         start = datetime.now()
         sql = """
-        LOAD DATA LOCAL INFILE '%s' INTO TABLE ms.%s FIELDS TERMINATED BY ',' (
+        LOAD DATA LOCAL INFILE '%s' INTO TABLE dev.%s FIELDS TERMINATED BY ',' (
             id, create_time, modify_time, idnumber,
                          age,
                          country,
@@ -122,7 +122,7 @@ class MYSQL:
         # self.__create_tables()
         start = datetime.now()
         sql = """
-        LOAD DATA LOCAL INFILE '%s' INTO TABLE ms.%s FIELDS TERMINATED BY ',' (
+        LOAD DATA LOCAL INFILE '%s' INTO TABLE dev.%s FIELDS TERMINATED BY ',' (
             user_id, roles
         );
         """
@@ -133,7 +133,7 @@ class MYSQL:
         # self.__create_tables()
         start = datetime.now()
         sql = """
-        LOAD DATA LOCAL INFILE '%s' INTO TABLE ms.%s FIELDS TERMINATED BY ',' (
+        LOAD DATA LOCAL INFILE '%s' INTO TABLE dev.%s FIELDS TERMINATED BY ',' (
             id,
                             create_time,
                             modify_time,
@@ -156,14 +156,14 @@ class MYSQL:
     def __drop_table(self, table):
         print("drop")
         sql = """
-        DROP TABLE IF EXISTS ms.%s;
+        DROP TABLE IF EXISTS dev.%s;
         """
         self.execute_sql(sql % table)
         print("drop success")
 
     def __create_tables(self):
         sql = """
-        CREATE TABLE ms.user (
+        CREATE TABLE dev.user (
             `id` bigint(20) NOT NULL AUTO_INCREMENT,
             `create_time` datetime(6) DEFAULT NULL,
             `modify_time` datetime(6) DEFAULT NULL,
@@ -188,7 +188,7 @@ class MYSQL:
         self.execute_sql(sql)
 
         sql = '''
-        CREATE TABLE ms.user_roles (
+        CREATE TABLE dev.user_roles (
             `user_id` bigint(20) NOT NULL,
             `roles` varchar(255) DEFAULT NULL,
             KEY `FK55itppkw3i07do3h7qoclqd4k` (`user_id`),
@@ -198,7 +198,7 @@ class MYSQL:
         self.execute_sql(sql)
 
         sql = '''
-        CREATE TABLE ms.bank_account (
+        CREATE TABLE dev.bank_account (
             `id` bigint(20) NOT NULL AUTO_INCREMENT,
             `create_time` datetime(6) DEFAULT NULL,
             `modify_time` datetime(6) DEFAULT NULL,
@@ -214,8 +214,8 @@ class MYSQL:
 
 if __name__ == '__main__':
     # generate_random()
-    db = MYSQL('root', 'ms', host='localhost')
-    db.connect_database('ms')
+    db = MYSQL('root', 'dev', host='localhost')
+    db.connect_database('dev')
 
     db.load_user_data('data/users.csv', "user")
     db.load_roles_data('data/roles.csv', "user_roles")

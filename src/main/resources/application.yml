@@ -25,7 +25,7 @@ spring:
     #  url: jdbc:mysql://172.32.32.230:3306/sxfcds2104486
     # username: sxfcds2104486
     # password: SX_fcds2104486
-    url: jdbc:mysql://xxx.com:3306/ms
+    url: jdbc:mysql://localhost:3306/dev
     username: root
     password: ms
     # driver-class-name: com.mysql.jdbc.Driver
@@ -40,7 +40,7 @@ spring:
   redis:
     # host: redis
     # host: localhost
-    host: xxx
+    host: localhost
     port: 6379
 #    username: default
     password: Aa1@0000
