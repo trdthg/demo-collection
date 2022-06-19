@@ -29,15 +29,12 @@ public class Activity extends BasePO {
     @Column(nullable = false)
     private Timestamp endTime;
 
-    /**
-     * 一个秒杀活动只能对应一个商品
-     * 一个商品可能有多个秒杀活动
-     */
-    // @JoinColumn(nullable = false)
-    // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // 商品 id
     private Long goodsId;
 
+    // 规则 ID
     private Long ruleId;
 
+    // 活动类型
     private Integer type;
 }

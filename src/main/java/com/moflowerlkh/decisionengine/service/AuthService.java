@@ -44,7 +44,7 @@ public class AuthService {
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (UsernameNotFoundException e) {
             return new BaseResponse<>(HttpStatus.FORBIDDEN, "没有该用户");
         } catch (BadCredentialsException e) {
@@ -60,8 +60,11 @@ public class AuthService {
         User user = userDao.getById(loginUser.getId());
         String token = JwtUtil.createToken(user.getId().toString());
         String refreshToken = JwtUtil.createRefreshToken(user.getId().toString());
-        List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> {return String.valueOf(x.getBankAccountSN());}).collect(Collectors.toList());
-        val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), accounts, user.getUsername(), user.getGender());
+        List<String> accounts = bankAccountDao.findByUserID(user.getId()).stream().map(x -> {
+            return String.valueOf(x.getBankAccountSN());
+        }).collect(Collectors.toList());
+        val jwtResponse = new JwtResponse(token, refreshToken, user.getId(), accounts, user.getUsername(),
+                user.getGender());
         // 把 token 存入 redis
         redisService.set(PC_TOKEN + "." + user.getId(), loginUser);
         return new BaseResponse<>(jwtResponse);
@@ -69,7 +72,7 @@ public class AuthService {
 
     public BaseResponse<String> logout() {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-            .getContext().getAuthentication();
+                .getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authenticationToken.getPrincipal();
         Long userid = loginUser.getId();
         redisService.del("pc_token_" + userid);

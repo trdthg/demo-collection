@@ -25,9 +25,4 @@ public class BaseRule extends BasePO {
     // 是否限制地区
     @Column(nullable = true)
     private Boolean checkCountry;
-
-    // // 对应的活动
-    // @JoinColumn(nullable = false)
-    // @OneToOne
-    // private BaseActivity activity;
 }

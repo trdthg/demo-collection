@@ -87,6 +87,7 @@ class UserRequest {
     @NotBlank(message = "用户账号不能为空")
     @Size(min = 6, max = 11, message = "账号长度必须是 6-11 个字符")
     private String username;
+    
     @NotBlank(message = "用户密码不能为空")
     private String password;
     // user_name string 姓名

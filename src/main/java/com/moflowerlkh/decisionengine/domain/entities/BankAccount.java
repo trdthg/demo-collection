@@ -22,8 +22,7 @@ public class BankAccount extends BasePO {
     private long bankAccountSN;
 
     /**
-     * 用户
-     * user_id is relative to user_tb
+     * 用户 ID
      */
     @Column(name = "user_id", nullable = false)
     private long userID;
